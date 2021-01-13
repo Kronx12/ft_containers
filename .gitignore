@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+ft_containers
+
+# Other
+.vscode
