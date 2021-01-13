@@ -33,4 +33,5 @@
 ft_containers
 
 # Other
+objs/
 .vscode
