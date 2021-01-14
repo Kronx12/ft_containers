@@ -25,10 +25,12 @@ namespace ft
 
 		public :
 			//BASICS
-			Iterator( Iterator const & rhs )
+			Iterator(link_pointer li)
 			{
-				this->current = rhs->current;
-			}
+				this->current = li;
+			};
+
+			Iterator( Iterator const & rhs ) : current(rhs.current){};
 			~Iterator(){};
 			Iterator &		operator=( Iterator const & rhs )
 			{
@@ -46,7 +48,6 @@ namespace ft
 				Iterator tmp(*this);
 				this->current = this->current->next;
 				return(tmp);
-
 			}
 
 			//Input Category
@@ -60,11 +61,11 @@ namespace ft
 			}
 			reference operator*()
 			{
-
+				return(this->current->value);
 			}
 			reference operator->()
 			{
-
+				return(this->current->value);
 			}
 
 			//Output Category ?????????????????????????? WHAT DO?
@@ -190,6 +191,31 @@ namespace ft
 	List<T>::List(const List& x)
 	{
 		(void)x;
+	}
+
+	//-------------------------- ITERATORS --------------------------
+	template <typename T>
+	typename List<T>::iterator List<T>::begin()
+	{
+		return(iterator(this->_begin));
+	}
+
+	template <typename T>
+	typename List<T>::const_iterator List<T>::begin() const
+	{
+		return(const_iterator(this->_begin));
+	}
+
+	template <typename T>
+	typename List<T>::iterator List<T>::end()
+	{
+		return(iterator(this->_end));
+	}
+
+	template <typename T>
+	typename List<T>::const_iterator List<T>::end() const
+	{
+		return(const_iterator(this->_end));
 	}
 
 	//-------------------------- CAPACITY --------------------------
