@@ -8,10 +8,60 @@
 
 namespace ft
 {
+	template <typename It>
+	class ReverseIterator : public It
+	{
+		public:
+			using typename It::link_type;
+			using typename It::link_pointer;
+			using typename It::value_type;
+			using typename It::pointer;
+			using typename It::const_pointer;
+			using typename It::reference;
+			using typename It::const_reference;
+		
+		
+			ReverseIterator() : It(){};
+			ReverseIterator(It const & it) : It(it){};
+			ReverseIterator(ReverseIterator const & rhs)
+			{
+				this->current = rhs.current;
+			};
+			~ReverseIterator(){};
+			ReverseIterator &		operator=( ReverseIterator const & rhs )
+			{
+				this->current = rhs->current;
+			}
+
+			ReverseIterator &operator++()
+			{
+				this->current = this->current->previous;
+				return(*this);
+			}
+			ReverseIterator operator++(int)
+			{
+				ReverseIterator tmp(*this);
+				this->current = this->current->previous;
+				return(tmp);
+			}
+
+			ReverseIterator &operator--()
+			{
+				this->current = this->current->next;
+				return(*this);
+			}
+			ReverseIterator operator--(int)
+			{
+				ReverseIterator tmp(*this);
+				this->current = this->current->next;
+				return(tmp);
+			}
+	};
+	
 	template <class T, class L>
 	class Iterator
 	{
-		private:
+		public:
 			typedef L link_type;
 			typedef link_type* link_pointer;
 			typedef T value_type;
@@ -23,7 +73,7 @@ namespace ft
 		protected:
 			link_pointer current;
 
-		public :
+		public:
 			//BASICS
 			Iterator(link_pointer li)
 			{
@@ -99,6 +149,7 @@ namespace ft
 			Link	*previous;
 			Link(const T& val) : value(val), next(NULL), previous(NULL) {};
 			Link(Link *pre) : next(NULL), previous(pre) {};
+			Link() : next(NULL), previous(NULL) {};
 	};
 
 	template <class T>
@@ -107,6 +158,7 @@ namespace ft
 		private:
 			Link<T> *_begin;
 			Link<T> *_end;
+			Link<T> *_rend;
 			size_t _size;
 			typedef T value_type;
 			typedef typename std::allocator<value_type> allocator_type;
@@ -118,6 +170,8 @@ namespace ft
 			typedef link_type* link_pointer;
 			typedef Iterator<value_type, link_type> iterator;
 			typedef Iterator<const value_type, const link_type> const_iterator;
+			typedef ReverseIterator<iterator> reverse_iterator;
+			typedef ReverseIterator<const_iterator> const_reverse_iterator;
 			//MAKE REVERSE ITERATOR AND CONST REVERSE ITERATOR -----------------------------------------
 			//MAKE DIFFERENCE_TYPE AND SIZE_TYPE -------------------------------------------------------
 
@@ -135,8 +189,11 @@ namespace ft
 			const_iterator begin() const;
 			iterator end();
 			const_iterator end() const;
-			void rbegin();
-			void rend();
+
+			reverse_iterator rbegin();
+			const_reverse_iterator rbegin() const;
+			reverse_iterator rend();
+			const_reverse_iterator rend() const;
 
 			//Capacity
 			bool empty();
@@ -166,11 +223,7 @@ namespace ft
 			void unique();
 			void merge();
 			void sort();
-			void reverse();
-
-		
-			
-			
+			void reverse();			
 	};
 
 
@@ -218,6 +271,31 @@ namespace ft
 		return(const_iterator(this->_end));
 	}
 
+	//------------------- REVERSE ITERATORS ------------------------
+	template <typename T>
+	typename List<T>::reverse_iterator List<T>::rbegin()
+	{
+		return(reverse_iterator(this->_end->previous));
+	}
+
+	template <typename T>
+	typename List<T>::const_reverse_iterator List<T>::rbegin() const
+	{
+		return(const_reverse_iterator(this->_end->previous));
+	}
+
+	template <typename T>
+	typename List<T>::reverse_iterator List<T>::rend()
+	{
+		return(reverse_iterator(this->_rend));
+	}
+
+	template <typename T>
+	typename List<T>::const_reverse_iterator List<T>::rend() const
+	{
+		return(const_reverse_iterator(this->_rend));
+	}
+
 	//-------------------------- CAPACITY --------------------------
 	template <typename T>
 	bool List<T>::empty()
@@ -245,6 +323,10 @@ namespace ft
 		if (_begin == NULL)
 		{
 			_begin = new Link<T>(val);
+			_rend = new Link<T>();
+			_rend->next = _begin;
+			_begin->previous = _rend;
+			_begin->next = _end;
 			_end = new Link<T>(_begin);
 		}
 		else
