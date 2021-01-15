@@ -107,7 +107,7 @@ namespace ft
 			}
 			bool operator!=(const Iterator & rhs)
 			{
-				return (this->current != rhs->current);
+				return (current != rhs.current);
 			}
 			reference operator*()
 			{
@@ -172,8 +172,8 @@ namespace ft
 			typedef Iterator<const value_type, const link_type> const_iterator;
 			typedef ReverseIterator<iterator> reverse_iterator;
 			typedef ReverseIterator<const_iterator> const_reverse_iterator;
-			//MAKE REVERSE ITERATOR AND CONST REVERSE ITERATOR -----------------------------------------
-			//MAKE DIFFERENCE_TYPE AND SIZE_TYPE -------------------------------------------------------
+			typedef std::ptrdiff_t difference_type;
+			typedef size_t size_type;
 
 		public:
 			explicit List (const allocator_type& alloc = allocator_type());
@@ -196,16 +196,19 @@ namespace ft
 			const_reverse_iterator rend() const;
 
 			//Capacity
-			bool empty();
-			void size();
-			void max_size();
+			bool empty() const;
+			size_type size() const;
+			size_type max_size() const;
 
 			//Element access
 			reference front();
 			reference back();
 
 			//Modifiers
-			void assign();
+			void assign(size_type n, const value_type& val);
+
+			void assign(iterator first, iterator last);
+
 			void push_front();
 			void pop_front();
 			void push_back(const value_type& val);
@@ -298,9 +301,21 @@ namespace ft
 
 	//-------------------------- CAPACITY --------------------------
 	template <typename T>
-	bool List<T>::empty()
+	bool List<T>::empty() const
 	{
 		return(begin() == end());
+	}
+
+	template <typename T>
+	typename List<T>::size_type List<T>::size() const
+	{
+		return(_size);
+	}
+
+	template <typename T>
+	typename List<T>::size_type List<T>::max_size() const
+	{
+		return (std::numeric_limits<size_type>::max() / sizeof(link_type));
 	}
 
 	//-------------------------- ELEMENT ACCESS --------------------------
@@ -316,23 +331,45 @@ namespace ft
 		return(_end->previous->value);
 	}
 
-	//-------------------------- MODIFIERS --------------------------
+	//-------------------------- MODIFIERS ---------------------------
+
+	template <typename T>
+	void List<T>::assign(iterator first, iterator last)
+	{
+		//Link<T> *_llink = static_cast< Link<T> >(last);
+		while(first != last)
+		{
+			std::cout << *(++first) << std::endl;
+			push_back(*first);
+			first++;
+		}
+	}
+
+	template <typename T>
+	void List<T>::assign(size_type n, const value_type& val)
+	{
+		for (size_type i = 0; i < n; i++)
+		{
+			push_back(val);
+		}
+	}
+
 	template <typename T>
 	void List<T>::push_back(const value_type& val)
 	{
+		_size += 1;
 		if (_begin == NULL)
 		{
 			_begin = new Link<T>(val);
 			_rend = new Link<T>();
 			_rend->next = _begin;
 			_begin->previous = _rend;
-			_begin->next = _end;
 			_end = new Link<T>(_begin);
+			_begin->next = _end;
 		}
 		else
 		{
 			_end->next = new Link<T>(_end);
-			_end->next->previous = _end;
 			_end->value = val;
 			_end = _end->next;
 		}
