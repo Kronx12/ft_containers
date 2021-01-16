@@ -70,7 +70,6 @@ namespace ft
 			typedef value_type& reference;
 			typedef const value_type& const_reference;
 
-		//protected:
 			link_pointer current;
 
 		public:
@@ -148,16 +147,16 @@ namespace ft
 			Link	*next;
 			Link	*previous;
 			Link(const T& val) : value(val), next(NULL), previous(NULL) {};
-			Link(Link *pre) : next(NULL), previous(pre) {};
-			Link() : next(NULL), previous(NULL) {};
+			Link(Link *pre, const T& val, Link *_next) :value(val), next(_next), previous(pre) {};
+			Link() : value(T()), next(NULL), previous(NULL) {};
 	};
 
 	template <class T>
 	class List
 	{
 		private:
-			Link<T> *_begin;
 			Link<T> *_end;
+			Link<T> *_begin;
 			Link<T> *_rend;
 			size_t _size;
 			typedef T value_type;
@@ -214,8 +213,14 @@ namespace ft
 			void pop_front();
 			void push_back(const value_type& val);
 			void pop_back();
-			void insert();
-			void erase();
+
+			template< class InputIt >
+			void insert(iterator pos, InputIt first, InputIt last);
+			iterator insert(iterator pos, const T &value);
+			void insert(iterator pos, size_type count, const T& value);
+
+			iterator erase (iterator position);
+			iterator erase (iterator first, iterator last);
 			void swap();
 			void resize();
 			void clear();
@@ -233,8 +238,9 @@ namespace ft
 
 	//-------------------------- CONSTRUCTOR --------------------------
 	template <typename T>
-	List<T>::List(const List<T>::allocator_type& alloc) : _begin(NULL), _end(new Link<T>()), _size(0)
+	List<T>::List(const List<T>::allocator_type& alloc) : _end(new Link<T>()), _begin(_end), _rend(new Link<T>(NULL, T(), _end)),_size(0)
 	{
+		_end->previous = _rend;
 		(void)alloc;
 	}
 
@@ -342,7 +348,7 @@ namespace ft
 		Link<T> *temp_start = NULL;
 		Link<T> *temp = NULL;
 		Link<T> *tempn = NULL;
-		while(*first != *last)
+		while(first != last)
 		{
 			if (temp_start == NULL)
 			{
@@ -361,19 +367,12 @@ namespace ft
 		}
 		clear();
 		_size = newsize;
+		temp->next = _end;
 		_end->previous = temp;
 		_begin = temp_start;
+		_begin->previous = _rend;
+		_rend->next = _begin;
 	}
-
-	/*template <typename T>
-	void List<T>::assign(iterator first, iterator last)
-	{
-		while(*first != *last)
-		{
-			push_back(*first);
-			first++;
-		}
-	}*/
 
 	template <typename T>
 	void List<T>::assign(size_type n, const value_type& val)
@@ -387,38 +386,81 @@ namespace ft
 	template <typename T>
 	void List<T>::push_back(const value_type& val)
 	{
-		_size += 1;
-		if (_begin == NULL)
+		insert(end(), val);
+	}
+
+	template <typename T>
+	typename List<T>::iterator List<T>::insert(iterator pos, const T &value)
+	{
+		iterator next = pos;
+		iterator prev = pos;
+		link_pointer n;
+		if (_begin == _end)
 		{
-			_begin = new Link<T>(val);
-			_rend = new Link<T>();
-			_rend->next = _begin;
-			_begin->previous = _rend;
+			_begin = new Link<T>(_rend, value, _end);
 			_end->previous = _begin;
-			_begin->next = _end;
+			_rend->next = _begin;
+			n = _begin;
 		}
 		else
 		{
-			_end->next = new Link<T>(_end);
-			_end->value = val;
-			_end = _end->next;
+			prev--;
+			n = new Link<T>(prev.current, value, next.current);
+			prev.current->next = n;
+			next.current->previous = n;
 		}
+		_size++;
+		return (iterator(n));
 	}
+
+	template <typename T>
+	typename List<T>::iterator List<T>::erase(iterator pos)
+	{
+		iterator ret = pos;
+		if (pos.current == _begin)
+			_begin = _begin->next;
+		pos.current->previous->next = pos.current->next;
+		pos.current->next->previous = pos.current->previous;
+		ret++;
+		delete (pos.current);
+		_size--;
+		return (ret);
+	}
+
+	template <typename T>
+	typename List<T>::iterator List<T>::erase(iterator first, iterator last)
+	{
+		iterator prev(first.current->previous);
+		while (first.current != last.current && first.current != _end && first.current != _rend)
+		{
+			first++;
+			if (first.current->previous == _begin)
+			{
+				delete(first.current->previous);
+				_begin = NULL;
+			}
+			else
+			{
+				delete(first.current->previous);	
+			}
+		}
+		last.current->previous = prev.current;
+		prev.current->next = last.current;
+		if (_begin == NULL)
+			_begin = last.current;
+		return (first);
+	}
+
 	template <typename T>
 	void List<T>::clear()
 	{
-		Link<T> *temp = _begin;
-		if (_begin == NULL)
+		if (_begin == _end)
 		{
 			return ;
 		}
-		while (temp != _end)
-		{
-			temp = temp->next;
-			delete(temp->previous);
-		}
-		_begin = NULL;
-		_end->previous = NULL;
+		erase(begin(), end());
+		_begin = _end;
+		_end->previous = _rend;
 	}
 }
 
