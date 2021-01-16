@@ -427,21 +427,9 @@ namespace ft
 			_begin = last.current;
 		return (first);
 	}
-
 	template <typename T>
-	void List<T>::clear()
+	void List<T>::swap(List<T> &other)
 	{
-		if (_begin == _end)
-		{
-			return ;
-		}
-		erase(begin(), end());
-		_begin = _end;
-		_end->previous = _rend;
-	}
-
-	template <typename T>
-	void List<T>::swap(List<T> &other) {
 		Link<T> *tmp_end = other._end;
 		Link<T> *tmp_begin = other._begin;
 		Link<T> *tmp_rend = other._rend;
@@ -456,6 +444,18 @@ namespace ft
 		_begin = tmp_begin;
 		_rend = tmp_rend;
 		_size = tmp_size;
+	}
+
+	template <typename T>
+	void List<T>::clear()
+	{
+		if (_begin == _end)
+		{
+			return ;
+		}
+		erase(begin(), end());
+		_begin = _end;
+		_end->previous = _rend;
 	}
 }
 
