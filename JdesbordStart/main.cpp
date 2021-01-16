@@ -13,13 +13,12 @@ int main()
 	testint_base.push_back(2);
 	testint_base.push_back(4);
 
-	testint.clear();
+	//testint.clear();
 
 	std::cout << "sizeTest base --> " << testint_base.max_size() << std::endl;
 	std::cout << "sizeTest new  --> " << testint.max_size() << std::endl;
-
+	testint_base.assign(testint_base.begin(), testint_base.end());
 	testint.assign(testint.begin(), testint.end());
-
 	std::cout<< "ft::List front()  --> " << testint.front() << std::endl;
 	std::cout<< "std::list front() --> " << testint_base.front() << std::endl;
 	std::cout<< "ft::List back()  --> " << testint.back() << std::endl;

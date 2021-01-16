@@ -45,12 +45,12 @@ namespace ft
 				return(tmp);
 			}
 
-			ReverseIterator &operator--()
+			virtual ReverseIterator &operator--()
 			{
 				this->current = this->current->next;
 				return(*this);
 			}
-			ReverseIterator operator--(int)
+			virtual ReverseIterator operator--(int)
 			{
 				ReverseIterator tmp(*this);
 				this->current = this->current->next;
@@ -338,13 +338,31 @@ namespace ft
 	template <typename InputIterator>
 	void List<T>::assign(InputIterator first, InputIterator last)
 	{
-		clear();
+		size_t newsize = 0;
+		Link<T> *temp_start = NULL;
+		Link<T> *temp = NULL;
+		Link<T> *tempn = NULL;
 		while(*first != *last)
 		{
-			std::cout << first.current << "--\\--" << last.current << std::endl;
-			push_back(*first);
+			if (temp_start == NULL)
+			{
+				temp_start = new Link<T>(*first);
+				temp = temp_start;
+			}
+			else
+			{
+				tempn = new Link<T>(*first);
+				tempn->previous = temp;
+				temp->next = tempn;
+				temp = tempn;
+			}
+			newsize++;
 			first++;
 		}
+		clear();
+		_size = newsize;
+		_end->previous = temp;
+		_begin = temp_start;
 	}
 
 	/*template <typename T>
@@ -390,11 +408,16 @@ namespace ft
 	void List<T>::clear()
 	{
 		Link<T> *temp = _begin;
+		if (_begin == NULL)
+		{
+			return ;
+		}
 		while (temp != _end)
 		{
 			temp = temp->next;
 			delete(temp->previous);
 		}
+		_begin = NULL;
 		_end->previous = NULL;
 	}
 }
