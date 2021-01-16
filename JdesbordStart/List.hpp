@@ -221,7 +221,7 @@ namespace ft
 
 			iterator erase (iterator position);
 			iterator erase (iterator first, iterator last);
-			void swap();
+			void swap(List &lst);
 			void resize();
 			void clear();
 
@@ -344,43 +344,19 @@ namespace ft
 	template <typename InputIterator>
 	void List<T>::assign(InputIterator first, InputIterator last)
 	{
-		size_t newsize = 0;
-		Link<T> *temp_start = NULL;
-		Link<T> *temp = NULL;
-		Link<T> *tempn = NULL;
-		while(first != last)
-		{
-			if (temp_start == NULL)
-			{
-				temp_start = new Link<T>(*first);
-				temp = temp_start;
-			}
-			else
-			{
-				tempn = new Link<T>(*first);
-				tempn->previous = temp;
-				temp->next = tempn;
-				temp = tempn;
-			}
-			newsize++;
-			first++;
-		}
-		clear();
-		_size = newsize;
-		temp->next = _end;
-		_end->previous = temp;
-		_begin = temp_start;
-		_begin->previous = _rend;
-		_rend->next = _begin;
+		List<T> tmp;
+		for (;first != last; first++)
+			tmp.push_back(*first);
+		swap(tmp);
+		tmp.~List();
 	}
 
 	template <typename T>
 	void List<T>::assign(size_type n, const value_type& val)
 	{
+		clear();
 		for (size_type i = 0; i < n; i++)
-		{
 			push_back(val);
-		}
 	}
 
 	template <typename T>
@@ -441,8 +417,9 @@ namespace ft
 			}
 			else
 			{
-				delete(first.current->previous);	
+				delete(first.current->previous);
 			}
+			_size--;	
 		}
 		last.current->previous = prev.current;
 		prev.current->next = last.current;
@@ -461,6 +438,24 @@ namespace ft
 		erase(begin(), end());
 		_begin = _end;
 		_end->previous = _rend;
+	}
+
+	template <typename T>
+	void List<T>::swap(List<T> &other) {
+		Link<T> *tmp_end = other._end;
+		Link<T> *tmp_begin = other._begin;
+		Link<T> *tmp_rend = other._rend;
+		size_t tmp_size = other._size;
+
+		other._end = _end;
+		other._begin = _begin;
+		other._rend = _rend;
+		other._size = _size;
+
+		_end = tmp_end;
+		_begin = tmp_begin;
+		_rend = tmp_rend;
+		_size = tmp_size;
 	}
 }
 

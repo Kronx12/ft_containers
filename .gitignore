@@ -35,3 +35,4 @@ ft_containers
 # Other
 objs/
 .vscode
+**.dSYM
