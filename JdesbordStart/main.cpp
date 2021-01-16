@@ -5,12 +5,12 @@ int main()
 {
 	std::cout << "INT TESTS" << std::endl;
 	ft::List<int> testint;
-	testint.push_back(1);
 	testint.push_back(2);
+	testint.push_back(1);
 	testint.push_back(3);
 	std::list<int> testint_base;
-	testint_base.push_back(1);
 	testint_base.push_back(2);
+	testint_base.push_back(1);
 	testint_base.push_back(4);
 
 	//testint.clear();
@@ -53,6 +53,15 @@ int main()
 	std::cout<< "std::List rbegin() --> " << *(teststring_base.rbegin()) << std::endl;
 	std::cout<< "ft::List --rend()  --> " << *(--teststring.rend()) << std::endl;
 	std::cout<< "std::List --rend() --> " << *(--teststring_base.rend()) << std::endl;
+
+
+	std::cout << "SORT TESTS" << std::endl;
+	std::cout<< "ft::List front()  --> " << testint.front() << std::endl;
+	std::cout<< "std::list front()  --> " << testint_base.front() << std::endl;
+	testint.sort();
+	testint_base.sort();
+	std::cout<< "ft::List front()  --> " << testint.front() << std::endl;
+	std::cout<< "std::list front()  --> " << testint_base.front() << std::endl;
 
 
 	std::cout << "ERASE / CLEAR TESTS" << std::endl;

@@ -406,6 +406,8 @@ namespace ft
 	typename List<T>::iterator List<T>::erase(iterator pos)
 	{
 		iterator ret = pos;
+		if (pos.current == _end || pos.current == _rend)
+			return (_end);
 		if (pos.current == _begin)
 			_begin = _begin->next;
 		pos.current->previous->next = pos.current->next;
