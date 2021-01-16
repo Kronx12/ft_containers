@@ -139,7 +139,7 @@ namespace ft
 			}
 	};
 
-	template <typename T>
+	template <typename T >
 	class Link
 	{
 		public :
@@ -151,7 +151,7 @@ namespace ft
 			Link() : value(T()), next(NULL), previous(NULL) {};
 	};
 
-	template <class T>
+	template <class T >
 	class List
 	{
 		private:
@@ -226,113 +226,126 @@ namespace ft
 			void clear();
 
 			//Operations
-			void splice();
-			void remove();
-			void remove_if();
+			void splice(const_iterator pos, List &other);
+			void splice(const_iterator pos, List &other, const_iterator it);
+			void splice(const_iterator pos, List &other, const_iterator first, const_iterator last);
+
+			template< class UnaryPredictate >
+			void remove_if(UnaryPredictate p);
+			void remove(const T &value);
+
+			template < class BinaryPredicate >			
+			void unique(BinaryPredicate p);
 			void unique();
-			void merge();
+
+			template < class Compare >
+			void merge(List &other, Compare comp);
+			void merge(List &other);
+
+			template < class Compare >
+			void sort(Compare comp);
 			void sort();
 			void reverse();			
 	};
 
 
 	//-------------------------- CONSTRUCTOR --------------------------
-	template <typename T>
+	template <typename T >
 	List<T>::List(const List<T>::allocator_type& alloc) : _end(new Link<T>()), _begin(_end), _rend(new Link<T>(NULL, T(), _end)),_size(0)
 	{
 		_end->previous = _rend;
 		(void)alloc;
 	}
 
-	template <typename T>
+	template <typename T >
 	List<T>::~List()
 	{
 		
 	}
 
-	template <typename T>
+	template <typename T >
 	List<T>::List(const List& x)
 	{
 		(void)x;
 	}
 
 	//-------------------------- ITERATORS --------------------------
-	template <typename T>
+	template <typename T >
 	typename List<T>::iterator List<T>::begin()
 	{
 		return(iterator(this->_begin));
 	}
 
-	template <typename T>
+	template <typename T >
 	typename List<T>::const_iterator List<T>::begin() const
 	{
 		return(const_iterator(this->_begin));
 	}
 
-	template <typename T>
+	template <typename T >
 	typename List<T>::iterator List<T>::end()
 	{
 		return(iterator(this->_end));
 	}
 
-	template <typename T>
+	template <typename T >
 	typename List<T>::const_iterator List<T>::end() const
 	{
 		return(const_iterator(this->_end));
 	}
 
 	//------------------- REVERSE ITERATORS ------------------------
-	template <typename T>
+	template <typename T >
 	typename List<T>::reverse_iterator List<T>::rbegin()
 	{
 		return(reverse_iterator(this->_end->previous));
 	}
 
-	template <typename T>
+	template <typename T >
 	typename List<T>::const_reverse_iterator List<T>::rbegin() const
 	{
 		return(const_reverse_iterator(this->_end->previous));
 	}
 
-	template <typename T>
+	template <typename T >
 	typename List<T>::reverse_iterator List<T>::rend()
 	{
 		return(reverse_iterator(this->_rend));
 	}
 
-	template <typename T>
+	template <typename T >
 	typename List<T>::const_reverse_iterator List<T>::rend() const
 	{
 		return(const_reverse_iterator(this->_rend));
 	}
 
 	//-------------------------- CAPACITY --------------------------
-	template <typename T>
+	template <typename T >
 	bool List<T>::empty() const
 	{
 		return(begin() == end());
 	}
 
-	template <typename T>
+	template <typename T >
 	typename List<T>::size_type List<T>::size() const
 	{
 		return(_size);
 	}
 
-	template <typename T>
+	template <typename T >
 	typename List<T>::size_type List<T>::max_size() const
 	{
 		return (std::numeric_limits<size_type>::max() / sizeof(link_type));
 	}
 
 	//-------------------------- ELEMENT ACCESS --------------------------
-	template <typename T>
+	template <typename T >
 	typename List<T>::reference List<T>::front()
 	{
 		return(_begin->value);
 	}
 
-	template <typename T>
+	template <typename T >
 	typename List<T>::reference List<T>::back()
 	{
 		return(_end->previous->value);
@@ -340,8 +353,8 @@ namespace ft
 
 	//-------------------------- MODIFIERS ---------------------------
 
-	template <typename T>
-	template <typename InputIterator>
+	template <typename T >
+	template <typename InputIterator >
 	void List<T>::assign(InputIterator first, InputIterator last)
 	{
 		List<T> tmp;
@@ -351,7 +364,7 @@ namespace ft
 		tmp.~List();
 	}
 
-	template <typename T>
+	template <typename T >
 	void List<T>::assign(size_type n, const value_type& val)
 	{
 		clear();
@@ -359,13 +372,13 @@ namespace ft
 			push_back(val);
 	}
 
-	template <typename T>
+	template <typename T >
 	void List<T>::push_back(const value_type& val)
 	{
 		insert(end(), val);
 	}
 
-	template <typename T>
+	template <typename T >
 	typename List<T>::iterator List<T>::insert(iterator pos, const T &value)
 	{
 		iterator next = pos;
@@ -389,7 +402,7 @@ namespace ft
 		return (iterator(n));
 	}
 
-	template <typename T>
+	template <typename T >
 	typename List<T>::iterator List<T>::erase(iterator pos)
 	{
 		iterator ret = pos;
@@ -403,7 +416,7 @@ namespace ft
 		return (ret);
 	}
 
-	template <typename T>
+	template <typename T >
 	typename List<T>::iterator List<T>::erase(iterator first, iterator last)
 	{
 		iterator prev(first.current->previous);
@@ -427,9 +440,21 @@ namespace ft
 			_begin = last.current;
 		return (first);
 	}
-	template <typename T>
-	void List<T>::swap(List<T> &other)
+
+	template <typename T >
+	void List<T>::clear()
 	{
+		if (_begin == _end)
+		{
+			return ;
+		}
+		erase(begin(), end());
+		_begin = _end;
+		_end->previous = _rend;
+	}
+
+	template < typename T >
+	void List<T>::swap(List &other) {
 		Link<T> *tmp_end = other._end;
 		Link<T> *tmp_begin = other._begin;
 		Link<T> *tmp_rend = other._rend;
@@ -446,16 +471,165 @@ namespace ft
 		_size = tmp_size;
 	}
 
-	template <typename T>
-	void List<T>::clear()
+	template < class T >
+	void List<T>::merge(List<T> &other)
 	{
-		if (_begin == _end)
+		if (this == &other) return;
+		while (other.size() > 0)
+			for (iterator itr = begin(); itr != end(); itr++)
+				if (*other.begin() < *itr)
+				{
+					insert(itr, *other.begin());
+					other.pop_front();
+					break ;
+				}
+	}
+
+	template < class T >
+	template < class Compare >
+	void List<T>::merge(List<T> &other, Compare comp)
+	{
+		if (this == &other) return;
+		while (other.size() > 0)
+			for (iterator itr = begin(); itr != end(); itr++)
+				if (comp(*other.begin(), *itr))
+				{
+					insert(itr, *other.begin());
+					other.pop_front();
+					break ;
+				}
+	}
+
+	template < class T >
+	void List<T>::splice(List<T>::const_iterator pos, List &other)
+	{
+		for (iterator itr = other.begin(); itr != other.end(); itr++)
 		{
-			return ;
+			insert(pos, *itr);
+			other.erase(itr);
+			pos++;
 		}
-		erase(begin(), end());
-		_begin = _end;
-		_end->previous = _rend;
+	}
+
+	template < class T >
+	void List<T>::splice(List<T>::const_iterator pos, List &other, List<T>::const_iterator it) 
+	{
+		for (; it != other.end(); it++)
+		{
+			insert(pos, *it);
+			other.erase(it);
+			pos++;
+		}
+	}
+
+	template < class T >
+	void List<T>::splice(List<T>::const_iterator pos, List &other, List<T>::const_iterator first, List<T>::const_iterator last)
+	{
+		for (; first != last; first++)
+		{
+			insert(pos, *first);
+			other.erase(first);
+			pos++;
+		}
+	}
+
+	template < class T >
+	void List<T>::remove(const T &value)
+	{
+		for (iterator itr = begin(); itr != end(); itr++)
+			if (*itr == value)
+				erase(itr);
+	}
+	
+	template < class T >
+	template < class UnaryPredictate >
+	void List<T>::remove_if(UnaryPredictate p) 
+	{
+		for (iterator itr = begin(); itr != end(); itr++)
+			if (p(*itr))
+				erase(itr);
+	}
+
+	template < class T >
+	void List<T>::reverse()
+	{
+		List<T> tmp;
+		for (iterator itr = begin(); itr != end(); itr++)
+			tmp.push_front(*itr);
+		swap(tmp);
+		tmp.~List();				
+	}
+
+	template < class T >
+	void List<T>::unique() 
+	{
+		List<T> tmp;
+		for (iterator itr = begin(); itr != end(); itr++)
+			if (!(tmp.back() == *itr))
+				tmp.push_back(*itr);
+		swap(tmp);
+		tmp.~List();
+	}
+
+	template < class T >
+	template < class BinaryPredicate >
+	void List<T>::unique(BinaryPredicate p) 
+	{
+		List<T> tmp;
+		for (iterator itr = begin(); itr != end(); itr++)
+			if (!p(tmp.back(), *itr))
+				tmp.push_back(*itr);
+		swap(tmp);
+		tmp.~List();
+	}
+
+	template < class T >
+	void List<T>::sort()
+	{
+		bool swap = true;
+		while (swap)
+		{
+			swap = false;
+			iterator itr_a = begin(), itr_b = begin();
+			itr_b++;
+			while (itr_b != end())
+			{
+				if (*itr_a > *itr_b) 
+				{
+					T tmp = *itr_a;
+					*itr_a = *itr_b;
+					*itr_b = tmp;
+					swap = true;
+				}
+				itr_a++;
+				itr_b++;
+			}
+		}
+	}
+
+	template < class T >
+	template < class Compare >
+	void List<T>::sort(Compare comp)
+	{
+		bool swap = true;
+		while (swap)
+		{
+			swap = false;
+			iterator itr_a = begin(), itr_b = begin();
+			itr_b++;
+			while (itr_b != end())
+			{
+				if (comp(*itr_b, *itr_a))
+				{
+					T tmp = *itr_a;
+					*itr_a = *itr_b;
+					*itr_b = tmp;
+					swap = true;
+				}
+				itr_a++;
+				itr_b++;
+			}
+		}
 	}
 }
 
