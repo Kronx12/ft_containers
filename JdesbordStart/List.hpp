@@ -70,7 +70,7 @@ namespace ft
 			typedef value_type& reference;
 			typedef const value_type& const_reference;
 
-		protected:
+		//protected:
 			link_pointer current;
 
 		public:
@@ -207,8 +207,9 @@ namespace ft
 			//Modifiers
 			void assign(size_type n, const value_type& val);
 
-			void assign(iterator first, iterator last);
-
+			template <typename InputIterator>
+			void assign(InputIterator first, InputIterator last);
+			//void assign(iterator first, iterator last);
 			void push_front();
 			void pop_front();
 			void push_back(const value_type& val);
@@ -232,7 +233,7 @@ namespace ft
 
 	//-------------------------- CONSTRUCTOR --------------------------
 	template <typename T>
-	List<T>::List(const List<T>::allocator_type& alloc) : _begin(NULL), _end(NULL), _size(0)
+	List<T>::List(const List<T>::allocator_type& alloc) : _begin(NULL), _end(new Link<T>()), _size(0)
 	{
 		(void)alloc;
 	}
@@ -334,16 +335,27 @@ namespace ft
 	//-------------------------- MODIFIERS ---------------------------
 
 	template <typename T>
-	void List<T>::assign(iterator first, iterator last)
+	template <typename InputIterator>
+	void List<T>::assign(InputIterator first, InputIterator last)
 	{
-		//Link<T> *_llink = static_cast< Link<T> >(last);
-		while(first != last)
+		clear();
+		while(*first != *last)
 		{
-			std::cout << *(++first) << std::endl;
+			std::cout << first.current << "--\\--" << last.current << std::endl;
 			push_back(*first);
 			first++;
 		}
 	}
+
+	/*template <typename T>
+	void List<T>::assign(iterator first, iterator last)
+	{
+		while(*first != *last)
+		{
+			push_back(*first);
+			first++;
+		}
+	}*/
 
 	template <typename T>
 	void List<T>::assign(size_type n, const value_type& val)
@@ -364,7 +376,7 @@ namespace ft
 			_rend = new Link<T>();
 			_rend->next = _begin;
 			_begin->previous = _rend;
-			_end = new Link<T>(_begin);
+			_end->previous = _begin;
 			_begin->next = _end;
 		}
 		else
@@ -373,6 +385,17 @@ namespace ft
 			_end->value = val;
 			_end = _end->next;
 		}
+	}
+	template <typename T>
+	void List<T>::clear()
+	{
+		Link<T> *temp = _begin;
+		while (temp != _end)
+		{
+			temp = temp->next;
+			delete(temp->previous);
+		}
+		_end->previous = NULL;
 	}
 }
 
