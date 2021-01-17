@@ -158,12 +158,6 @@ namespace ft
 	template < class T >
 	class List
 	{
-		private:
-			Link<T> *_end;
-			Link<T> *_begin;
-			Link<T> *_rend;
-			size_t _size;
-
 		public:
 			typedef T value_type;
 			typedef typename std::allocator<value_type> allocator_type;
@@ -179,6 +173,13 @@ namespace ft
 			typedef ReverseIterator<const_iterator> const_reverse_iterator;
 			typedef std::ptrdiff_t difference_type;
 			typedef size_t size_type;
+
+		private:
+			Link<T> *_end;
+			Link<T> *_begin;
+			Link<T> *_rend;
+			size_t _size;
+			allocator_type _alloc;
 
 		public:
 			explicit List (const allocator_type& alloc = allocator_type());
@@ -259,41 +260,34 @@ namespace ft
 	//-------------------------- CONSTRUCTOR --------------------------
 	template < typename T >
 	List<T>::List(const List<T>::allocator_type& alloc)
-		: _end(new Link<T>()), _begin(_end), _rend(new Link<T>(NULL, T(), _end)),_size(0)
+		: _end(new Link<T>()), _begin(_end), _rend(new Link<T>(NULL, T(), _end)), _size(0), _alloc(alloc)
 	{
 		_end->previous = _rend;
-		(void) alloc;
-		// TODO alloc
 	}
 
 	template < typename T >
 	List<T>::List(size_type n, const value_type& val, const allocator_type& alloc)
-		: _end(new Link<T>()), _begin(_end), _rend(new Link<T>(NULL, T(), _end)), _size(0)
+		: _end(new Link<T>()), _begin(_end), _rend(new Link<T>(NULL, T(), _end)), _size(0), _alloc(alloc)
 	{
 		for (size_type i = 0; i < n; i++)
 			push_back(val);
-		(void) alloc;
-		// TODO alloc
 	}
 
 	template < typename T >
 	template < class InputIterator >
 	List<T>::List(InputIterator first, InputIterator last, const allocator_type& alloc)
-		: _end(new Link<T>()), _begin(_end), _rend(new Link<T>(NULL, T(), _end)), _size(0)
+		: _end(new Link<T>()), _begin(_end), _rend(new Link<T>(NULL, T(), _end)), _size(0), _alloc(alloc)
 	{
 		for (;first != last; first++)
 			push_back(*first);
-		(void) alloc;
-		// TODO alloc
 	}
 
 	template < typename T >
 	List<T>::List(const List& x)
-		: _end(new Link<T>()), _begin(_end), _rend(new Link<T>(NULL, T(), _end)), _size(0)
+		: _end(new Link<T>()), _begin(_end), _rend(new Link<T>(NULL, T(), _end)), _size(0), _alloc(x._alloc)
 	{
 		for (List<T>::const_iterator itr = x.begin(); itr != x.end(); itr++)
 			push_back(*itr);
-		// TODO get allocator from x
 	}
 
 	template < typename T >
