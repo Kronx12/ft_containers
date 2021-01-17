@@ -6,9 +6,13 @@
 # include <string>
 # include <stack>
 
+# ifdef __linux__
+#  include <limits>
+# endif
+
 namespace ft
 {
-	template <typename It>
+	template < typename It >
 	class ReverseIterator : public It
 	{
 		public:
@@ -58,7 +62,7 @@ namespace ft
 			}
 	};
 	
-	template <class T, class L>
+	template < class T, class L >
 	class Iterator
 	{
 		public:
@@ -102,7 +106,7 @@ namespace ft
 			//Input Category
 			bool operator==(const Iterator & rhs)
 			{
-				return (this->current == rhs->current);
+				return (this->current == rhs.current);
 			}
 			bool operator!=(const Iterator & rhs)
 			{
@@ -139,7 +143,7 @@ namespace ft
 			}
 	};
 
-	template <typename T >
+	template < typename T >
 	class Link
 	{
 		public :
@@ -151,7 +155,7 @@ namespace ft
 			Link() : value(T()), next(NULL), previous(NULL) {};
 	};
 
-	template <class T >
+	template < class T >
 	class List
 	{
 		private:
@@ -159,6 +163,8 @@ namespace ft
 			Link<T> *_begin;
 			Link<T> *_rend;
 			size_t _size;
+
+		public:
 			typedef T value_type;
 			typedef typename std::allocator<value_type> allocator_type;
 			typedef typename allocator_type::reference reference;
@@ -176,13 +182,14 @@ namespace ft
 
 		public:
 			explicit List (const allocator_type& alloc = allocator_type());
-			//explicit List (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type());
-			template <class InputIterator>
+			explicit List (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type());
+			
+			template < class InputIterator >
 			List (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());
 			List (const List& x);
 			~List();
-			//List<T> &		operator=( List const & rhs );
-
+			List<T> &operator=( List const & rhs );
+//---
 			//Iterators;
 			iterator begin();
 			const_iterator begin() const;
@@ -206,7 +213,7 @@ namespace ft
 			//Modifiers
 			void assign(size_type n, const value_type& val);
 
-			template <typename InputIterator>
+			template < typename InputIterator >
 			void assign(InputIterator first, InputIterator last);
 			//void assign(iterator first, iterator last);
 			void push_front();
@@ -250,102 +257,135 @@ namespace ft
 
 
 	//-------------------------- CONSTRUCTOR --------------------------
-	template <typename T >
-	List<T>::List(const List<T>::allocator_type& alloc) : _end(new Link<T>()), _begin(_end), _rend(new Link<T>(NULL, T(), _end)),_size(0)
+	template < typename T >
+	List<T>::List(const List<T>::allocator_type& alloc)
+		: _end(new Link<T>()), _begin(_end), _rend(new Link<T>(NULL, T(), _end)),_size(0)
 	{
 		_end->previous = _rend;
-		(void)alloc;
+		(void) alloc;
+		// TODO alloc
 	}
 
-	template <typename T >
+	template < typename T >
+	List<T>::List(size_type n, const value_type& val, const allocator_type& alloc)
+		: _end(new Link<T>()), _begin(_end), _rend(new Link<T>(NULL, T(), _end)), _size(0)
+	{
+		for (size_type i = 0; i < n; i++)
+			push_back(val);
+		(void) alloc;
+		// TODO alloc
+	}
+
+	template < typename T >
+	template < class InputIterator >
+	List<T>::List(InputIterator first, InputIterator last, const allocator_type& alloc)
+		: _end(new Link<T>()), _begin(_end), _rend(new Link<T>(NULL, T(), _end)), _size(0)
+	{
+		for (;first != last; first++)
+			push_back(*first);
+		(void) alloc;
+		// TODO alloc
+	}
+
+	template < typename T >
+	List<T>::List(const List& x)
+		: _end(new Link<T>()), _begin(_end), _rend(new Link<T>(NULL, T(), _end)), _size(0)
+	{
+		for (List<T>::const_iterator itr = x.begin(); itr != x.end(); itr++)
+			push_back(*itr);
+		// TODO get allocator from x
+	}
+
+	template < typename T >
+	List<T> &List<T>::operator=(List<T> const & rhs) {
+        if (this == &rhs) return(*this);
+		this->~List();
+        return *new(this) List(rhs);
+	}
+
+	template < typename T >
 	List<T>::~List()
 	{
-		
-	}
-
-	template <typename T >
-	List<T>::List(const List& x)
-	{
-		(void)x;
+		clear();
 	}
 
 	//-------------------------- ITERATORS --------------------------
-	template <typename T >
+	template < typename T >
 	typename List<T>::iterator List<T>::begin()
 	{
 		return(iterator(this->_begin));
 	}
 
-	template <typename T >
+	template < typename T >
 	typename List<T>::const_iterator List<T>::begin() const
 	{
 		return(const_iterator(this->_begin));
 	}
 
-	template <typename T >
+	template < typename T >
 	typename List<T>::iterator List<T>::end()
 	{
 		return(iterator(this->_end));
 	}
 
-	template <typename T >
+	template < typename T >
 	typename List<T>::const_iterator List<T>::end() const
 	{
 		return(const_iterator(this->_end));
 	}
 
 	//------------------- REVERSE ITERATORS ------------------------
-	template <typename T >
+	template < typename T >
 	typename List<T>::reverse_iterator List<T>::rbegin()
 	{
 		return(reverse_iterator(this->_end->previous));
 	}
 
-	template <typename T >
+	template < typename T >
 	typename List<T>::const_reverse_iterator List<T>::rbegin() const
 	{
 		return(const_reverse_iterator(this->_end->previous));
 	}
 
-	template <typename T >
+	template < typename T >
 	typename List<T>::reverse_iterator List<T>::rend()
 	{
 		return(reverse_iterator(this->_rend));
 	}
 
-	template <typename T >
+	template < typename T >
 	typename List<T>::const_reverse_iterator List<T>::rend() const
 	{
 		return(const_reverse_iterator(this->_rend));
 	}
 
 	//-------------------------- CAPACITY --------------------------
-	template <typename T >
+	template < typename T >
 	bool List<T>::empty() const
 	{
 		return(begin() == end());
 	}
 
-	template <typename T >
+	template < typename T >
 	typename List<T>::size_type List<T>::size() const
 	{
 		return(_size);
 	}
 
-	template <typename T >
+	template < typename T >
 	typename List<T>::size_type List<T>::max_size() const
 	{
 		return (std::numeric_limits<size_type>::max() / sizeof(link_type));
 	}
 
 	//-------------------------- ELEMENT ACCESS --------------------------
-	template <typename T >
+	template < typename T >
 	typename List<T>::reference List<T>::front()
 	{
 		return(_begin->value);
 	}
 
-	template <typename T >
+	template < typename T >
 	typename List<T>::reference List<T>::back()
 	{
 		return(_end->previous->value);
@@ -353,8 +393,8 @@ namespace ft
 
 	//-------------------------- MODIFIERS ---------------------------
 
-	template <typename T >
-	template <typename InputIterator >
+	template < typename T >
+	template < typename InputIterator >
 	void List<T>::assign(InputIterator first, InputIterator last)
 	{
 		List<T> tmp;
@@ -364,7 +404,7 @@ namespace ft
 		tmp.~List();
 	}
 
-	template <typename T >
+	template < typename T >
 	void List<T>::assign(size_type n, const value_type& val)
 	{
 		clear();
@@ -372,13 +412,13 @@ namespace ft
 			push_back(val);
 	}
 
-	template <typename T >
+	template < typename T >
 	void List<T>::push_back(const value_type& val)
 	{
 		insert(end(), val);
 	}
 
-	template <typename T >
+	template < typename T >
 	typename List<T>::iterator List<T>::insert(iterator pos, const T &value)
 	{
 		iterator next = pos;
@@ -402,7 +442,7 @@ namespace ft
 		return (iterator(n));
 	}
 
-	template <typename T >
+	template < typename T >
 	typename List<T>::iterator List<T>::erase(iterator pos)
 	{
 		iterator ret = pos;
@@ -418,7 +458,7 @@ namespace ft
 		return (ret);
 	}
 
-	template <typename T >
+	template < typename T >
 	typename List<T>::iterator List<T>::erase(iterator first, iterator last)
 	{
 		iterator prev(first.current->previous);
@@ -443,7 +483,7 @@ namespace ft
 		return (first);
 	}
 
-	template <typename T >
+	template < typename T >
 	void List<T>::clear()
 	{
 		if (_begin == _end)
