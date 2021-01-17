@@ -1,6 +1,19 @@
 #include "List.hpp"
 #include <list>
 
+/*
+
+all = 0
+constructor_test = 1
+iterator_test = 2
+capacity_test = 3
+element_access_test = 4
+
+*/
+#ifndef TEST
+# define TEST 0
+#endif
+
 template < class T >
 void describe_list(std::list<T> lst, std::string name)
 {
@@ -43,6 +56,7 @@ void describe_list(std::list<T> std_lst, std::string std_name, ft::List<T> ft_ls
 
 void constructor_test(int size)
 {
+	std::cout << "Constructor size(" << size << ")" << std::endl;
 // default constructor
 	std::list<int> std_lst;
 	ft::List<int> ft_lst;
@@ -84,17 +98,150 @@ void constructor_test(int size)
 	ft_lst_assignment = ft_lst_range;
 	describe_list(std_lst_assignment, "std_lst_assignment", ft_lst_assignment, "ft_lst_assignment");
 
-	std::cout << "=========================" << std::endl << std::endl;
+	std::cout << "=========================" << std::endl;
+}
+
+void iterator_test(int size)
+{
+	std::cout << "Iterator size(" << size << ")" << std::endl;
+	std::list<int> std_lst;
+	std::list<int> ft_lst;
+
+	for (int i = 0; i < size; i++)
+	{
+		std_lst.push_back(i);
+		ft_lst.push_back(i);
+	}
+
+// iterators
+	std::cout << "STD Iterator: " << std::endl;
+	for (std::list<int>::iterator itr = std_lst.begin(); itr != std_lst.end(); itr++)
+		std::cout << "[" << *itr << "] ";
+	std::cout << std::endl << "FT Iterator: " << std::endl;
+	for (std::list<int>::iterator itr = ft_lst.begin(); itr != ft_lst.end(); itr++)
+		std::cout << "[" << *itr << "] ";
+	std::cout << std::endl << std::endl;
+
+// const_iterators
+	std::cout << "STD Const Iterator: " << std::endl;
+	for (std::list<int>::const_iterator itr = std_lst.begin(); itr != std_lst.end(); itr++)
+		std::cout << "[" << *itr << "] ";
+	std::cout << std::endl << "STD Const Iterator: " << std::endl;
+	for (std::list<int>::const_iterator itr = ft_lst.begin(); itr != ft_lst.end(); itr++)
+		std::cout << "[" << *itr << "] ";
+	std::cout << std::endl << std::endl;
+
+// reverse_iterators
+	std::cout << "STD Reverse Iterator: " << std::endl;
+	for (std::list<int>::reverse_iterator itr = std_lst.rbegin(); itr != std_lst.rend(); itr++)
+		std::cout << "[" << *itr << "] ";
+	std::cout << std::endl << "FT Reverse Iterator: " << std::endl;
+	for (std::list<int>::reverse_iterator itr = ft_lst.rbegin(); itr != ft_lst.rend(); itr++)
+		std::cout << "[" << *itr << "] ";
+	std::cout << std::endl << std::endl;
+
+// const_reverse_iterator
+	std::cout << "STD Const Reverse Iterator: " << std::endl;
+	for (std::list<int>::const_reverse_iterator itr = std_lst.rbegin(); itr != std_lst.rend(); itr++)
+		std::cout << "[" << *itr << "] ";
+	std::cout << std::endl << "FT Const Reverse Iterator: " << std::endl;
+	for (std::list<int>::const_reverse_iterator itr = ft_lst.rbegin(); itr != ft_lst.rend(); itr++)
+		std::cout << "[" << *itr << "] ";
+	std::cout << std::endl;
+
+	std::cout << "=========================" << std::endl;
+}
+
+void capacity_test(int size)
+{
+	std::cout << "Capacity size(" << size << ")" << std::endl;
+	std::list<int> std_lst;
+	std::list<int> ft_lst;
+
+	for (int i = 0; i < size; i++)
+	{
+		std_lst.push_back(i);
+		ft_lst.push_back(i);
+	}
+
+// capacity
+	std::cout << "STD size : " << std_lst.size() << std::endl;
+	std::cout << "FT size : " << ft_lst.size() << std::endl << std::endl;
+
+	std::cout << "STD max_size : " << std_lst.max_size() << std::endl;
+	std::cout << "FT max_size : " << ft_lst.max_size() << std::endl << std::endl;
+
+	std::cout << "STD empty : " << std_lst.empty() << std::endl;
+	std::cout << "FT empty : " << ft_lst.empty() << std::endl;
+
+	std::cout << "=========================" << std::endl;
+}
+
+void element_access_test(int size)
+{
+	std::cout << "Element_access size(" << size << ")" << std::endl;
+	std::list<int> std_lst;
+	std::list<int> ft_lst;
+
+	for (int i = 0; i < size; i++)
+	{
+		std_lst.push_back(i);
+		ft_lst.push_back(i);
+	}
+
+// element access
+	std::cout << "STD front : " << std_lst.front() << std::endl;
+	std::cout << "FT front : " << ft_lst.front() << std::endl << std::endl;
+
+	std::cout << "STD back : " << std_lst.back() << std::endl;
+	std::cout << "FT back : " << ft_lst.back() << std::endl;
+
+	std::cout << "=========================" << std::endl;
 }
 
 int main()
 {
-	// constructor_test(100000); OK Sur linux (juste chiant a afficher)
+
+#if TEST == 0 || TEST == 1
+
+	// constructor_test(1000); // OK Sur linux (juste chiant a afficher)
 	constructor_test(10);
 	constructor_test(5);
 	constructor_test(2);
 	constructor_test(1);
 	constructor_test(0);
+
+#endif
+#if TEST == 0 || TEST == 2
+
+	// iterator_test(1000); // OK Sur linux (juste chiant a afficher)
+	iterator_test(10);
+	iterator_test(5);
+	iterator_test(2);
+	iterator_test(1);
+	iterator_test(0);
+
+#endif
+#if TEST == 0 || TEST == 3
+
+	// capacity_test(1000); // OK Sur linux (juste chiant a afficher)
+	capacity_test(10);
+	capacity_test(5);
+	capacity_test(2);
+	capacity_test(1);
+	capacity_test(0);
+
+#endif
+#if TEST == 0 || TEST == 4
+
+	// element_access_test(1000); // OK Sur linux (juste chiant a afficher)
+	element_access_test(10);
+	element_access_test(5);
+	element_access_test(2);
+	element_access_test(1);
+	element_access_test(0);
+
+#endif
 
 	/*
 	std::cout << "INT TESTS" << std::endl;

@@ -184,7 +184,6 @@ namespace ft
 		public:
 			explicit List (const allocator_type& alloc = allocator_type());
 			explicit List (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type());
-			
 			template < class InputIterator >
 			List (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());
 			List (const List& x);
@@ -201,22 +200,21 @@ namespace ft
 			const_reverse_iterator rbegin() const;
 			reverse_iterator rend();
 			const_reverse_iterator rend() const;
-
+//---
 			//Capacity
 			bool empty() const;
 			size_type size() const;
 			size_type max_size() const;
-
+//---
 			//Element access
 			reference front();
 			reference back();
-
+//---
 			//Modifiers
 			void assign(size_type n, const value_type& val);
 
 			template < typename InputIterator >
 			void assign(InputIterator first, InputIterator last);
-			//void assign(iterator first, iterator last);
 			void push_front();
 			void pop_front();
 			void push_back(const value_type& val);
