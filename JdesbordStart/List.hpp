@@ -215,7 +215,7 @@ namespace ft
 
 			template < typename InputIterator >
 			void assign(InputIterator first, InputIterator last);
-			void push_front();
+			void push_front(const value_type& val);
 			void pop_front();
 			void push_back(const value_type& val);
 			void pop_back();
@@ -386,6 +386,14 @@ namespace ft
 	//-------------------------- MODIFIERS ---------------------------
 
 	template < typename T >
+	void List<T>::assign(size_type n, const value_type& val)
+	{
+		clear();
+		for (size_type i = 0; i < n; i++)
+			push_back(val);
+	}
+
+	template < typename T >
 	template < typename InputIterator >
 	void List<T>::assign(InputIterator first, InputIterator last)
 	{
@@ -397,17 +405,27 @@ namespace ft
 	}
 
 	template < typename T >
-	void List<T>::assign(size_type n, const value_type& val)
+	void List<T>::push_front(const value_type& val)
 	{
-		clear();
-		for (size_type i = 0; i < n; i++)
-			push_back(val);
+		insert(begin(), val);
+	}
+	
+	template < typename T >
+	void List<T>::pop_front()
+	{
+		erase(begin());
 	}
 
 	template < typename T >
 	void List<T>::push_back(const value_type& val)
 	{
 		insert(end(), val);
+	}
+	
+	template < typename T >
+	void List<T>::pop_back()
+	{
+		erase(end());
 	}
 
 	template < typename T >

@@ -199,6 +199,75 @@ void element_access_test(int size)
 	std::cout << "=========================" << std::endl;
 }
 
+void modifiers_test(int size)
+{
+	std::cout << "Modifiers size(" << size << ")" << std::endl;
+
+	std::list<int> std_lst;
+	ft::List<int> ft_lst;
+
+	// ====================================================================== BAD ASSIGN CALLED
+	// std_lst.assign(size, size);
+	// ft_lst.assign(size, size);
+	// std::cout << "assign(" << size << ":" << size << ")" << std::endl;
+	// describe_list(std_lst, "std_lst", ft_lst, "ft_lst");
+	// TODO ==========================================================================================
+
+	std_lst = std::list<int>(size);
+	ft_lst = ft::List<int>(size);
+	describe_list(std_lst, "std_lst", ft_lst, "ft_lst");
+	std::list<int> std_lst_assign;
+	ft::List<int> ft_lst_assign;
+	std_lst_assign.assign(std_lst.begin(), std_lst.end());
+	ft_lst_assign.assign(ft_lst.begin(), ft_lst.end());
+	std::cout << "assign from iterator :" << std::endl;
+	describe_list(std_lst_assign, "std_lst_assign", ft_lst_assign, "ft_lst_assign");
+
+	std::list<int> std_lst_back;
+	ft::List<int> ft_lst_back;
+	for (int i = 0; i < size; i++)
+	{
+		std_lst_back.push_back(i);
+		ft_lst_back.push_back(i);
+	}
+	describe_list(std_lst_back, "std_lst_back", ft_lst_back, "ft_lst_back");
+
+	std::list<int> std_lst_front;
+	ft::List<int> ft_lst_front;
+	for (int i = 0; i < size; i++)
+	{
+		std_lst_front.push_front(i);
+		ft_lst_front.push_front(i);
+
+	// ====================================================================== PUSH_FRONT
+	// Error: Si c'est pas la premiere valeur, elle s'insert pas ! 
+	// TODO ==========================================================================================
+
+	}
+	describe_list(std_lst_front, "std_lst_front", ft_lst_front, "ft_lst_front");
+
+	// std::cout << "pop_back :" << std::endl;
+	// while (!std_lst.empty() && !ft_lst.empty())
+	// {
+	// 	std_lst.pop_back();
+	// 	ft_lst.pop_back();
+	// 	describe_list(std_lst, "std_lst", ft_lst, "ft_lst");
+	// }
+
+	// std::cout << "pop_front :" << std::endl;
+	// while (!std_lst_assign.empty() && !ft_lst_assign.empty())
+	// {
+	// 	std_lst_assign.pop_front();
+	// 	ft_lst_assign.pop_front();
+	// 	describe_list(std_lst_assign, "std_lst", ft_lst_assign, "ft_lst");
+	// }
+
+	// ====================================================================== PUSH_FRONT
+	// Error: Code commente au dessus
+	// TODO ==========================================================================================
+
+}
+
 int main()
 {
 
@@ -240,6 +309,16 @@ int main()
 	element_access_test(2);
 	element_access_test(1);
 	element_access_test(0);
+
+#endif
+#if TEST == 0 || TEST == 5
+
+	// modifiers_test(1000); // OK Sur linux (juste chiant a afficher)
+	modifiers_test(10);
+	modifiers_test(5);
+	modifiers_test(2);
+	modifiers_test(1);
+	modifiers_test(0);
 
 #endif
 
