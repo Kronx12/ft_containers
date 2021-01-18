@@ -1,11 +1,16 @@
 # Exec #
 NAME			=	ft_containers.a
+LIST			=	list_test
 
-# PATH #
+# Test #
+TEST			=	LIST 
+
+# Path #
+MAIN_DIR		=	main
 SRCS_DIR		=	srcs
 OBJS_DIR		=	objs
 INCS_DIR		=	includes
-VPATH			=	$(SRCS_DIR):$(OBJS_DIR):$(INCS_DIR)
+VPATH			=	$(SRCS_DIR):$(OBJS_DIR):$(INCS_DIR):$(MAIN_DIR)
 
 # File with Path #
 SRCS_PATH		=	$(wildcard $(SRCS_DIR)/*.cpp)
@@ -13,9 +18,12 @@ OBJS_PATH		=	$(patsubst $(SRCS_DIR)%,$(OBJS_DIR)%,$(SRCS_PATH:%.cpp=%.o))
 INCS_PATH		=	$(wildcard $(INCS_DIR)/*.hpp)
 
 # File #
-SRCS			=	$(patsubst $(SRCS_DIR)/%,%,$(SRCS_PATH))
-OBJS			=	$(patsubst $(SRCS_DIR)/%,%,$(OBJS_PATH))
-INCS			=	$(patsubst $(INCS_DIR)/%,%,$(INCS_PATH))
+SRCS			=	$(notdir $(SRCS_PATH))
+OBJS			=	$(notdir $(OBJS_PATH))
+INCS			=	$(notdir $(INCS_PATH))
+
+# Main #
+LIST_MAIN		=	$(addprefix $(SRCS_MAIN),/mainlist.cpp)
 
 # Compile #
 CC				=	clang++
@@ -36,13 +44,17 @@ $(NAME)			:	$(OBJS_PATH)
 $(OBJS_DIR)/%.o	:	%.cpp $(INCS)
 	$(CALLFLIB) -c $< -o $@
 
+# Containers test #
+list			:	all $(LIST_MAIN)
+	$(CALLFLIB) $(NAME) $(LIST_MAIN) -o $(LIST)
+
 # Make the Directories #
 directories		:
 	@mkdir -p $(OBJS_DIR)
 
 # Clean obj #
 clean			:
-	@rm -f $(OBJS_PATH)
+	@rm -f $(OBJS_PATH) $(TEST)
 	$(info Build done! Cleaning object files...)
 
 # Clean all #
@@ -74,4 +86,4 @@ ART:
 		done ; echo ;                              \
 	done
 
-.PHONY			:	all fclean clean re directories ART
+.PHONY			:	all fclean clean re directories ART list
