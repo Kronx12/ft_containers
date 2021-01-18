@@ -75,9 +75,9 @@ void constructor_test(int size)
 	describe_list(std_lst_fill, "std_lst_fill", ft_lst_fill, "ft_lst_fill");
 
 	// ====================================================================== BAD CONSTRUCTOR CALLED
-	// std_lst_fill = std::list<int>(size, 5);
-	// ft_lst_fill = ft::List<int>(size, 5);
-	// describe_list(std_lst_fill, "std_lst_fill", ft_lst_fill, "ft_lst_fill");
+	std_lst_fill = std::list<int>(size, 5);
+	ft_lst_fill = ft::List<int>(size, 5);
+	describe_list(std_lst_fill, "std_lst_fill", ft_lst_fill, "ft_lst_fill");
 	// TODO ========================================================================================
 
 // range constructor
