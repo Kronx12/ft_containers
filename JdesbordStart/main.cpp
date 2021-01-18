@@ -10,6 +10,7 @@ iterator_test = 2
 capacity_test = 3
 element_access_test = 4
 modifiers_test = 5
+modifiers2_test = 6
 
 */
 #ifndef TEST
@@ -357,6 +358,75 @@ void modifiers_test(int size)
 
 }
 
+void modifiers2_test(int size)
+{
+	std::cout << "Modifiers size(" << size << ")" << std::endl;
+
+	std::list<int> std_lst;
+	ft::List<int> ft_lst;
+	for (int i = 0; i < size; i++)
+	{
+		std_lst.push_back(i);
+		ft_lst.push_back(i);
+	}
+
+	std::cout << "swap :" << std::endl;
+	std::list<int> std_lst_swap;
+	ft::List<int> ft_lst_swap;
+	for (int i = 0; i < size; i++)
+	{
+		std_lst_swap.push_back(size - i);
+		ft_lst_swap.push_back(size - i);
+	}
+	std_lst.swap(std_lst_swap);
+	ft_lst.swap(ft_lst_swap);
+	describe_list(std_lst, "std_lst", ft_lst, "ft_lst");
+	describe_list(std_lst_swap, "std_lst_swap", ft_lst_swap, "ft_lst_swap");
+
+	std::cout << "clear :" << std::endl;
+	std_lst.clear();
+	ft_lst.clear();
+	std_lst_swap.clear();
+	ft_lst_swap.clear();
+	describe_list(std_lst, "std_lst", ft_lst, "ft_lst");
+	describe_list(std_lst_swap, "std_lst_swap", ft_lst_swap, "ft_lst_swap");
+
+	if (size > 0)
+	{
+		std::cout << "erase :" << std::endl;
+		//erase nb
+		std::cout << "erase with one nb :" << std::endl;
+		for (int i = 0; i < size; i++)
+		{
+			std_lst.push_back(size - i);
+			ft_lst.push_back(size - i);
+		}
+		std_lst.erase(std_lst.begin());
+		ft_lst.erase(ft_lst.begin());
+		describe_list(std_lst, "std_lst", ft_lst, "ft_lst");
+		//erase itr
+		std::cout << "erase with one itr range :" << std::endl;
+		std_lst.clear();
+		ft_lst.clear();
+		for (int i = 0; i < size; i++)
+		{
+			std_lst.push_back(size - i);
+			ft_lst.push_back(size - i);
+		}
+		std_lst.erase(std_lst.begin(), std_lst.end());
+		ft_lst.erase(ft_lst.begin(), ft_lst.end());
+		describe_list(std_lst, "std_lst", ft_lst, "ft_lst");
+	}
+
+	// ====================================================================== No proto Resize
+	// std::cout << "resize :" << std::endl;
+	// std_lst.resize(size + 1);
+	// ft_lst.resize(size + 1);
+	// describe_list(std_lst, "std_lst", ft_lst, "ft_lst");
+	// TODO ==========================================================================================
+
+}
+
 int main()
 {
 
@@ -408,6 +478,16 @@ int main()
 	modifiers_test(2);
 	modifiers_test(1);
 	modifiers_test(0);
+
+#endif
+#if TEST == 0 || TEST == 6
+
+	// modifiers2_test(1000); // OK Sur linux (juste chiant a afficher)
+	modifiers2_test(10);
+	modifiers2_test(5);
+	modifiers2_test(2);
+	modifiers2_test(1);
+	modifiers2_test(0);
 
 #endif
 

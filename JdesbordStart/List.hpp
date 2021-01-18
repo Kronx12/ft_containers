@@ -226,19 +226,20 @@ namespace ft
 //---
 			//Modifiers
 			void assign(size_type n, const value_type& val);
-
 			template < typename InputIterator >
 			void assign(InputIterator first, InputIterator last);
 			void push_front(const value_type& val);
 			void pop_front();
 			void push_back(const value_type& val);
 			void pop_back();
-
+//--
+			//Modifiers (also used on other modifiers)
 			template< class InputIt >
 			void insert(iterator pos, InputIt first, InputIt last);
 			iterator insert(iterator pos, const T &value);
 			void insert(iterator pos, size_type count, const T& value);
-
+//--
+			//Modifiers2
 			iterator erase (iterator position);
 			iterator erase (iterator first, iterator last);
 			void swap(List &lst);

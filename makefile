@@ -1,29 +1,25 @@
 # Exec #
-NAME			=	ft_containers
+NAME			=	ft_containers.a
 
 # PATH #
-MAIN_DIR		=	main
 SRCS_DIR		=	srcs
 OBJS_DIR		=	objs
 INCS_DIR		=	includes
-VPATH			=	$(MAIN_DIR):$(SRCS_DIR):$(OBJS_DIR):$(INCS_DIR)
+VPATH			=	$(SRCS_DIR):$(OBJS_DIR):$(INCS_DIR)
 
 # File with Path #
-MAIN_PATH		=	$(MAIN_DIR)/main.cpp
 SRCS_PATH		=	$(wildcard $(SRCS_DIR)/*.cpp)
 OBJS_PATH		=	$(patsubst $(SRCS_DIR)%,$(OBJS_DIR)%,$(SRCS_PATH:%.cpp=%.o))
-# OBJS_PATH		=	$(SRCS:%.cpp=$(OBJS_DIR)/%.o)
 INCS_PATH		=	$(wildcard $(INCS_DIR)/*.hpp)
 
 # File #
-MAIN			=	main.cpp
 SRCS			=	$(patsubst $(SRCS_DIR)/%,%,$(SRCS_PATH))
 OBJS			=	$(patsubst $(SRCS_DIR)/%,%,$(OBJS_PATH))
 INCS			=	$(patsubst $(INCS_DIR)/%,%,$(INCS_PATH))
 
 # Compile #
 CC				=	clang++
-CFLAGS			=	-Wall -Wextra -Werror -Wconversion
+CFLAGS			=	-Wall -Wextra -Werror
 CVERSION		=	-std=c++98
 LFLAGS  		=	-I $(INCS_DIR)
 CALLF			=	$(CC) $(CFLAGS) $(CVERSION)
@@ -34,7 +30,8 @@ all				:	directories $(NAME) ART
 
 # Stuff #
 $(NAME)			:	$(OBJS_PATH)
-	$(CALLFLIB) $(OBJS_PATH) $(MAIN_PATH) -o $(NAME)
+	ar rc $(NAME) $(OBJS_PATH)
+	ranlib $(NAME)
 
 $(OBJS_DIR)/%.o	:	%.cpp $(INCS)
 	$(CALLFLIB) -c $< -o $@
@@ -45,7 +42,7 @@ directories		:
 
 # Clean obj #
 clean			:
-	@rm -f $(addprefix $(OBJS_DIR), $(OBJS)) # more opti with $(OBJS_PATH) #
+	@rm -f $(OBJS_PATH)
 	$(info Build done! Cleaning object files...)
 
 # Clean all #
