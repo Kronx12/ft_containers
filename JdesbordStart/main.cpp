@@ -17,6 +17,11 @@ modifiers2_test = 6
 # define TEST 0
 #endif
 
+// Used for show test result
+#ifndef SHOW
+# define SHOW
+#endif
+
 void title(std::string title)
 {
 	std::cout << "\033[33;1m" << std::endl << title << "\n\033[0m";
@@ -27,6 +32,23 @@ void title(std::string title, int size)
 	std::cout << "\033[33;1m" << std::endl << "=========================\n" << "\033[0m";
 	std::cout << "\033[33;1m" << title << " (" << size << ")" << std::endl << "\033[0m";
 	std::cout << "\033[33;1m" << "=========================\n\n" << "\033[0m";
+}
+
+void check(std::stringstream *ss_std, std::stringstream *ss_ft)
+{
+	if (!ss_std->str().compare(ss_ft->str()))
+	{
+		#ifdef SHOW
+		std::cout << "\033[1;32mOK\033[2;37m\n" << ss_std->str() << std::endl << ss_ft->str() << "\033[0m";
+		#else
+		std::cout << "\033[1;32mOK\033[0m";
+		#endif
+	}
+	else
+		std::cout << "\033[1;31mKO\n" << ss_std->str() << std::endl << ss_ft->str() << "\033[0m";
+	std::cout << std::endl;
+	ss_std->str("");
+	ss_ft->str("");
 }
 
 template < class T >
@@ -57,16 +79,11 @@ void describe_list(std::list<T> std_lst, ft::List<T> ft_lst)
 			ss_ft << i << ":[" << *itr << "] ";
 			i++;
 		}
-
-	if (!ss_std.str().compare(ss_ft.str()))
-		std::cout << "\033[1;32mOK\033[2;37m\n" << ss_std.str() << std::endl << ss_ft.str() << "\033[0m";
-	else
-		std::cout << "\033[1;31mKO\n" << ss_std.str() << std::endl << ss_ft.str() << "\033[0m";
-	std::cout << std::endl;
+	check(&ss_std, &ss_ft);
 }
 
 template < class T >
-void const_describe_list(std::list<T> std_lst, ft::List<T> ft_lst)
+void const_describe_list(const std::list<T> std_lst, const ft::List<T> ft_lst)
 {
 	std::stringstream ss_std;
 	std::stringstream ss_ft;
@@ -93,12 +110,7 @@ void const_describe_list(std::list<T> std_lst, ft::List<T> ft_lst)
 			ss_ft << i << ":[" << *itr << "] ";
 			i++;
 		}
-
-	if (!ss_std.str().compare(ss_ft.str()))
-		std::cout << "\033[1;32mOK\033[2;37m\n" << ss_std.str() << std::endl << ss_ft.str() << "\033[0m";
-	else
-		std::cout << "\033[1;31mKO\n" << ss_std.str() << std::endl << ss_ft.str() << "\033[0m";
-	std::cout << std::endl;
+	check(&ss_std, &ss_ft);
 }
 
 template < class T >
@@ -129,16 +141,11 @@ void reverse_describe_list(std::list<T> std_lst, ft::List<T> ft_lst)
 			ss_ft << i << ":[" << *itr << "] ";
 			i++;
 		}
-
-	if (!ss_std.str().compare(ss_ft.str()))
-		std::cout << "\033[1;32mOK\033[2;37m\n" << ss_std.str() << std::endl << ss_ft.str() << "\033[0m";
-	else
-		std::cout << "\033[1;31mKO\n" << ss_std.str() << std::endl << ss_ft.str() << "\033[0m";
-	std::cout << std::endl;
+	check(&ss_std, &ss_ft);
 }
 
 template < class T >
-void const_reverse_describe_list(std::list<T> std_lst, ft::List<T> ft_lst)
+void const_reverse_describe_list(const std::list<T> std_lst, const ft::List<T> ft_lst)
 {
 	std::stringstream ss_std;
 	std::stringstream ss_ft;
@@ -160,19 +167,13 @@ void const_reverse_describe_list(std::list<T> std_lst, ft::List<T> ft_lst)
 	if (ft_lst.empty())
 		ss_ft << "(empty)";
 	else {
-	ft::List<T>::const_reverse_iterator itr = ft_lst.rbegin();
 		for (typename ft::List<T>::const_reverse_iterator itr = ft_lst.rbegin(); itr != ft_lst.rend(); itr++)
 		{
 			ss_ft << i << ":[" << *itr << "] ";
 			i++;
 		}
 	}
-
-	if (!ss_std.str().compare(ss_ft.str()))
-		std::cout << "\033[1;32mOK\033[2;37m\n" << ss_std.str() << std::endl << ss_ft.str() << "\033[0m";
-	else
-		std::cout << "\033[1;31mKO\n" << ss_std.str() << std::endl << ss_ft.str() << "\033[0m";
-	std::cout << std::endl;
+	check(&ss_std, &ss_ft);
 }
 
 void constructor_test(int size)
@@ -251,7 +252,7 @@ void iterator_test(int size)
 
 void capacity_test(int size)
 {
-	std::cout << "Capacity size(" << size << ")" << std::endl;
+	title("Capacity size", size);
 	std::list<int> std_lst;
 	std::list<int> ft_lst;
 
@@ -262,20 +263,25 @@ void capacity_test(int size)
 	}
 
 // capacity
-	std::cout << "STD size : " << std_lst.size() << std::endl;
-	std::cout << "FT size : " << ft_lst.size() << std::endl << std::endl;
+	std::stringstream ss_std;
+	std::stringstream ss_ft;
 
-	std::cout << "STD max_size : " << std_lst.max_size() << std::endl;
-	std::cout << "FT max_size : " << ft_lst.max_size() << std::endl << std::endl;
+	ss_std << "size : " << std_lst.size();
+	ss_ft << "size : " << ft_lst.size();
+	check(&ss_std, &ss_ft);
 
-	std::cout << "STD empty : " << std_lst.empty() << std::endl;
-	std::cout << "FT empty : " << ft_lst.empty() << std::endl;
+	ss_std << "max_size : " << std_lst.max_size();
+	ss_ft << "max_size : " << ft_lst.max_size();
+	check(&ss_std, &ss_ft);
 
+	ss_std << "empty : " << std_lst.empty();
+	ss_ft << "empty : " << ft_lst.empty();
+	check(&ss_std, &ss_ft);
 }
 
 void element_access_test(int size)
 {
-	std::cout << "Element_access size(" << size << ")" << std::endl;
+	title("Element_access", size);
 	std::list<int> std_lst;
 	std::list<int> ft_lst;
 
@@ -286,17 +292,21 @@ void element_access_test(int size)
 	}
 
 // element access
-	std::cout << "STD front : " << std_lst.front() << std::endl;
-	std::cout << "FT front : " << ft_lst.front() << std::endl << std::endl;
+	std::stringstream ss_std;
+	std::stringstream ss_ft;
 
-	std::cout << "STD back : " << std_lst.back() << std::endl;
-	std::cout << "FT back : " << ft_lst.back() << std::endl;
+	ss_std << "front : " << std_lst.front();
+	ss_ft << "front : " << ft_lst.front();
+	check(&ss_std, &ss_ft);
 
+	ss_std << "back : " << std_lst.back();
+	ss_ft << "back : " << ft_lst.back();
+	check(&ss_std, &ss_ft);
 }
 
 void modifiers_test(int size)
 {
-	std::cout << "Modifiers size(" << size << ")" << std::endl;
+	title("Modifiers size", size);
 
 	std::list<int> std_lst;
 	ft::List<int> ft_lst;
@@ -310,14 +320,17 @@ void modifiers_test(int size)
 
 	std_lst = std::list<int>(size);
 	ft_lst = ft::List<int>(size);
+	title("initial :");
 	describe_list(std_lst, ft_lst);
 	std::list<int> std_lst_assign;
 	ft::List<int> ft_lst_assign;
+
+	title("assign from iterator :");
 	std_lst_assign.assign(std_lst.begin(), std_lst.end());
 	ft_lst_assign.assign(ft_lst.begin(), ft_lst.end());
-	std::cout << "assign from iterator :" << std::endl;
 	describe_list(std_lst_assign, ft_lst_assign);
 
+	title("push_back :");
 	std::list<int> std_lst_back;
 	ft::List<int> ft_lst_back;
 	for (int i = 0; i < size; i++)
@@ -327,6 +340,7 @@ void modifiers_test(int size)
 	}
 	describe_list(std_lst_back, ft_lst_back);
 
+	title("push_front :");
 	std::list<int> std_lst_front;
 	ft::List<int> ft_lst_front;
 	for (int i = 1; i < size; i++)
@@ -336,7 +350,7 @@ void modifiers_test(int size)
 	}
 	describe_list(std_lst_front, ft_lst_front);
 	
-	std::cout << "pop_back :" << std::endl;
+	title("pop_back :");
 	while (!std_lst.empty() && !ft_lst.empty())
 	{
 		std_lst.pop_back();
@@ -344,23 +358,18 @@ void modifiers_test(int size)
 		describe_list(std_lst, ft_lst);
 	}
 
-	std::cout << "pop_front :" << std::endl;
+	title("pop_front :");
 	while (!std_lst_assign.empty() && !ft_lst_assign.empty())
 	{
 		std_lst_assign.pop_front();
 		ft_lst_assign.pop_front();
 		describe_list(std_lst_assign, ft_lst_assign);
 	}
-
-	// ====================================================================== PUSH_FRONT
-	// Error: Code commente au dessus
-	// TODO ==========================================================================================
-
 }
 
 void modifiers2_test(int size)
 {
-	std::cout << "Modifiers size(" << size << ")" << std::endl;
+	title("Modifiers size", size);
 
 	std::list<int> std_lst;
 	ft::List<int> ft_lst;
@@ -370,7 +379,7 @@ void modifiers2_test(int size)
 		ft_lst.push_back(i);
 	}
 
-	std::cout << "swap :" << std::endl;
+	title("swap :");
 	std::list<int> std_lst_swap;
 	ft::List<int> ft_lst_swap;
 	for (int i = 0; i < size; i++)
@@ -380,22 +389,21 @@ void modifiers2_test(int size)
 	}
 	std_lst.swap(std_lst_swap);
 	ft_lst.swap(ft_lst_swap);
-	describe_list(std_lst, "std_lst", ft_lst, "ft_lst");
-	describe_list(std_lst_swap, "std_lst_swap", ft_lst_swap, "ft_lst_swap");
+	describe_list(std_lst, ft_lst);
+	describe_list(std_lst_swap, ft_lst_swap);
 
-	std::cout << "clear :" << std::endl;
+	title("clear :");
 	std_lst.clear();
 	ft_lst.clear();
 	std_lst_swap.clear();
 	ft_lst_swap.clear();
-	describe_list(std_lst, "std_lst", ft_lst, "ft_lst");
-	describe_list(std_lst_swap, "std_lst_swap", ft_lst_swap, "ft_lst_swap");
+	describe_list(std_lst, ft_lst);
+	describe_list(std_lst_swap, ft_lst_swap);
 
 	if (size > 0)
 	{
-		std::cout << "erase :" << std::endl;
 		//erase nb
-		std::cout << "erase with one nb :" << std::endl;
+		title("erase with one nb :");
 		for (int i = 0; i < size; i++)
 		{
 			std_lst.push_back(size - i);
@@ -403,9 +411,9 @@ void modifiers2_test(int size)
 		}
 		std_lst.erase(std_lst.begin());
 		ft_lst.erase(ft_lst.begin());
-		describe_list(std_lst, "std_lst", ft_lst, "ft_lst");
+		describe_list(std_lst, ft_lst);
 		//erase itr
-		std::cout << "erase with one itr range :" << std::endl;
+		title("erase with one itr range :");
 		std_lst.clear();
 		ft_lst.clear();
 		for (int i = 0; i < size; i++)
@@ -415,16 +423,15 @@ void modifiers2_test(int size)
 		}
 		std_lst.erase(std_lst.begin(), std_lst.end());
 		ft_lst.erase(ft_lst.begin(), ft_lst.end());
-		describe_list(std_lst, "std_lst", ft_lst, "ft_lst");
+		describe_list(std_lst, ft_lst);
 	}
 
 	// ====================================================================== No proto Resize
 	// std::cout << "resize :" << std::endl;
 	// std_lst.resize(size + 1);
 	// ft_lst.resize(size + 1);
-	// describe_list(std_lst, "std_lst", ft_lst, "ft_lst");
+	// describe_list(std_lst, ft_lst);
 	// TODO ==========================================================================================
-
 }
 
 int main()
