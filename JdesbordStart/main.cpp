@@ -234,20 +234,17 @@ void iterator_test(int size)
 		ft_lst.push_back(i);
 	}
 
-	const std::list<int> const_std_lst(std_lst);
-	const ft::List<int> const_ft_lst(ft_lst);
-
 // iterators
 	describe_list(std_lst, ft_lst);
 
 // const_iterators
-	const_describe_list(const_std_lst, const_ft_lst);
+	const_describe_list(std_lst, ft_lst);
 
 // reverse_iterators
 	reverse_describe_list(std_lst, ft_lst);
 
 // const_reverse_iterator
-	const_reverse_describe_list(const_std_lst, const_ft_lst);
+	const_reverse_describe_list(std_lst, ft_lst);
 }
 
 void capacity_test(int size)
