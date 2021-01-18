@@ -447,6 +447,8 @@ namespace ft
 			n = new Link<T>(prev.current, value, next.current);
 			prev.current->next = n;
 			next.current->previous = n;
+			if (pos.current == _begin)
+				_begin = n;
 		}
 		_size++;
 		return (iterator(n));

@@ -8,6 +8,7 @@ constructor_test = 1
 iterator_test = 2
 capacity_test = 3
 element_access_test = 4
+modifiers_test = 5
 
 */
 #ifndef TEST
@@ -234,18 +235,13 @@ void modifiers_test(int size)
 
 	std::list<int> std_lst_front;
 	ft::List<int> ft_lst_front;
-	for (int i = 0; i < size; i++)
+	for (int i = 1; i < size; i++)
 	{
 		std_lst_front.push_front(i);
 		ft_lst_front.push_front(i);
-
-	// ====================================================================== PUSH_FRONT
-	// Error: Si c'est pas la premiere valeur, elle s'insert pas ! 
-	// TODO ==========================================================================================
-
 	}
 	describe_list(std_lst_front, "std_lst_front", ft_lst_front, "ft_lst_front");
-
+	
 	// std::cout << "pop_back :" << std::endl;
 	// while (!std_lst.empty() && !ft_lst.empty())
 	// {
