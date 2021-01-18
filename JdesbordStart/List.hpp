@@ -290,8 +290,6 @@ namespace ft
 	List<T>::List(InputIterator first, InputIterator last, const allocator_type& alloc)
 		: _end(new Link<T>()), _begin(_end), _rend(new Link<T>(NULL, T(), _end)), _size(0), _alloc(alloc)
 	{
-		// if (grugage(first, last))
-			// return ;
 		for (;first != last; first++)
 			push_back(*first);
 	}
