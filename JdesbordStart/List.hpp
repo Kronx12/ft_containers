@@ -182,18 +182,18 @@ namespace ft
 			size_t _size;
 			allocator_type _alloc;
 
-			template< class A, class B >
-			int grugage(A a, B b) {
-				char t[] = {'c', 'h', 's', 't', 'i', 'j', 'l', 'm'};
+			// template< class A, class B >
+			// int grugage(A a, B b) {
+			// 	char t[] = {'c', 'h', 's', 't', 'i', 'j', 'l', 'm'};
 
-				for (int i = 0; i < 8; i++)
-					if (typeid(a).name()[0] == t[i]) {
-						for (int i = 0; i < static_cast<int>(a); i++)
-							push_back(b);
-						return (1);
-					}
-				return (0);
-			}
+			// 	for (int i = 0; i < 8; i++)
+			// 		if (typeid(a).name()[0] == t[i]) {
+			// 			for (int i = 0; i < static_cast<int>(a); i++)
+			// 				push_back(b);
+			// 			return (1);
+			// 		}
+			// 	return (0);
+			// }
 
 		public:
 			explicit List (const allocator_type& alloc = allocator_type());
@@ -290,9 +290,10 @@ namespace ft
 	List<T>::List(InputIterator first, InputIterator last, const allocator_type& alloc)
 		: _end(new Link<T>()), _begin(_end), _rend(new Link<T>(NULL, T(), _end)), _size(0), _alloc(alloc)
 	{
-		if (grugage(first, last))
-			return ;
-		insert(begin(), first, last);
+		// if (grugage(first, last))
+			// return ;
+		for (;first != last; first++)
+			push_back(*first);
 	}
 
 	template < typename T >
@@ -440,7 +441,7 @@ namespace ft
 	template < typename T >
 	void List<T>::pop_back()
 	{
-		erase(end());
+		erase(--end());
 	}
 
 	template < typename T >

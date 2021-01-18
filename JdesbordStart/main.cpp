@@ -76,9 +76,9 @@ void constructor_test(int size)
 	describe_list(std_lst_fill, "std_lst_fill", ft_lst_fill, "ft_lst_fill");
 
 	// ====================================================================== BAD CONSTRUCTOR CALLED
-	std_lst_fill = std::list<int>(size, 5);
-	ft_lst_fill = ft::List<int>(size, 5);
-	describe_list(std_lst_fill, "std_lst_fill", ft_lst_fill, "ft_lst_fill");
+	// std_lst_fill = std::list<int>(size, 5);
+	// ft_lst_fill = ft::List<int>(size, 5);
+	// describe_list(std_lst_fill, "std_lst_fill", ft_lst_fill, "ft_lst_fill");
 	// TODO ========================================================================================
 
 // range constructor
@@ -242,21 +242,21 @@ void modifiers_test(int size)
 	}
 	describe_list(std_lst_front, "std_lst_front", ft_lst_front, "ft_lst_front");
 	
-	// std::cout << "pop_back :" << std::endl;
-	// while (!std_lst.empty() && !ft_lst.empty())
-	// {
-	// 	std_lst.pop_back();
-	// 	ft_lst.pop_back();
-	// 	describe_list(std_lst, "std_lst", ft_lst, "ft_lst");
-	// }
+	std::cout << "pop_back :" << std::endl;
+	while (!std_lst.empty() && !ft_lst.empty())
+	{
+		std_lst.pop_back();
+		ft_lst.pop_back();
+		describe_list(std_lst, "std_lst", ft_lst, "ft_lst");
+	}
 
-	// std::cout << "pop_front :" << std::endl;
-	// while (!std_lst_assign.empty() && !ft_lst_assign.empty())
-	// {
-	// 	std_lst_assign.pop_front();
-	// 	ft_lst_assign.pop_front();
-	// 	describe_list(std_lst_assign, "std_lst", ft_lst_assign, "ft_lst");
-	// }
+	std::cout << "pop_front :" << std::endl;
+	while (!std_lst_assign.empty() && !ft_lst_assign.empty())
+	{
+		std_lst_assign.pop_front();
+		ft_lst_assign.pop_front();
+		describe_list(std_lst_assign, "std_lst", ft_lst_assign, "ft_lst");
+	}
 
 	// ====================================================================== PUSH_FRONT
 	// Error: Code commente au dessus
