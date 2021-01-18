@@ -36,3 +36,4 @@ ft_containers
 objs/
 .vscode
 **.dSYM
+*_test
