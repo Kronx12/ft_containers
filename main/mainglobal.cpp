@@ -2,10 +2,6 @@
 #include <list>
 #include <sstream>
 
-#ifndef TEST_LIST
-# define TEST_LIST 0
-#endif
-
 // Used for show test result
 #ifndef SHOW
 # define SHOW

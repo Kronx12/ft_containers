@@ -1,5 +1,5 @@
 # LIB #
-NAME			=	ft_containers.a
+# NAME			=	ft_containers.a
 
 # Exec #
 LIST			=	list_test
@@ -36,10 +36,12 @@ CFLAGS			=	-Wall -Wextra -Werror
 CVERSION		=	-std=c++98
 LFLAGS  		=	-I $(INCS_DIR)
 CALLF			=	$(CC) $(CFLAGS) $(CVERSION)
-CALLFLIB		=	$(CC) $(CFLAGS) $(CVERSION) $(LFLAGS)
+CALLFLIB		=	$(CC) $(CFLAGS) $(CVERSION) $(LFLAGS) ${INPUT}
+
+$(info ${INPUT})
 
 # Defauilt Make #
-all				:	directories $(NAME) #ART
+all				:	directories #ART
 
 # Stuff #
 $(NAME)			:	$(OBJS_PATH)
@@ -50,8 +52,8 @@ $(OBJS_DIR)/%.o	:	%.cpp $(INCS)
 	$(CALLFLIB) -c $< -o $@
 
 # Containers test #
-list			:	all $(LIST_MAIN) $(TEST_MAIN) $(TEST_INCS)
-	$(CALLFLIB) $(LIST_MAIN) $(TEST_MAIN) $(NAME) -I $(INCS_PATH) -I $(TEST_INCS) -o $(addprefix $(TEST_DIR)/,$(LIST))
+list			:	all $(LIST_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
+	$(CALLFLIB) $(LIST_MAIN) $(TEST_MAIN) -I $(TEST_INCS) -o $(addprefix $(TEST_DIR)/,$(LIST))
 	./$(addprefix $(TEST_DIR)/,$(LIST))
 
 # Make the Directories #

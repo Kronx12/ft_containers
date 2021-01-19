@@ -1,10 +1,10 @@
 #ifndef TESTER_HPP
-#define TESTER_HPP
+# define TESTER_HPP
 
-#include "List.hpp"
-#include <list>
+# include "List.hpp"
+# include <list>
 
-#include <sstream>
+# include <sstream>
 
 void title(std::string title);
 void title(std::string title, int size);
