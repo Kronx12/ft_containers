@@ -106,12 +106,12 @@ namespace ft
 			void clear();
 			void swap(List &lst);
 			void resize(size_type count, T value = T());
-//-- NEEDING
+//TODO
 			//Operations
 			void splice(const_iterator pos, List &other);
 			void splice(const_iterator pos, List &other, const_iterator it);
 			void splice(const_iterator pos, List &other, const_iterator first, const_iterator last);
-
+// END TODO
 //---
 			template< class UnaryPredictate >
 			void remove_if(UnaryPredictate p);
@@ -122,13 +122,13 @@ namespace ft
 			template < class BinaryPredicate >			
 			void unique(BinaryPredicate p);
 			void unique();
+// END TODO
 
-
-// TODO Merge
+//---
 			template < class Compare >
 			void merge(List &other, Compare comp);
 			void merge(List &other);
-//---
+
 			//Operations2
 			template < class Compare >
 			void sort(Compare comp);
@@ -485,8 +485,11 @@ namespace ft
 	template < class T >
 	void List<T>::splice(List<T>::const_iterator pos, List &other)
 	{
+		std::cout << "test" << std::endl;
 		insert(pos, other.begin(), other.end());
+		std::cout << "test" << std::endl;
 		other.erase(other.begin(), other.end());
+		std::cout << "test" << std::endl;
 	}
 
 	template < class T >
@@ -619,7 +622,7 @@ namespace ft
 		}
 		swap(tmp);
 		tmp.~List();
-		return ("HELLO");
+		return ("");
 	}
 
 	template < typename T >
@@ -628,7 +631,7 @@ namespace ft
 		clear();
 		for (int i = 0; i < size; i++)
 			push_back(val);
-		return ("BYE");
+		return ("");
 	}
 	
 	template < typename T >
@@ -646,7 +649,7 @@ namespace ft
 		}
 		swap(tmp);
 		tmp.~List();
-		return ("HELLO");
+		return ("");
 	}
 
 	template < typename T >
@@ -655,7 +658,7 @@ namespace ft
 		clear();
 		for (int i = 0; i < size; i++)
 			push_back(val);
-		return ("BYE");
+		return ("");
 	}
 }
 

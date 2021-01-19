@@ -37,11 +37,9 @@ void constructor_test(int size)
 	ft::List<int> ft_lst_fill(size);
 	describe_list(std_lst_fill, ft_lst_fill);
 
-	// ====================================================================== BAD CONSTRUCTOR CALLED
 	std_lst_fill = std::list<int>(size, 5);
 	ft_lst_fill = ft::List<int>(size, 5);
 	describe_list(std_lst_fill, ft_lst_fill);
-	// TODO ========================================================================================
 
 // range constructor
 	std::list<int> std_lst_range(std_lst.begin(), std_lst.end());
@@ -149,12 +147,10 @@ void modifiers_test(int size)
 	std::list<int> std_lst;
 	ft::List<int> ft_lst;
 
-	// ====================================================================== BAD ASSIGN CALLED
 	title("assign :");
 	std_lst.assign(size, size);
 	ft_lst.assign(size, size);
 	describe_list(std_lst, ft_lst);
-	// TODO ==========================================================================================
 
 	std_lst = std::list<int>(size);
 	ft_lst = ft::List<int>(size);
@@ -297,26 +293,28 @@ void operator_test(int size)
 		ft_lst_b.push_back(i * 10);
 	}
  
-//     std::list<int>::iterator std_it = std_lst_a.begin();
-//     ft::List<int>::iterator ft_it = ft_lst_a.begin();
-//     std::advance(std_it, 2);
-//     ft_it++;
-//     ft_it++;
+    std::list<int>::iterator std_it = std_lst_a.begin();
+    ft::List<int>::iterator ft_it = ft_lst_a.begin();
+    std::advance(std_it, 2);
+    ft_it++;
+    ft_it++;
 
-// 	describe_list(std_lst_a, ft_lst_a);
-// 	describe_list(std_lst_b, ft_lst_b);
+	describe_list(std_lst_a, ft_lst_a);
+	describe_list(std_lst_b, ft_lst_b);
  
-//     std_lst_a.splice(std_it, std_lst_b);
-//     ft_lst_a.splice(ft_it, ft_lst_b);
- 
-// 	describe_list(std_lst_a, ft_lst_a);
-// 	describe_list(std_lst_b, ft_lst_b);
+    std_lst_a.splice(std_it, std_lst_b);
+    // ft_lst_a.splice(ft_it, ft_lst_b);
+	// TODO ===
 
-//     std_lst_b.splice(std_lst_b.begin(), std_lst_a, std_it, std_lst_a.end());
-//   //  ft_lst_b.splice(ft_lst_b.begin(), ft_lst_a, ft_it, ft_lst_a.end());
+	describe_list(std_lst_a, ft_lst_a);
+	describe_list(std_lst_b, ft_lst_b);
 
-// 	describe_list(std_lst_a, ft_lst_a);
-// 	describe_list(std_lst_b, ft_lst_b);
+    std_lst_b.splice(std_lst_b.begin(), std_lst_a, std_it, std_lst_a.end());
+    // ft_lst_b.splice(ft_lst_b.begin(), ft_lst_a, ft_it, ft_lst_a.end());
+	// TODO ===
+
+	describe_list(std_lst_a, ft_lst_a);
+	describe_list(std_lst_b, ft_lst_b);
 
 }
 
