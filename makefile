@@ -37,7 +37,6 @@ CVERSION		=	-std=c++98
 LFLAGS  		=	-I $(INCS_DIR)
 CALLF			=	$(CC) $(CFLAGS) $(CVERSION)
 CALLFLIB		=	$(CC) $(CFLAGS) $(CVERSION) $(LFLAGS) ${INPUT}
-
 $(info ${INPUT})
 
 # Defauilt Make #
