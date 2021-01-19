@@ -297,26 +297,26 @@ void operator_test(int size)
 		ft_lst_b.push_back(i * 10);
 	}
  
-    std::list<int>::iterator std_it = std_lst_a.begin();
-    ft::List<int>::iterator ft_it = ft_lst_a.begin();
-    std::advance(std_it, 2);
-    ft_it++;
-    ft_it++;
+//     std::list<int>::iterator std_it = std_lst_a.begin();
+//     ft::List<int>::iterator ft_it = ft_lst_a.begin();
+//     std::advance(std_it, 2);
+//     ft_it++;
+//     ft_it++;
 
-	describe_list(std_lst_a, ft_lst_a);
-	describe_list(std_lst_b, ft_lst_b);
+// 	describe_list(std_lst_a, ft_lst_a);
+// 	describe_list(std_lst_b, ft_lst_b);
  
-    std_lst_a.splice(std_it, std_lst_b);
-    ft_lst_a.splice(ft_it, ft_lst_b);
+//     std_lst_a.splice(std_it, std_lst_b);
+//     ft_lst_a.splice(ft_it, ft_lst_b);
  
-	describe_list(std_lst_a, ft_lst_a);
-	describe_list(std_lst_b, ft_lst_b);
+// 	describe_list(std_lst_a, ft_lst_a);
+// 	describe_list(std_lst_b, ft_lst_b);
 
-    std_lst_b.splice(std_lst_b.begin(), std_lst_a, std_it, std_lst_a.end());
-  //  ft_lst_b.splice(ft_lst_b.begin(), ft_lst_a, ft_it, ft_lst_a.end());
+//     std_lst_b.splice(std_lst_b.begin(), std_lst_a, std_it, std_lst_a.end());
+//   //  ft_lst_b.splice(ft_lst_b.begin(), ft_lst_a, ft_it, ft_lst_a.end());
 
-	describe_list(std_lst_a, ft_lst_a);
-	describe_list(std_lst_b, ft_lst_b);
+// 	describe_list(std_lst_a, ft_lst_a);
+// 	describe_list(std_lst_b, ft_lst_b);
 
 }
 
