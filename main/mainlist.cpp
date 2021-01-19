@@ -1,3 +1,7 @@
+#ifndef TEST_LIST
+# define TEST_LIST 8
+#endif
+
 #include "Tester.hpp"
 
 /*
@@ -266,6 +270,87 @@ void modifiers2_test(int size)
 	describe_list(std_lst, ft_lst);
 }
 
+bool test_max_int(const int lhs, const int rhs)
+{
+	return (lhs > rhs ? true : false);
+}
+
+bool test_paire_int(const int lhs)
+{
+	return (lhs % 2 == 1);
+}
+
+void operations2_test(int size)
+{
+	title("Operations size", size);
+	std::list<int> std_lst;
+	ft::List<int> ft_lst;
+	for (int i = 0; i < size; i++)
+	{
+		std_lst.push_back(i);
+		ft_lst.push_back(i);
+	}
+
+	title("remove : 0 (first)");
+	std_lst.remove(0);
+	ft_lst.remove(0);
+	describe_list(std_lst, ft_lst);
+	std_lst.clear();
+	ft_lst.clear();
+	for (int i = 0; i < size; i++)
+	{
+		std_lst.push_back(i);
+		ft_lst.push_back(i);
+	}
+
+	title("remove : size (last)");
+	std_lst.remove(size - 1);
+	ft_lst.remove(size - 1);
+	describe_list(std_lst, ft_lst);
+	std_lst.clear();
+	ft_lst.clear();
+	for (int i = 0; i < size; i++)
+	{
+		std_lst.push_back(i);
+		ft_lst.push_back(i);
+	}
+
+	title("reverse :");
+	std_lst.reverse();
+	ft_lst.reverse();
+	describe_list(std_lst, ft_lst);
+
+	title("sort :");
+	std_lst.sort();
+	ft_lst.sort();
+	describe_list(std_lst, ft_lst);
+
+	title("sort with Compare :");
+	std_lst.sort(test_max_int);
+	ft_lst.sort(test_max_int);
+	describe_list(std_lst, ft_lst);
+
+	title("removeif :");
+	std_lst.remove_if(test_paire_int);
+	ft_lst.remove_if(test_paire_int);
+	describe_list(std_lst, ft_lst);
+
+	// title("merge :");
+	// std::list<int> std_lst_merge;
+	// ft::List<int> ft_lst_merge;
+	// std_lst.sort();
+	// ft_lst.sort();
+	// for (int i = 0; i / 2 < size; i++)
+	// {
+	// 	i++;
+	// 	std_lst_merge.push_back(i);
+	// 	ft_lst_merge.push_back(i);
+	// }
+	// std_lst.merge(std_lst_merge);
+	// ft_lst.merge(ft_lst_merge);
+	// describe_list(std_lst, ft_lst);
+}
+
 int main()
 {
 
@@ -327,6 +412,16 @@ int main()
 	modifiers2_test(2);
 	modifiers2_test(1);
 	modifiers2_test(0);
+
+#endif
+#if TEST == 0 || TEST == 8
+
+	// operations2_test(1000); // OK Sur linux (juste chiant a afficher)
+	operations2_test(10);
+	operations2_test(5);
+	operations2_test(2);
+	operations2_test(1);
+	operations2_test(0);
 
 #endif
 

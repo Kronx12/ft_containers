@@ -245,7 +245,7 @@ namespace ft
 			void swap(List &lst);
 			void resize(size_type count, T value = T());
 			void clear();
-
+//-- NEEDING
 			//Operations
 			void splice(const_iterator pos, List &other);
 			void splice(const_iterator pos, List &other, const_iterator it);
@@ -262,7 +262,8 @@ namespace ft
 			template < class Compare >
 			void merge(List &other, Compare comp);
 			void merge(List &other);
-
+//---
+			//Operations2
 			template < class Compare >
 			void sort(Compare comp);
 			void sort();
@@ -671,7 +672,7 @@ namespace ft
 	void List<T>::sort()
 	{
 		bool swap = true;
-		while (swap)
+		while (swap && this->_size > 0)
 		{
 			swap = false;
 			iterator itr_a = begin(), itr_b = begin();
@@ -696,7 +697,7 @@ namespace ft
 	void List<T>::sort(Compare comp)
 	{
 		bool swap = true;
-		while (swap)
+		while (swap && this->_size > 0)
 		{
 			swap = false;
 			iterator itr_a = begin(), itr_b = begin();
