@@ -13,199 +13,6 @@
 
 namespace ft
 {
-	template < class T, class L >
-	class Iterator
-	{
-		public:
-			typedef L link_type;
-			typedef link_type* link_pointer;
-			typedef T value_type;
-			typedef value_type* pointer;
-			typedef const value_type* const_pointer;
-			typedef value_type& reference;
-			typedef const value_type& const_reference;
-			typedef const_reference iterator_category;
-
-			link_pointer current;
-
-		public:
-			//BASICS
-			Iterator(link_pointer li)
-			{
-				this->current = li;
-			};
-
-			Iterator( Iterator const & rhs ) : current(rhs.current){};
-			Iterator( ConstIterator<T, L> const & rhs ) : current(rhs.current){};
-			~Iterator(){};
-			Iterator &		operator=( Iterator const & rhs )
-			{
-				this->current = rhs->current;
-			}
-			Iterator &		operator=( ConstIterator<T, L> const & rhs )
-			{
-				this->current = rhs->current;
-			}
-
-			//BASICS INCREMENTATION
-			Iterator &operator++()
-			{
-				this->current = this->current->next;
-				return(*this);
-			}
-			Iterator operator++(int)
-			{
-				Iterator tmp(*this);
-				this->current = this->current->next;
-				return(tmp);
-			}
-
-			//Input Category
-			bool operator==(const Iterator & rhs)
-			{
-				return (this->current == rhs.current);
-			}
-			bool operator!=(const Iterator & rhs)
-			{
-				return (current != rhs.current);
-			}
-			bool operator==(const ConstIterator<T, L> & rhs)
-			{
-				return (this->current == rhs.current);
-			}
-			bool operator!=(const ConstIterator<T, L> & rhs)
-			{
-				return (current != rhs.current);
-			}
-			reference operator*()
-			{
-				return(this->current->value);
-			}
-			reference operator->()
-			{
-				return(this->current->value);
-			}
-
-			//Output Category ?????????????????????????? WHAT DO?
-
-			//Forward Specific Category
-			Iterator()
-			{
-				current = NULL;
-			};
-
-			//Bidirectional Category
-			Iterator &operator--()
-			{
-				this->current = this->current->previous;
-				return(*this);
-			}
-			Iterator operator--(int)
-			{
-				Iterator tmp(*this);
-				this->current = this->current->previous;
-				return(tmp);
-			}
-
-			bool isIter(){return(1);};
-	};
-
-	template < class T, class L >
-	class ConstIterator
-	{
-		public:
-			typedef L link_type;
-			typedef link_type* link_pointer;
-			typedef T value_type;
-			typedef value_type* pointer;
-			typedef const value_type* const_pointer;
-			typedef value_type& reference;
-			typedef const value_type& const_reference;
-			typedef const_reference iterator_category;
-
-			link_pointer current;
-
-		public:
-			//BASICS
-			ConstIterator(link_pointer li)
-			{
-				this->current = li;
-			};
-
-			ConstIterator( ConstIterator const & rhs ) : current(rhs.current){};
-			ConstIterator( Iterator<T, L> const & rhs ) : current(rhs.current){};
-			~ConstIterator(){};
-			ConstIterator &		operator=( ConstIterator const & rhs )
-			{
-				this->current = rhs->current;
-			}
-
-			ConstIterator &		operator=( Iterator<T, L> const & rhs )
-			{
-				this->current = rhs->current;
-			}
-
-			//BASICS INCREMENTATION
-			ConstIterator &operator++()
-			{
-				this->current = this->current->next;
-				return(*this);
-			}
-			ConstIterator operator++(int)
-			{
-				ConstIterator tmp(*this);
-				this->current = this->current->next;
-				return(tmp);
-			}
-
-			//Input Category
-			bool operator==(const ConstIterator & rhs)
-			{
-				return (this->current == rhs.current);
-			}
-			bool operator!=(const ConstIterator & rhs)
-			{
-				return (current != rhs.current);
-			}
-			bool operator==(const Iterator<T, L> & rhs)
-			{
-				return (this->current == rhs.current);
-			}
-			bool operator!=(const Iterator<T, L> & rhs)
-			{
-				return (current != rhs.current);
-			}
-			reference operator*() const
-			{
-				return(this->current->value);
-			}
-			reference operator->() const
-			{
-				return(this->current->value);
-			}
-
-			//Output Category ?????????????????????????? WHAT DO?
-
-			//Forward Specific Category
-			ConstIterator()
-			{
-				current = NULL;
-			};
-
-			//Bidirectional Category
-			ConstIterator &operator--()
-			{
-				this->current = this->current->previous;
-				return(*this);
-			}
-			ConstIterator operator--(int)
-			{
-				ConstIterator tmp(*this);
-				this->current = this->current->previous;
-				return(tmp);
-			}
-	};
-
 	template < typename T >
 	class Link
 	{
@@ -294,23 +101,28 @@ namespace ft
 			//Modifiers2
 			iterator erase (iterator position);
 			iterator erase (iterator first, iterator last);
+			void clear();
 			void swap(List &lst);
 			void resize(size_type count, T value = T());
-			void clear();
 //-- NEEDING
 			//Operations
 			void splice(const_iterator pos, List &other);
 			void splice(const_iterator pos, List &other, const_iterator it);
 			void splice(const_iterator pos, List &other, const_iterator first, const_iterator last);
 
+//---
 			template< class UnaryPredictate >
 			void remove_if(UnaryPredictate p);
 			void remove(const T &value);
+//---
 
+// TODO A tester
 			template < class BinaryPredicate >			
 			void unique(BinaryPredicate p);
 			void unique();
 
+
+// TODO Merge
 			template < class Compare >
 			void merge(List &other, Compare comp);
 			void merge(List &other);
