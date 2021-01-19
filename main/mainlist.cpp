@@ -12,6 +12,10 @@ modifiers2_test = 6
 
 */
 
+#ifndef TEST_LIST
+# define TEST_LIST 0
+#endif
+
 
 void constructor_test(int size)
 {

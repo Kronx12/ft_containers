@@ -51,8 +51,10 @@ namespace ft
 			size_t _size;
 			allocator_type _alloc;
 
-			template <class C> typename enable_if<isIterator<C>::value, std::string>::type grugage(const C& size, const C& val);
-			template <class C> typename enable_if<!isIterator<C>::value, std::string>::type grugage(const C& size, const C& val);
+			template <class C> typename enable_if<isIterator<C>::value, std::string>::type constructor_assign_helper(const C& size, const C& val);
+			template <class C> typename enable_if<!isIterator<C>::value, std::string>::type constructor_assign_helper(const C& size, const C& val);
+			template <class C> typename enable_if<isIterator<C>::value, std::string>::type insert_helper(const C& size, const C& val);
+			template <class C> typename enable_if<!isIterator<C>::value, std::string>::type insert_helper(const C& size, const C& val);
 
 		public:
 			explicit List (const allocator_type& alloc = allocator_type());
@@ -93,8 +95,8 @@ namespace ft
 			void pop_back();
 //--
 			//Modifiers (also used on other modifiers)
-			template< class InputIt >
-			void insert(iterator pos, InputIt first, InputIt last);
+			template< class InputIterator >
+			void insert(iterator pos, InputIterator first, InputIterator last);
 			iterator insert(iterator pos, const T &value);
 			void insert(iterator pos, size_type count, const T& value);
 //--
@@ -156,7 +158,7 @@ namespace ft
 	List<T>::List(InputIterator first, InputIterator last, const allocator_type& alloc)
 		: _end(new Link<T>()), _begin(_end), _rend(new Link<T>(NULL, T(), _end)), _size(0), _alloc(alloc)
 	{
-		grugage(first, last);
+		constructor_assign_helper(first, last);
 	}
 
 	template < typename T >
@@ -277,7 +279,7 @@ namespace ft
 	void List<T>::assign(InputIterator first, InputIterator last)
 	{
 		clear();
-		grugage(first, last);
+		constructor_assign_helper(first, last);
 	}
 
 	template < typename T >
@@ -302,6 +304,41 @@ namespace ft
 	void List<T>::pop_back()
 	{
 		erase(--end());
+	}
+
+	template < typename T >
+	void List<T>::insert(iterator pos, size_type count, const T& value)
+	{
+		iterator next = pos;
+		iterator prev = pos;
+		link_pointer n;
+		for (size_t i = 0; i < count; i++)
+		{
+			if (_begin == _end)
+			{
+				_begin = new Link<T>(_rend, value, _end);
+				_end->previous = _begin;
+				_rend->next = _begin;
+				n = _begin;
+			}
+			else
+			{
+				prev--;
+				n = new Link<T>(prev.current, value, next.current);
+				prev.current->next = n;
+				next.current->previous = n;
+				if (pos.current == _begin)
+					_begin = n;
+			}
+			_size++;
+		}
+	}
+
+	template < typename T >
+	template< class InputIterator >
+	void List<T>::insert(iterator pos, InputIterator first, InputIterator last)
+	{
+		insert_helper(first, last);
 	}
 
 	template < typename T >
@@ -566,8 +603,9 @@ namespace ft
 	}
 
 	//----------------------------------OUR OWN PRIVATE STUFF--------------------------------------------------
+	
 	template < typename T >
-	template <class C> typename enable_if<isIterator<C>::value, std::string>::type List<T>::grugage(const C& first, const C& last)
+	template <class C> typename enable_if<isIterator<C>::value, std::string>::type List<T>::insert_helper(const C& first, const C& last)
 	{
 		C & test = const_cast<C&>(first);
 		C ble(test);
@@ -585,7 +623,34 @@ namespace ft
 	}
 
 	template < typename T >
-	template <class C> typename enable_if<!isIterator<C>::value, std::string>::type List<T>::grugage(const C& size, const C& val)
+	template <class C> typename enable_if<!isIterator<C>::value, std::string>::type List<T>::insert_helper(const C& size, const C& val)
+	{
+		clear();
+		for (int i = 0; i < size; i++)
+			push_back(val);
+		return ("BYE");
+	}
+	
+	template < typename T >
+	template <class C> typename enable_if<isIterator<C>::value, std::string>::type List<T>::constructor_assign_helper(const C& first, const C& last)
+	{
+		C & test = const_cast<C&>(first);
+		C ble(test);
+		List<T> tmp;
+		int i = 0;
+		while (ble.current != last.current && ble.current != _end && ble.current != _rend && ble.current != NULL)
+		{
+			tmp.push_back(ble.current->value);
+			ble.current = ble.current->next;
+			i++;
+		}
+		swap(tmp);
+		tmp.~List();
+		return ("HELLO");
+	}
+
+	template < typename T >
+	template <class C> typename enable_if<!isIterator<C>::value, std::string>::type List<T>::constructor_assign_helper(const C& size, const C& val)
 	{
 		clear();
 		for (int i = 0; i < size; i++)
