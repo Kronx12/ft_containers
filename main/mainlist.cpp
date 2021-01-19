@@ -1,7 +1,3 @@
-#ifndef TEST_LIST
-# define TEST_LIST 8
-#endif
-
 #include "Tester.hpp"
 
 /*
@@ -404,7 +400,7 @@ void operations2_test(int size)
 int main()
 {
 
-#if TEST == 0 || TEST == 1
+#if TEST_LIST == 0 || TEST_LIST == 1
 
 	// constructor_test(1000); // OK Sur linux (juste chiant a afficher)
 	constructor_test(10);
@@ -414,7 +410,7 @@ int main()
 	constructor_test(0);
 
 #endif
-#if TEST == 0 || TEST == 2
+#if TEST_LIST == 0 || TEST_LIST == 2
 
 	// iterator_test(1000); // OK Sur linux (juste chiant a afficher)
 	iterator_test(10);
@@ -424,7 +420,7 @@ int main()
 	iterator_test(0);
 
 #endif
-#if TEST == 0 || TEST == 3
+#if TEST_LIST == 0 || TEST_LIST == 3
 
 	// capacity_test(1000); // OK Sur linux (juste chiant a afficher)
 	capacity_test(10);
@@ -434,7 +430,7 @@ int main()
 	capacity_test(0);
 
 #endif
-#if TEST == 0 || TEST == 4
+#if TEST_LIST == 0 || TEST_LIST == 4
 
 	// element_access_test(1000); // OK Sur linux (juste chiant a afficher)
 	element_access_test(10);
@@ -444,7 +440,7 @@ int main()
 	element_access_test(0);
 
 #endif
-#if TEST == 0 || TEST == 5
+#if TEST_LIST == 0 || TEST_LIST == 5
 
 	// modifiers_test(1000); // OK Sur linux (juste chiant a afficher)
 	modifiers_test(10);
@@ -454,7 +450,7 @@ int main()
 	modifiers_test(0);
 
 #endif
-#if TEST == 0 || TEST == 6
+#if TEST_LIST == 0 || TEST_LIST == 6
 
 	// modifiers2_test(1000); // OK Sur linux (juste chiant a afficher)
 	modifiers2_test(10);
@@ -464,7 +460,7 @@ int main()
 	modifiers2_test(0);
 
 #endif
-#if TEST == 0 || TEST == 7
+#if TEST_LIST == 0 || TEST_LIST == 7
 
 	// operator_test(1000); // OK Sur linux (juste chiant a afficher)
 	operator_test(10);
@@ -473,7 +469,7 @@ int main()
 	operator_test(1);
 	operator_test(0);
 #endif
-#if TEST == 0 || TEST == 8
+#if TEST_LIST == 0 || TEST_LIST == 8
 
 	// operations2_test(1000); // OK Sur linux (juste chiant a afficher)
 	operations2_test(10);

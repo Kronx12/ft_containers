@@ -43,15 +43,15 @@ all				:	directories $(NAME) #ART
 
 # Stuff #
 $(NAME)			:	$(OBJS_PATH)
-	ar rc $(NAME) $(OBJS_PATH)
-	ranlib $(NAME)
+	# ar rc $(NAME) $(OBJS_PATH)
+	# ranlib $(NAME)
 
 $(OBJS_DIR)/%.o	:	%.cpp $(INCS)
 	$(CALLFLIB) -c $< -o $@
 
 # Containers test #
 list			:	all $(LIST_MAIN) $(TEST_MAIN) $(TEST_INCS)
-	$(CALLFLIB) $(LIST_MAIN) $(TEST_MAIN) $(NAME) -I $(TEST_INCS) -o $(addprefix $(TEST_DIR)/,$(LIST))
+	$(CALLFLIB) $(LIST_MAIN) $(TEST_MAIN) $(NAME) -I $(INCS_PATH) -I $(TEST_INCS) -o $(addprefix $(TEST_DIR)/,$(LIST))
 	./$(addprefix $(TEST_DIR)/,$(LIST))
 
 # Make the Directories #
