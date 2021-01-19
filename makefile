@@ -69,7 +69,7 @@ clean			:
 fclean			:	clean
 	@rm -rf $(OBJS_DIR) $(addprefix $(TEST_DIR)/,$(TEST)) $(TEST_DIR)
 	@rm -f $(NAME)
-	$(info Build done! Cleaning $(NAME) and exec...)
+	$(info Build done! Cleaning exec...)
 
 re				:	fclean all
 
