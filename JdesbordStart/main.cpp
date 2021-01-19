@@ -182,6 +182,7 @@ void constructor_test(int size)
 // default constructor
 	std::list<int> std_lst;
 	ft::List<int> ft_lst;
+std::list<int>::const_iterator
 	describe_list(std_lst, ft_lst);
 
 	for (int i = 0; i < size; i++)

@@ -583,8 +583,12 @@ namespace ft
 	template < class T >
 	void List<T>::splice(List<T>::const_iterator pos, List &other)
 	{
+		// ne pas etre nul
+		
+			std::cout << "test" << std::endl;
 		for (iterator itr = other.begin(); itr != other.end(); itr++)
 		{
+			std::cout << "test" << std::endl;
 			insert(pos, *itr);
 			other.erase(itr);
 			pos++;

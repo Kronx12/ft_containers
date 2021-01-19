@@ -12,6 +12,9 @@
 
 namespace ft
 {
+	template < class T, class L >
+	class ConstIterator;
+
 	template < typename It >
 	class ReverseIterator : public It
 	{
@@ -61,7 +64,7 @@ namespace ft
 				return(tmp);
 			}
 	};
-	
+
 	template < class T, class L >
 	class Iterator
 	{
@@ -85,8 +88,13 @@ namespace ft
 			};
 
 			Iterator( Iterator const & rhs ) : current(rhs.current){};
+			Iterator( ConstIterator<T, L> const & rhs ) : current(rhs.current){};
 			~Iterator(){};
 			Iterator &		operator=( Iterator const & rhs )
+			{
+				this->current = rhs->current;
+			}
+			Iterator &		operator=( ConstIterator<T, L> const & rhs )
 			{
 				this->current = rhs->current;
 			}
@@ -110,6 +118,14 @@ namespace ft
 				return (this->current == rhs.current);
 			}
 			bool operator!=(const Iterator & rhs)
+			{
+				return (current != rhs.current);
+			}
+			bool operator==(const ConstIterator<T, L> & rhs)
+			{
+				return (this->current == rhs.current);
+			}
+			bool operator!=(const ConstIterator<T, L> & rhs)
 			{
 				return (current != rhs.current);
 			}
@@ -144,6 +160,102 @@ namespace ft
 			}
 	};
 
+	template < class T, class L >
+	class ConstIterator
+	{
+		public:
+			typedef L link_type;
+			typedef link_type* link_pointer;
+			typedef T value_type;
+			typedef value_type* pointer;
+			typedef const value_type* const_pointer;
+			typedef value_type& reference;
+			typedef const value_type& const_reference;
+			typedef const_reference iterator_category;
+
+			link_pointer current;
+
+		public:
+			//BASICS
+			ConstIterator(link_pointer li)
+			{
+				this->current = li;
+			};
+
+			ConstIterator( ConstIterator const & rhs ) : current(rhs.current){};
+			ConstIterator( Iterator<T, L> const & rhs ) : current(rhs.current){};
+			~ConstIterator(){};
+			ConstIterator &		operator=( ConstIterator const & rhs )
+			{
+				this->current = rhs->current;
+			}
+
+			ConstIterator &		operator=( Iterator<T, L> const & rhs )
+			{
+				this->current = rhs->current;
+			}
+
+			//BASICS INCREMENTATION
+			ConstIterator &operator++()
+			{
+				this->current = this->current->next;
+				return(*this);
+			}
+			ConstIterator operator++(int)
+			{
+				ConstIterator tmp(*this);
+				this->current = this->current->next;
+				return(tmp);
+			}
+
+			//Input Category
+			bool operator==(const ConstIterator & rhs)
+			{
+				return (this->current == rhs.current);
+			}
+			bool operator!=(const ConstIterator & rhs)
+			{
+				return (current != rhs.current);
+			}
+			bool operator==(const Iterator<T, L> & rhs)
+			{
+				return (this->current == rhs.current);
+			}
+			bool operator!=(const Iterator<T, L> & rhs)
+			{
+				return (current != rhs.current);
+			}
+			reference operator*() const
+			{
+				return(this->current->value);
+			}
+			reference operator->() const
+			{
+				return(this->current->value);
+			}
+
+			//Output Category ?????????????????????????? WHAT DO?
+
+			//Forward Specific Category
+			ConstIterator()
+			{
+				current = NULL;
+			};
+
+			//Bidirectional Category
+			ConstIterator &operator--()
+			{
+				this->current = this->current->previous;
+				return(*this);
+			}
+			ConstIterator operator--(int)
+			{
+				ConstIterator tmp(*this);
+				this->current = this->current->previous;
+				return(tmp);
+			}
+	};
+
 	template < typename T >
 	class Link
 	{
@@ -169,7 +281,7 @@ namespace ft
 			typedef Link<value_type> link_type;
 			typedef link_type* link_pointer;
 			typedef Iterator<value_type, link_type> iterator;
-			typedef Iterator<const value_type, const link_type> const_iterator;
+			typedef ConstIterator<value_type, link_type> const_iterator;
 			typedef ReverseIterator<iterator> reverse_iterator;
 			typedef ReverseIterator<const_iterator> const_reverse_iterator;
 			typedef std::ptrdiff_t difference_type;
@@ -587,19 +699,29 @@ namespace ft
 	template < class T >
 	void List<T>::splice(List<T>::const_iterator pos, List &other)
 	{
-		for (iterator itr = other.begin(); itr != other.end(); itr++)
-		{
-			insert(pos, *itr);
-			other.erase(itr);
-			pos++;
-		}
+		std::cout << "test" << std::endl;
+		iterator temp;
+		insert(pos, other.begin(), other.end());
+		other.erase(other.begin(), other.end());
+		// for (iterator itr = other.begin(); itr != other.end(); itr++)
+		// {
+		// 	std::cout << "test" << std::endl;
+		// 	insert(pos, *itr);
+		// 	temp = itr;
+		// 	temp++;
+		// 	other.erase(itr);
+
+		// 	pos++;
+		// }
 	}
 
 	template < class T >
 	void List<T>::splice(List<T>::const_iterator pos, List &other, List<T>::const_iterator it) 
 	{
+		std::cout << "test" << std::endl;
 		for (; it != other.end(); it++)
 		{
+			std::cout << "test" << std::endl;
 			insert(pos, *it);
 			other.erase(it);
 			pos++;
@@ -609,8 +731,10 @@ namespace ft
 	template < class T >
 	void List<T>::splice(List<T>::const_iterator pos, List &other, List<T>::const_iterator first, List<T>::const_iterator last)
 	{
+		std::cout << "test" << std::endl;
 		for (; first != last; first++)
 		{
+			std::cout << "test" << std::endl;
 			insert(pos, *first);
 			other.erase(first);
 			pos++;

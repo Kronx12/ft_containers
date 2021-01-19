@@ -258,12 +258,62 @@ void modifiers2_test(int size)
 		std_lst.erase(std_lst.begin(), std_lst.end());
 		ft_lst.erase(ft_lst.begin(), ft_lst.end());
 		describe_list(std_lst, ft_lst);
-	}
 
-	title("resize :");
+		title("resize - 1 :");
+		std_lst.resize(size - 1);
+		ft_lst.resize(size - 1);
+		describe_list(std_lst, ft_lst);
+	}
+	title("resize + 1 :");
 	std_lst.resize(size + 1);
 	ft_lst.resize(size + 1);
 	describe_list(std_lst, ft_lst);
+
+	title("resize == :");
+	std_lst.resize(size);
+	ft_lst.resize(size);
+	describe_list(std_lst, ft_lst);
+}
+
+void operator_test(int size)
+{
+	title("Operator size", size);
+
+	std::list<int> std_lst_a;
+    std::list<int> std_lst_b;
+
+	ft::List<int> ft_lst_a;
+    ft::List<int> ft_lst_b;
+
+	for (int i = 0; i < size; i++)
+	{
+		std_lst_a.push_back(i);
+		std_lst_b.push_back(i * 10);
+		ft_lst_a.push_back(i);
+		ft_lst_b.push_back(i * 10);
+	}
+ 
+    std::list<int>::iterator std_it = std_lst_a.begin();
+    ft::List<int>::iterator ft_it = ft_lst_a.begin();
+    std::advance(std_it, 2);
+    ft_it++;
+    ft_it++;
+
+	describe_list(std_lst_a, ft_lst_a);
+	describe_list(std_lst_b, ft_lst_b);
+ 
+    std_lst_a.splice(std_it, std_lst_b);
+    ft_lst_a.splice(ft_it, ft_lst_b);
+ 
+	describe_list(std_lst_a, ft_lst_a);
+	describe_list(std_lst_b, ft_lst_b);
+
+    std_lst_b.splice(std_lst_b.begin(), std_lst_a, std_it, std_lst_a.end());
+  //  ft_lst_b.splice(ft_lst_b.begin(), ft_lst_a, ft_it, ft_lst_a.end());
+
+	describe_list(std_lst_a, ft_lst_a);
+	describe_list(std_lst_b, ft_lst_b);
+
 }
 
 int main()
@@ -327,6 +377,16 @@ int main()
 	modifiers2_test(2);
 	modifiers2_test(1);
 	modifiers2_test(0);
+
+#endif
+#if TEST == 0 || TEST == 7
+
+	// operator_test(1000); // OK Sur linux (juste chiant a afficher)
+	operator_test(10);
+	operator_test(5);
+	operator_test(2);
+	operator_test(1);
+	operator_test(0);
 
 #endif
 
