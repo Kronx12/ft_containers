@@ -1,11 +1,14 @@
-# Exec #
+# LIB #
 NAME			=	ft_containers.a
+
+# Exec #
 LIST			=	list_test
 
 # Test #
-TEST			=	LIST 
+TEST			=	$(LIST)
 
 # Path #
+TEST_DIR		=	test
 MAIN_DIR		=	main
 SRCS_DIR		=	srcs
 OBJS_DIR		=	objs
@@ -23,7 +26,7 @@ OBJS			=	$(notdir $(OBJS_PATH))
 INCS			=	$(notdir $(INCS_PATH))
 
 # Main #
-LIST_MAIN		=	$(addprefix $(SRCS_MAIN),/mainlist.cpp)
+LIST_MAIN		=	$(addprefix $(MAIN_DIR),/mainlist.cpp)
 
 # Compile #
 CC				=	clang++
@@ -34,7 +37,7 @@ CALLF			=	$(CC) $(CFLAGS) $(CVERSION)
 CALLFLIB		=	$(CC) $(CFLAGS) $(CVERSION) $(LFLAGS)
 
 # Defauilt Make #
-all				:	directories $(NAME) ART
+all				:	directories $(NAME) #ART
 
 # Stuff #
 $(NAME)			:	$(OBJS_PATH)
@@ -46,22 +49,24 @@ $(OBJS_DIR)/%.o	:	%.cpp $(INCS)
 
 # Containers test #
 list			:	all $(LIST_MAIN)
-	$(CALLFLIB) $(NAME) $(LIST_MAIN) -o $(LIST)
+	$(CALLFLIB) $(LIST_MAIN) $(NAME)  -o $(LIST)
+	./$(LIST)
 
 # Make the Directories #
 directories		:
 	@mkdir -p $(OBJS_DIR)
+	@mkdir -p $(TEST_DIR)
 
 # Clean obj #
 clean			:
-	@rm -f $(OBJS_PATH) $(TEST)
+	@rm -f $(OBJS_PATH)
 	$(info Build done! Cleaning object files...)
 
 # Clean all #
 fclean			:	clean
-	@rm -rf $(OBJS_DIR)
+	@rm -rf $(OBJS_DIR) $(TEST) $(TEST_DIR)
 	@rm -f $(NAME)
-	$(info Build done! Cleaning $(NAME) exec...)
+	$(info Build done! Cleaning $(NAME) and exec...)
 
 re				:	fclean all
 
