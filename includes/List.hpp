@@ -243,7 +243,7 @@ namespace ft
 			iterator erase (iterator position);
 			iterator erase (iterator first, iterator last);
 			void swap(List &lst);
-			void resize();
+			void resize(size_type count, T value = T());
 			void clear();
 
 			//Operations
@@ -538,6 +538,21 @@ namespace ft
 		_begin = tmp_begin;
 		_rend = tmp_rend;
 		_size = tmp_size;
+	}
+
+	template< class T >
+	void List<T>::resize(size_type count, T value)
+	{
+		if (size() < count)
+		{
+			while (size() < count)
+				push_back(value);
+		}
+		else if (size() > count)
+		{
+			while (size() > count)
+				pop_back();
+		}
 	}
 
 	template < class T >

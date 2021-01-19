@@ -26,6 +26,8 @@ OBJS			=	$(notdir $(OBJS_PATH))
 INCS			=	$(notdir $(INCS_PATH))
 
 # Main #
+TEST_INCS		=	$(addprefix $(MAIN_DIR),/Tester.hpp)
+TEST_MAIN		=	$(addprefix $(MAIN_DIR),/mainglobal.cpp)
 LIST_MAIN		=	$(addprefix $(MAIN_DIR),/mainlist.cpp)
 
 # Compile #
@@ -48,9 +50,9 @@ $(OBJS_DIR)/%.o	:	%.cpp $(INCS)
 	$(CALLFLIB) -c $< -o $@
 
 # Containers test #
-list			:	all $(LIST_MAIN)
-	$(CALLFLIB) $(LIST_MAIN) $(NAME)  -o $(LIST)
-	./$(LIST)
+list			:	all $(LIST_MAIN) $(TEST_MAIN) $(TEST_INCS)
+	$(CALLFLIB) $(LIST_MAIN) $(TEST_MAIN) $(NAME) -I $(TEST_INCS) -o $(addprefix $(TEST_DIR)/,$(LIST))
+	./$(addprefix $(TEST_DIR)/,$(LIST))
 
 # Make the Directories #
 directories		:
@@ -64,7 +66,7 @@ clean			:
 
 # Clean all #
 fclean			:	clean
-	@rm -rf $(OBJS_DIR) $(TEST) $(TEST_DIR)
+	@rm -rf $(OBJS_DIR) $(addprefix $(TEST_DIR)/,$(TEST)) $(TEST_DIR)
 	@rm -f $(NAME)
 	$(info Build done! Cleaning $(NAME) and exec...)
 
