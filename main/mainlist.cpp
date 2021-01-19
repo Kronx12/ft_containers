@@ -34,9 +34,9 @@ void constructor_test(int size)
 	describe_list(std_lst_fill, ft_lst_fill);
 
 	// ====================================================================== BAD CONSTRUCTOR CALLED
-	// std_lst_fill = std::list<int>(size, 5);
-	// ft_lst_fill = ft::List<int>(size, 5);
-	// describe_list(std_lst_fill, "std_lst_fill", ft_lst_fill, "ft_lst_fill");
+	std_lst_fill = std::list<int>(size, 5);
+	ft_lst_fill = ft::List<int>(size, 5);
+	describe_list(std_lst_fill, ft_lst_fill);
 	// TODO ========================================================================================
 
 // range constructor
@@ -146,10 +146,10 @@ void modifiers_test(int size)
 	ft::List<int> ft_lst;
 
 	// ====================================================================== BAD ASSIGN CALLED
-	// std_lst.assign(size, size);
-	// ft_lst.assign(size, size);
-	// std::cout << "assign(" << size << ":" << size << ")" << std::endl;
-	// describe_list(std_lst, "std_lst", ft_lst, "ft_lst");
+	title("assign :");
+	std_lst.assign(size, size);
+	ft_lst.assign(size, size);
+	describe_list(std_lst, ft_lst);
 	// TODO ==========================================================================================
 
 	std_lst = std::list<int>(size);
