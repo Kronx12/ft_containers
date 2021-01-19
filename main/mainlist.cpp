@@ -295,38 +295,53 @@ void operator_test(int size)
  
     std::list<int>::iterator std_it = std_lst_a.begin();
     ft::List<int>::iterator ft_it = ft_lst_a.begin();
-    std::advance(std_it, 2);
-    ft_it++;
-    ft_it++;
+    
+	if (size > 2)
+	{
+		std::advance(std_it, 2);
+		ft_it++;
+	    ft_it++;
+	}
 
 	describe_list(std_lst_a, ft_lst_a);
 	describe_list(std_lst_b, ft_lst_b);
  
     std_lst_a.splice(std_it, std_lst_b);
-    // ft_lst_a.splice(ft_it, ft_lst_b);
-	// TODO ===
+    ft_lst_a.splice(ft_it, ft_lst_b);
 
 	describe_list(std_lst_a, ft_lst_a);
 	describe_list(std_lst_b, ft_lst_b);
+	
+	std_lst_a.insert(std_lst_a.begin(), size, size);
+	ft_lst_a.insert(ft_lst_a.begin(), size, size);
 
+	describe_list(std_lst_a, ft_lst_a);
+	describe_list(std_lst_b, ft_lst_b);
+	
+	// TODO Attention a ne pas tester sans debug sous peine de crash VM (/ Session ?) 
+
+    // std_lst_b.splice(std_lst_b.begin(), std_lst_a, std_lst_a.begin());
+    // ft_lst_b.splice(ft_lst_b.begin(), ft_lst_a, ft_lst_a.begin());
+
+	// describe_list(std_lst_a, ft_lst_a);
+	// describe_list(std_lst_b, ft_lst_b);
+	
+	std_lst_a.insert(std_lst_a.begin(), size, size);
+	ft_lst_a.insert(ft_lst_a.begin(), size, size);
+
+	describe_list(std_lst_a, ft_lst_a);
+	describe_list(std_lst_b, ft_lst_b);
+	
     std_lst_b.splice(std_lst_b.begin(), std_lst_a, std_it, std_lst_a.end());
-    // ft_lst_b.splice(ft_lst_b.begin(), ft_lst_a, ft_it, ft_lst_a.end());
-	// TODO ===
+    ft_lst_b.splice(ft_lst_b.begin(), ft_lst_a, ft_it, ft_lst_a.end());
 
 	describe_list(std_lst_a, ft_lst_a);
 	describe_list(std_lst_b, ft_lst_b);
 
 }
 
-bool test_max_int(const int lhs, const int rhs)
-{
-	return (lhs > rhs ? true : false);
-}
-
-bool test_paire_int(const int lhs)
-{
-	return (lhs % 2 == 1);
-}
+bool test_max_int(const int lhs, const int rhs) { return (lhs > rhs ? true : false); }
+bool test_paire_int(const int lhs) { return (lhs % 2 == 1); }
 
 void operations2_test(int size)
 {
@@ -383,20 +398,23 @@ void operations2_test(int size)
 	ft_lst.remove_if(test_paire_int);
 	describe_list(std_lst, ft_lst);
 
-	// title("merge :");
-	// std::list<int> std_lst_merge;
-	// ft::List<int> ft_lst_merge;
-	// std_lst.sort();
-	// ft_lst.sort();
-	// for (int i = 0; i / 2 < size; i++)
-	// {
-	// 	i++;
-	// 	std_lst_merge.push_back(i);
-	// 	ft_lst_merge.push_back(i);
-	// }
-	// std_lst.merge(std_lst_merge);
-	// ft_lst.merge(ft_lst_merge);
-	// describe_list(std_lst, ft_lst);
+	title("merge :");
+	std::list<int> std_lst_merge;
+	ft::List<int> ft_lst_merge;
+	std_lst.sort();
+	ft_lst.sort();
+	for (int i = 0; i / 2 < size; i++)
+	{
+		i++;
+		std_lst_merge.push_back(i);
+		ft_lst_merge.push_back(i);
+	}
+	describe_list(std_lst, ft_lst);
+	describe_list(std_lst_merge, ft_lst_merge);
+	std_lst.merge(std_lst_merge);
+	ft_lst.merge(ft_lst_merge);
+	describe_list(std_lst, ft_lst);
+	describe_list(std_lst_merge, ft_lst_merge);
 }
 
 int main()

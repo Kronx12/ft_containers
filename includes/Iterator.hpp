@@ -112,11 +112,15 @@ namespace ft
 			~Iterator(){};
 			Iterator &operator=( Iterator const & rhs )
 			{
-				this->current = rhs->current;
+				if (this == &rhs) return(*this);
+        		this->~Iterator();
+        		return *new(this) Iterator(rhs);
 			}
 			Iterator &operator=( ConstIterator<T, L> const & rhs )
 			{
-				this->current = rhs->current;
+				if (this == &rhs) return(*this);
+        		this->~Iterator();
+        		return *new(this) Iterator(rhs);
 			}
 
 			//BASICS INCREMENTATION
@@ -209,12 +213,16 @@ namespace ft
 			~ConstIterator(){};
 			ConstIterator &operator=( ConstIterator const & rhs )
 			{
-				this->current = rhs->current;
+				if (this == &rhs) return(*this);
+        		this->~ConstIterator();
+        		return *new(this) ConstIterator(rhs);
 			}
 
 			ConstIterator &operator=( Iterator<T, L> const & rhs )
 			{
-				this->current = rhs->current;
+				if (this == &rhs) return(*this);
+        		this->~ConstIterator();
+        		return *new(this) ConstIterator(rhs);
 			}
 
 			//BASICS INCREMENTATION
@@ -276,6 +284,8 @@ namespace ft
 				this->current = this->current->previous;
 				return(tmp);
 			}
+
+			bool isIter(){return(1);};
 	};
 
 }

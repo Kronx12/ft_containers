@@ -9,6 +9,7 @@
 
 # ifdef __linux__
 #  include <limits>
+#  include <typeinfo>
 # endif
 
 namespace ft
@@ -53,8 +54,8 @@ namespace ft
 
 			template <class C> typename enable_if<isIterator<C>::value, std::string>::type constructor_assign_helper(const C& size, const C& val);
 			template <class C> typename enable_if<!isIterator<C>::value, std::string>::type constructor_assign_helper(const C& size, const C& val);
-			template <class C> typename enable_if<isIterator<C>::value, std::string>::type insert_helper(const C& size, const C& val);
-			template <class C> typename enable_if<!isIterator<C>::value, std::string>::type insert_helper(const C& size, const C& val);
+			template <class C> typename enable_if<isIterator<C>::value, std::string>::type insert_helper(ft::List<T>::iterator pos, const C& size, const C& val);
+			template <class C> typename enable_if<!isIterator<C>::value, std::string>::type insert_helper(ft::List<T>::iterator pos, const C& size, const C& val);
 
 		public:
 			explicit List (const allocator_type& alloc = allocator_type());
@@ -338,7 +339,7 @@ namespace ft
 	template< class InputIterator >
 	void List<T>::insert(iterator pos, InputIterator first, InputIterator last)
 	{
-		insert_helper(first, last);
+		insert_helper(pos, first, last);
 	}
 
 	template < typename T >
@@ -457,45 +458,86 @@ namespace ft
 	void List<T>::merge(List<T> &other)
 	{
 		if (this == &other) return;
-		while (other.size() > 0)
-			for (iterator itr = begin(); itr != end(); itr++)
-				if (*other.begin() < *itr)
+		ft::List<T> tmp;
+		iterator itr = begin();
+		iterator itr_other = other.begin();
+		while (itr.current != _end || itr_other.current != other._end)
+			if (itr.current != _end && itr_other.current != other._end)
+			{
+				if (*itr < *itr_other)
 				{
-					insert(itr, *other.begin());
-					other.pop_front();
-					break ;
+					tmp.push_back(*itr);
+					itr++;
 				}
+				else
+				{
+					tmp.push_back(*itr_other);
+					itr_other++;
+				}
+			}
+			else if (itr.current != _end)
+			{
+				tmp.push_back(*itr);
+				itr++;
+			}
+			else
+			{
+				tmp.push_back(*itr_other);
+				itr_other++;
+			}
+		swap(tmp);
+		tmp.~List();
+		other.~List();
 	}
 
 	template < class T >
 	template < class Compare >
 	void List<T>::merge(List<T> &other, Compare comp)
 	{
-		if (this == &other) return;
-		while (other.size() > 0)
-			for (iterator itr = begin(); itr != end(); itr++)
-				if (comp(*other.begin(), *itr))
+		ft::List<T> tmp;
+		iterator itr = begin();
+		iterator itr_other = other.begin();
+		while (itr.current != _end || itr_other.current != other._end)
+			if (itr.current != _end && itr_other.current != other._end)
+			{
+				if (comp(*itr_other, *itr))
 				{
-					insert(itr, *other.begin());
-					other.pop_front();
-					break ;
+					tmp.push_back(*itr);
+					itr++;
 				}
+				else
+				{
+					tmp.push_back(*itr_other);
+					itr_other++;
+				}
+			}
+			else if (itr.current != _end)
+			{
+				tmp.push_back(*itr);
+				itr++;
+			}
+			else
+			{
+				tmp.push_back(*itr_other);
+				itr_other++;
+			}
+		swap(tmp);
+		tmp.~List();
+		other.~List();
 	}
 
 	template < class T >
 	void List<T>::splice(List<T>::const_iterator pos, List &other)
 	{
-		std::cout << "test" << std::endl;
 		insert(pos, other.begin(), other.end());
-		std::cout << "test" << std::endl;
 		other.erase(other.begin(), other.end());
-		std::cout << "test" << std::endl;
 	}
 
 	template < class T >
 	void List<T>::splice(List<T>::const_iterator pos, List &other, List<T>::const_iterator it) 
 	{
-		insert(pos, it, other.end());
+		(void)pos;
+		insert(pos, it, const_iterator(other.end()));
 		other.erase(it, other.end());
 	}
 
@@ -608,29 +650,25 @@ namespace ft
 	//----------------------------------OUR OWN PRIVATE STUFF--------------------------------------------------
 	
 	template < typename T >
-	template <class C> typename enable_if<isIterator<C>::value, std::string>::type List<T>::insert_helper(const C& first, const C& last)
+	template <class C> typename enable_if<isIterator<C>::value, std::string>::type List<T>::insert_helper(ft::List<T>::iterator pos, const C& first, const C& last)
 	{
-		C & test = const_cast<C&>(first);
-		C ble(test);
-		List<T> tmp;
-		int i = 0;
-		while (ble.current != last.current && ble.current != _end && ble.current != _rend && ble.current != NULL)
+		C & first_itr = const_cast<C&>(first);
+		C from(first_itr);
+		while (from != last)
 		{
-			tmp.push_back(ble.current->value);
-			ble.current = ble.current->next;
-			i++;
+			pos = insert(pos, from.current->value);
+			pos++;
+			from.current = from.current->next;
 		}
-		swap(tmp);
-		tmp.~List();
 		return ("");
 	}
 
 	template < typename T >
-	template <class C> typename enable_if<!isIterator<C>::value, std::string>::type List<T>::insert_helper(const C& size, const C& val)
+	template <class C> typename enable_if<!isIterator<C>::value, std::string>::type List<T>::insert_helper(ft::List<T>::iterator pos, const C& size, const C& val)
 	{
-		clear();
-		for (int i = 0; i < size; i++)
-			push_back(val);
+		size_t s(size);
+		for (size_t i = 0; i < s; i++)
+			insert(pos, val);
 		return ("");
 	}
 	
