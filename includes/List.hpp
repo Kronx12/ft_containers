@@ -5,6 +5,7 @@
 # include <memory>
 # include <string>
 # include <stack>
+# include "Iterator.hpp"
 
 # ifdef __linux__
 #  include <limits>
@@ -12,59 +13,6 @@
 
 namespace ft
 {
-	template < class T, class L >
-	class ConstIterator;
-
-	template < typename It >
-	class ReverseIterator : public It
-	{
-		public:
-			using typename It::link_type;
-			using typename It::link_pointer;
-			using typename It::value_type;
-			using typename It::pointer;
-			using typename It::const_pointer;
-			using typename It::reference;
-			using typename It::const_reference;
-		
-		
-			ReverseIterator() : It(){};
-			ReverseIterator(It const & it) : It(it){};
-			ReverseIterator(ReverseIterator const & rhs)
-			{
-				this->current = rhs.current;
-			};
-			~ReverseIterator(){};
-			ReverseIterator &		operator=( ReverseIterator const & rhs )
-			{
-				this->current = rhs->current;
-			}
-
-			ReverseIterator &operator++()
-			{
-				this->current = this->current->previous;
-				return(*this);
-			}
-			ReverseIterator operator++(int)
-			{
-				ReverseIterator tmp(*this);
-				this->current = this->current->previous;
-				return(tmp);
-			}
-
-			virtual ReverseIterator &operator--()
-			{
-				this->current = this->current->next;
-				return(*this);
-			}
-			virtual ReverseIterator operator--(int)
-			{
-				ReverseIterator tmp(*this);
-				this->current = this->current->next;
-				return(tmp);
-			}
-	};
-
 	template < class T, class L >
 	class Iterator
 	{
@@ -158,6 +106,8 @@ namespace ft
 				this->current = this->current->previous;
 				return(tmp);
 			}
+
+			bool isIter(){return(1);};
 	};
 
 	template < class T, class L >
@@ -294,6 +244,9 @@ namespace ft
 			size_t _size;
 			allocator_type _alloc;
 
+			template <class C> typename enable_if<isIterator<C>::value, std::string>::type grugage(const C& size, const C& val);
+			template <class C> typename enable_if<!isIterator<C>::value, std::string>::type grugage(const C& size, const C& val);
+
 		public:
 			explicit List (const allocator_type& alloc = allocator_type());
 			explicit List (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type());
@@ -391,8 +344,7 @@ namespace ft
 	List<T>::List(InputIterator first, InputIterator last, const allocator_type& alloc)
 		: _end(new Link<T>()), _begin(_end), _rend(new Link<T>(NULL, T(), _end)), _size(0), _alloc(alloc)
 	{
-		for (;first != last; first++)
-			push_back(*first);
+		grugage(first, last);
 	}
 
 	template < typename T >
@@ -512,11 +464,8 @@ namespace ft
 	template < typename InputIterator >
 	void List<T>::assign(InputIterator first, InputIterator last)
 	{
-		List<T> tmp;
-		for (;first != last; first++)
-			tmp.push_back(*first);
-		swap(tmp);
-		tmp.~List();
+		clear();
+		grugage(first, last);
 	}
 
 	template < typename T >
@@ -802,6 +751,34 @@ namespace ft
 				itr_b++;
 			}
 		}
+	}
+
+	//----------------------------------OUR OWN PRIVATE STUFF--------------------------------------------------
+	template < typename T >
+	template <class C> typename enable_if<isIterator<C>::value, std::string>::type List<T>::grugage(const C& first, const C& last)
+	{
+		C & test = const_cast<C&>(first);
+		C ble(test);
+		List<T> tmp;
+		int i = 0;
+		while (ble.current != last.current && ble.current != _end && ble.current != _rend && ble.current != NULL)
+		{
+			tmp.push_back(ble.current->value);
+			ble.current = ble.current->next;
+			i++;
+		}
+		swap(tmp);
+		tmp.~List();
+		return ("HELLO");
+	}
+
+	template < typename T >
+	template <class C> typename enable_if<!isIterator<C>::value, std::string>::type List<T>::grugage(const C& size, const C& val)
+	{
+		clear();
+		for (int i = 0; i < size; i++)
+			push_back(val);
+		return ("BYE");
 	}
 }
 
