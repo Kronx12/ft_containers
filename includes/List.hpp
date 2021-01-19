@@ -294,19 +294,6 @@ namespace ft
 			size_t _size;
 			allocator_type _alloc;
 
-			// template< class A, class B >
-			// int grugage(A a, B b) {
-			// 	char t[] = {'c', 'h', 's', 't', 'i', 'j', 'l', 'm'};
-
-			// 	for (int i = 0; i < 8; i++)
-			// 		if (typeid(a).name()[0] == t[i]) {
-			// 			for (int i = 0; i < static_cast<int>(a); i++)
-			// 				push_back(b);
-			// 			return (1);
-			// 		}
-			// 	return (0);
-			// }
-
 		public:
 			explicit List (const allocator_type& alloc = allocator_type());
 			explicit List (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type());
@@ -699,46 +686,22 @@ namespace ft
 	template < class T >
 	void List<T>::splice(List<T>::const_iterator pos, List &other)
 	{
-		std::cout << "test" << std::endl;
-		iterator temp;
 		insert(pos, other.begin(), other.end());
 		other.erase(other.begin(), other.end());
-		// for (iterator itr = other.begin(); itr != other.end(); itr++)
-		// {
-		// 	std::cout << "test" << std::endl;
-		// 	insert(pos, *itr);
-		// 	temp = itr;
-		// 	temp++;
-		// 	other.erase(itr);
-
-		// 	pos++;
-		// }
 	}
 
 	template < class T >
 	void List<T>::splice(List<T>::const_iterator pos, List &other, List<T>::const_iterator it) 
 	{
-		std::cout << "test" << std::endl;
-		for (; it != other.end(); it++)
-		{
-			std::cout << "test" << std::endl;
-			insert(pos, *it);
-			other.erase(it);
-			pos++;
-		}
+		insert(pos, it, other.end());
+		other.erase(it, other.end());
 	}
 
 	template < class T >
 	void List<T>::splice(List<T>::const_iterator pos, List &other, List<T>::const_iterator first, List<T>::const_iterator last)
 	{
-		std::cout << "test" << std::endl;
-		for (; first != last; first++)
-		{
-			std::cout << "test" << std::endl;
-			insert(pos, *first);
-			other.erase(first);
-			pos++;
-		}
+		insert(pos, first, last);
+		other.erase(first, last);
 	}
 
 	template < class T >
