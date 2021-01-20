@@ -342,6 +342,7 @@ void operator_test(int size)
 
 bool test_max_int(const int lhs, const int rhs) { return (lhs > rhs ? true : false); }
 bool test_paire_int(const int lhs) { return (lhs % 2 == 1); }
+bool test_paire_int_unique(const int, const int rhs) { return (rhs % 2 == 1); }
 
 void operations2_test(int size)
 {
@@ -397,6 +398,19 @@ void operations2_test(int size)
 	std_lst.remove_if(test_paire_int);
 	ft_lst.remove_if(test_paire_int);
 	describe_list(std_lst, ft_lst);
+}
+
+void operations3_test(int size)
+{
+	title("Operations - 2 size", size);
+	std::list<int> std_lst;
+	ft::List<int> ft_lst;
+
+	for (int i = 0; i < size; i++)
+	{
+		std_lst.push_back(i);
+		ft_lst.push_back(i);
+	}
 
 	title("merge :");
 	std::list<int> std_lst_merge;
@@ -419,15 +433,20 @@ void operations2_test(int size)
 	title("merge_comp :");
 	std::list<int> std_lst_merge_comp(std_lst);
 	ft::List<int> ft_lst_merge_comp(ft_lst);
-
 	describe_list(std_lst_merge_comp, ft_lst_merge_comp);
-
 	std_lst_merge_comp.merge(std_lst, test_max_int);
 	ft_lst_merge_comp.merge(ft_lst, test_max_int);
-
 	describe_list(std_lst_merge_comp, ft_lst_merge_comp);
 
+	title("unique :");
+	std_lst_merge_comp.unique();
+	ft_lst_merge_comp.unique();
+	describe_list(std_lst_merge_comp, ft_lst_merge_comp);
 
+	title("unique_comp :");
+	std_lst_merge_comp.unique(test_paire_int_unique);
+	ft_lst_merge_comp.unique(test_paire_int_unique);
+	describe_list(std_lst_merge_comp, ft_lst_merge_comp);
 }
 
 int main()
@@ -510,6 +529,15 @@ int main()
 	operations2_test(2);
 	operations2_test(1);
 	operations2_test(0);
+#endif
+#if TEST_LIST == 0 || TEST_LIST == 9
+
+	// operations3_test(1000); // OK Sur linux (juste chiant a afficher)
+	operations3_test(10);
+	operations3_test(5);
+	operations3_test(2);
+	operations3_test(1);
+	operations3_test(0);
 #endif
 
 	/*

@@ -120,6 +120,7 @@ namespace ft
 //---
 
 // TODO A tester
+			//Operations3
 			template < class BinaryPredicate >			
 			void unique(BinaryPredicate p);
 			void unique();
@@ -580,7 +581,7 @@ namespace ft
 	{
 		List<T> tmp;
 		for (iterator itr = begin(); itr != end(); itr++)
-			if (!(tmp.back() == *itr))
+			if (tmp.empty() || tmp.back() != *itr)
 				tmp.push_back(*itr);
 		swap(tmp);
 		tmp.~List();
