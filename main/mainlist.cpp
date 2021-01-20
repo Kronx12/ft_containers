@@ -306,32 +306,45 @@ void operator_test(int size)
 	describe_list(std_lst_a, ft_lst_a);
 	describe_list(std_lst_b, ft_lst_b);
  
+	title("splice itr, lst :");
     std_lst_a.splice(std_it, std_lst_b);
     ft_lst_a.splice(ft_it, ft_lst_b);
 
 	describe_list(std_lst_a, ft_lst_a);
 	describe_list(std_lst_b, ft_lst_b);
 	
+	title("insert itr, size_t, value :");
 	std_lst_a.insert(std_lst_a.begin(), size, size);
 	ft_lst_a.insert(ft_lst_a.begin(), size, size);
 
 	describe_list(std_lst_a, ft_lst_a);
 	describe_list(std_lst_b, ft_lst_b);
 	
-	// TODO Attention a ne pas tester sans debug sous peine de crash VM (/ Session ?) 
 
-    // std_lst_b.splice(std_lst_b.begin(), std_lst_a, std_lst_a.begin());
-    // ft_lst_b.splice(ft_lst_b.begin(), ft_lst_a, ft_lst_a.begin());
+	std::list<int> std_lst_a_splice(size + 1, size);
+	std::list<int> std_lst_b_splice(size + 3, size - 1);
+	ft::List<int> ft_lst_a_splice(size + 1, size);
+	ft::List<int> ft_lst_b_splice(size + 3, size - 1);
 
-	// describe_list(std_lst_a, ft_lst_a);
-	// describe_list(std_lst_b, ft_lst_b);
+	// TODO
 	
+	title("splice itr, lst, lst_itr :");
+	std_lst_b_splice.splice(std_lst_b_splice.begin(), std_lst_a_splice, std_lst_a_splice.begin());
+	ft_lst_b_splice.splice(ft_lst_b_splice.begin(), ft_lst_a_splice, ft_lst_a_splice.begin());
+	
+	// END TODO
+
+	describe_list(std_lst_a_splice, ft_lst_a_splice);
+	describe_list(std_lst_b_splice, ft_lst_b_splice);
+
+	title("insert itr, size_t, value :");
 	std_lst_a.insert(std_lst_a.begin(), size, size);
 	ft_lst_a.insert(ft_lst_a.begin(), size, size);
 
 	describe_list(std_lst_a, ft_lst_a);
 	describe_list(std_lst_b, ft_lst_b);
 	
+	title("splice itr, lst, lst_itr_first, lst_itr_last :");
     std_lst_b.splice(std_lst_b.begin(), std_lst_a, std_it, std_lst_a.end());
     ft_lst_b.splice(ft_lst_b.begin(), ft_lst_a, ft_it, ft_lst_a.end());
 

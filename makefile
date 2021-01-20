@@ -32,7 +32,7 @@ LIST_MAIN		=	$(addprefix $(MAIN_DIR),/mainlist.cpp)
 
 # Compile #
 CC				=	clang++
-CFLAGS			=	-Wall -Wextra -Werror
+CFLAGS			=	-Wall -Wextra -Werror -fsanitize=address -g3
 CVERSION		=	-std=c++98
 LFLAGS  		=	-I $(INCS_DIR)
 CALLF			=	$(CC) $(CFLAGS) $(CVERSION)

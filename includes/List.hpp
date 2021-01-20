@@ -537,9 +537,8 @@ namespace ft
 	template < class T >
 	void List<T>::splice(List<T>::const_iterator pos, List &other, List<T>::const_iterator it) 
 	{
-		(void)pos;
-		insert(pos, it, const_iterator(other.end()));
-		other.erase(it, other.end());
+		insert(pos, *it);
+		other.erase(it);
 	}
 
 	template < class T >
