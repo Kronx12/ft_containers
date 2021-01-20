@@ -3,11 +3,12 @@
 
 # Exec #
 LIST			=	list_test
-STACK			=	stack_test
+MAP				=	map_test
 QUEUE			=	queue_test
+STACK			=	stack_test
 
 # Test #
-TEST			=	$(LIST) $(STACK) $(QUEUE)
+TEST			=	$(LIST) $(STACK) $(QUEUE) $(MAP)
 
 # Path #
 TEST_DIR		=	test
@@ -31,6 +32,7 @@ INCS			=	$(notdir $(INCS_PATH))
 TEST_INCS		=	$(addprefix $(MAIN_DIR),/Tester.hpp)
 TEST_MAIN		=	$(addprefix $(MAIN_DIR),/mainglobal.cpp)
 LIST_MAIN		=	$(addprefix $(MAIN_DIR),/mainlist.cpp)
+MAP_MAIN		=	$(addprefix $(MAIN_DIR),/mainmap.cpp)
 STACK_MAIN		=	$(addprefix $(MAIN_DIR),/mainstack.cpp)
 QUEUE_MAIN		=	$(addprefix $(MAIN_DIR),/mainqueue.cpp)
 
@@ -68,6 +70,11 @@ stack			:	all $(STACK_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
 queue			:	all $(QUEUE_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
 	$(CALLFLIB) $(QUEUE_MAIN) $(TEST_MAIN) -I $(TEST_INCS) -o $(addprefix $(TEST_DIR)/,$(QUEUE))
 	./$(addprefix $(TEST_DIR)/,$(QUEUE))
+
+# Containers test #
+map				:	all $(MAP_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
+	$(CALLFLIB) $(MAP_MAIN) $(TEST_MAIN) -I $(TEST_INCS) -o $(addprefix $(TEST_DIR)/,$(MAP))
+	./$(addprefix $(TEST_DIR)/,$(MAP))
 
 # Make the Directories #
 directories		:
