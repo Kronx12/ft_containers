@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mainlist.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gbaud <gbaud@42lyon.fr>                    +#+  +:+       +#+        */
+/*   By: jdesbord <jdesbord@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/20 08:56:11 by gbaud             #+#    #+#             */
-/*   Updated: 2021/01/20 10:54:23 by gbaud            ###   ########lyon.fr   */
+/*   Updated: 2021/01/20 12:22:25 by jdesbord         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void constructor_test(int size)
 {
 	title("Constructor size", size);
 // default constructor
+	title("Default constructor");
 	std::list<int> std_lst;
 	ft::List<int> ft_lst;
 	describe_list(std_lst, ft_lst);
@@ -49,6 +50,7 @@ void constructor_test(int size)
 	describe_list(std_lst, ft_lst);
 
 // fill constructor
+	title("Fill constructor");
 	std::list<int> std_lst_fill(size);
 	ft::List<int> ft_lst_fill(size);
 	describe_list(std_lst_fill, ft_lst_fill);
@@ -58,17 +60,25 @@ void constructor_test(int size)
 	describe_list(std_lst_fill, ft_lst_fill);
 
 // range constructor
+	title("Range constructor");
 	std::list<int> std_lst_range(std_lst.begin(), std_lst.end());
 	ft::List<int> ft_lst_range(ft_lst.begin(), ft_lst.end());
 	describe_list(std_lst_range, ft_lst_range);
 
+	title("Range constructor with STL Iterators");
+	std::list<int> std_lst_range2(std_lst.begin(), std_lst.end());
+	ft::List<int> ft_lst_range2(std_lst.begin(), std_lst.end());
+	describe_list(std_lst_range2, ft_lst_range2);
+
 // copy constructor
+	title("Copy constructor");
 	std::list<int> std_lst_copy(std_lst);
 	ft::List<int> ft_lst_copy(ft_lst);
 	describe_list(std_lst_copy, ft_lst_copy);
 
 
 // assignment constructor
+	title("assignment operator");
 	std::list<int> std_lst_assignment;
 	ft::List<int> ft_lst_assignment;
 	std_lst_assignment = std_lst_range;
@@ -178,6 +188,11 @@ void modifiers_test(int size)
 	title("assign from iterator :");
 	std_lst_assign.assign(std_lst.begin(), std_lst.end());
 	ft_lst_assign.assign(ft_lst.begin(), ft_lst.end());
+	describe_list(std_lst_assign, ft_lst_assign);
+
+	title("assign from STL iterator :");
+	std_lst_assign.assign(std_lst.begin(), std_lst.end());
+	ft_lst_assign.assign(std_lst.begin(), std_lst.end());
 	describe_list(std_lst_assign, ft_lst_assign);
 
 	title("push_back :");
