@@ -70,7 +70,7 @@ namespace ft
     template< class T, class Container >
     typename Queue<T, Container>::reference Queue<T, Container>::back()
     {
-        return (C.back());
+		return (C.back());
     }
     
     template< class T, class Container >
