@@ -52,10 +52,14 @@ namespace ft
 			size_t _size;
 			allocator_type _alloc;
 
-			template <class C> typename enable_if<isIterator<C>::value, std::string>::type constructor_assign_helper(const C& size, const C& val);
-			template <class C> typename enable_if<!isIterator<C>::value, std::string>::type constructor_assign_helper(const C& size, const C& val);
-			template <class C> typename enable_if<isIterator<C>::value, std::string>::type insert_helper(ft::List<T>::iterator pos, const C& size, const C& val);
-			template <class C> typename enable_if<!isIterator<C>::value, std::string>::type insert_helper(ft::List<T>::iterator pos, const C& size, const C& val);
+			template <class InputIterator>
+			void constructor_assign_helper(InputIterator & first, InputIterator & last, void *);
+			template <class InputIterator>
+			void constructor_assign_helper(InputIterator & first, InputIterator & last, int);
+			template <class InputIterator>
+			void insert_helper(ft::List<T>::iterator pos, const InputIterator& first, const InputIterator& last, void *);
+			template <class InputIterator>
+			void insert_helper(ft::List<T>::iterator pos, const InputIterator& first, const InputIterator& last, int);
 
 		public:
 //--
@@ -158,7 +162,7 @@ namespace ft
 	List<T>::List(InputIterator first, InputIterator last, const allocator_type& alloc)
 		: _end(new Link<T>()), _begin(_end), _rend(new Link<T>(NULL, T(), _end)), _size(0), _alloc(alloc)
 	{
-		constructor_assign_helper(first, last);
+		constructor_assign_helper(first, last, typename ft::is_integral<InputIterator>::type());
 	}
 
 	template < typename T >
@@ -279,7 +283,7 @@ namespace ft
 	void List<T>::assign(InputIterator first, InputIterator last)
 	{
 		clear();
-		constructor_assign_helper(first, last);
+		constructor_assign_helper(first, last, typename ft::is_integral<InputIterator>::type());
 	}
 
 	template < typename T >
@@ -338,7 +342,7 @@ namespace ft
 	template< class InputIterator >
 	void List<T>::insert(iterator pos, InputIterator first, InputIterator last)
 	{
-		insert_helper(pos, first, last);
+		insert_helper(pos, first, last, typename ft::is_integral<InputIterator>::type());
 	}
 
 	template < typename T >
@@ -762,55 +766,48 @@ namespace ft
 	}
 	
 	//----------------------------------OUR OWN PRIVATE STUFF--------------------------------------------------
-	
-	template < typename T >
-	template <class C> typename enable_if<isIterator<C>::value, std::string>::type List<T>::insert_helper(ft::List<T>::iterator pos, const C& first, const C& last)
+
+	template <typename T>
+	template <class InputIterator>
+	void	List<T>::insert_helper(ft::List<T>::iterator pos, const InputIterator& first, const InputIterator& last, void *)
 	{
-		C & first_itr = const_cast<C&>(first);
-		C from(first_itr);
+		InputIterator & first_itr = const_cast<InputIterator&>(first);
+		InputIterator from(first_itr);
 		while (from != last)
 		{
 			pos = insert(pos, from.current->value);
 			pos++;
 			from.current = from.current->next;
 		}
-		return ("");
 	}
 
-	template < typename T >
-	template <class C> typename enable_if<!isIterator<C>::value, std::string>::type List<T>::insert_helper(ft::List<T>::iterator pos, const C& size, const C& val)
+	template <typename T>
+	template <class InputIterator>
+	void	List<T>::insert_helper(ft::List<T>::iterator pos, const InputIterator& size, const InputIterator& val, int)
 	{
-		size_t s(size);
-		for (size_t i = 0; i < s; i++)
+		for (int i = 0; i < size; i++)
 			insert(pos, val);
-		return ("");
-	}
-	
-	template < typename T >
-	template <class C> typename enable_if<isIterator<C>::value, std::string>::type List<T>::constructor_assign_helper(const C& first, const C& last)
-	{
-		C & test = const_cast<C&>(first);
-		C ble(test);
-		List<T> tmp;
-		int i = 0;
-		while (ble.current != last.current && ble.current != _end && ble.current != _rend && ble.current != NULL)
-		{
-			tmp.push_back(ble.current->value);
-			ble.current = ble.current->next;
-			i++;
-		}
-		swap(tmp);
-		tmp.~List();
-		return ("");
 	}
 
-	template < typename T >
-	template <class C> typename enable_if<!isIterator<C>::value, std::string>::type List<T>::constructor_assign_helper(const C& size, const C& val)
+	template <typename T>
+	template <class InputIterator>
+	void	List<T>::constructor_assign_helper(InputIterator & first, InputIterator & last, void *)
+	{
+		while (first != last)
+		{
+			push_back(*first);
+			first++;
+			_size++;
+		}
+	}
+
+	template <typename T>
+	template <class InputIterator>
+	void	List<T>::constructor_assign_helper(InputIterator & size, InputIterator & val, int)
 	{
 		clear();
 		for (int i = 0; i < size; i++)
 			push_back(val);
-		return ("");
 	}
 }
 
