@@ -52,10 +52,7 @@ namespace ft
     }
 
     template< class T, class Container >
-    Queue<T, Container>::~Queue()
-    {
-        C.~Container();
-    }
+    Queue<T, Container>::~Queue() {}
 
     // Element access
     template< class T, class Container >
@@ -126,17 +123,17 @@ namespace ft
     }
 
     template< class T >
-    bool operator==(Queue<T> &lhs, Queue<T> &rhs) { return (lhs == rhs); }
+    bool operator==(Queue<T> &lhs, Queue<T> &rhs) { return (lhs.C == rhs.C); }
     template< class T >
-    bool operator!=(Queue<T> &lhs, Queue<T> &rhs) { return (lhs != rhs); }
+    bool operator!=(Queue<T> &lhs, Queue<T> &rhs) { return (lhs.C != rhs.C); }
     template< class T >
-    bool operator>(Queue<T> &lhs, Queue<T> &rhs) { return (lhs > rhs); }
+    bool operator>(Queue<T> &lhs, Queue<T> &rhs) { return (lhs.C > rhs.C); }
     template< class T >
-    bool operator>=(Queue<T> &lhs, Queue<T> &rhs) { return (lhs >= rhs); }
+    bool operator>=(Queue<T> &lhs, Queue<T> &rhs) { return (lhs.C >= rhs.C); }
     template< class T >
-    bool operator<(Queue<T> &lhs, Queue<T> &rhs) { return (lhs < rhs); }
+    bool operator<(Queue<T> &lhs, Queue<T> &rhs) { return (lhs.C < rhs.C); }
     template< class T >
-    bool operator<=(Queue<T> &lhs, Queue<T> &rhs) { return (lhs <= rhs); }
+    bool operator<=(Queue<T> &lhs, Queue<T> &rhs) { return (lhs.C <= rhs.C); }
 }
 
 #endif
