@@ -2,9 +2,14 @@
 #include <list>
 #include <sstream>
 
-// Used for show test result
+// Use for show test result
 #ifndef SHOW
 # define SHOW
+#endif
+
+// Use for auto exit on error
+#ifndef EXIT_ERR
+# define EXIT_ERR
 #endif
 
 void title(std::string title)
@@ -21,6 +26,7 @@ void title(std::string title, int size)
 
 void check(std::stringstream *ss_std, std::stringstream *ss_ft)
 {
+	bool e = false;
 	if (!ss_std->str().compare(ss_ft->str()))
 	{
 		#ifdef SHOW
@@ -30,8 +36,14 @@ void check(std::stringstream *ss_std, std::stringstream *ss_ft)
 		#endif
 	}
 	else
+	{
 		std::cout << "\033[1;31mKO\n" << ss_std->str() << std::endl << ss_ft->str() << "\033[0m";
+		#ifdef EXIT_ERR
+			e = true;
+		#endif
+	}
 	std::cout << std::endl;
 	ss_std->str("");
 	ss_ft->str("");
+	if (e) exit(1);
 }

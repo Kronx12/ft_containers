@@ -58,6 +58,7 @@ namespace ft
 			template <class C> typename enable_if<!isIterator<C>::value, std::string>::type insert_helper(ft::List<T>::iterator pos, const C& size, const C& val);
 
 		public:
+//--
 			explicit List (const allocator_type& alloc = allocator_type());
 			explicit List (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type());
 			template < class InputIterator >
@@ -95,7 +96,7 @@ namespace ft
 			void push_back(const value_type& val);
 			void pop_back();
 //--
-			//Modifiers (also used on other modifiers)
+			//Modifiers
 			template< class InputIterator >
 			void insert(iterator pos, InputIterator first, InputIterator last);
 			iterator insert(iterator pos, const T &value);
@@ -107,35 +108,32 @@ namespace ft
 			void clear();
 			void swap(List &lst);
 			void resize(size_type count, T value = T());
-//TODO
+//--
 			//Operations
 			void splice(const_iterator pos, List &other);
 			void splice(const_iterator pos, List &other, const_iterator it);
 			void splice(const_iterator pos, List &other, const_iterator first, const_iterator last);
-// END TODO
+
 //---
+			//Operations2
 			template< class UnaryPredictate >
 			void remove_if(UnaryPredictate p);
 			void remove(const T &value);
-//---
 
-// TODO A tester
+			template < class Compare >
+			void sort(Compare comp);
+			void sort();
+			void reverse();	
+//---
 			//Operations3
-			template < class BinaryPredicate >			
-			void unique(BinaryPredicate p);
-			void unique();
-// END TODO
-
-//---
 			template < class Compare >
 			void merge(List &other, Compare comp);
 			void merge(List &other);
 
-			//Operations2
-			template < class Compare >
-			void sort(Compare comp);
-			void sort();
-			void reverse();			
+			template < class BinaryPredicate >			
+			void unique(BinaryPredicate p);
+			void unique();
+//--		
 	};
 
 
@@ -551,18 +549,24 @@ namespace ft
 	template < class T >
 	void List<T>::remove(const T &value)
 	{
+		ft::List<T> tmp;
 		for (iterator itr = begin(); itr != end(); itr++)
-			if (*itr == value)
-				erase(itr);
+			if (*itr != value)
+				tmp.push_back(*itr);
+		swap(tmp);
+		tmp.~List();
 	}
 	
 	template < class T >
 	template < class UnaryPredictate >
 	void List<T>::remove_if(UnaryPredictate p) 
 	{
+		ft::List<T> tmp;
 		for (iterator itr = begin(); itr != end(); itr++)
-			if (p(*itr))
-				erase(itr);
+			if (!p(*itr))
+				tmp.push_back(*itr);
+		swap(tmp);
+		tmp.~List();
 	}
 
 	template < class T >

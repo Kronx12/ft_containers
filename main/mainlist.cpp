@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   mainlist.cpp                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gbaud <gbaud@42lyon.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/01/20 08:56:11 by gbaud             #+#    #+#             */
+/*   Updated: 2021/01/20 08:56:11 by gbaud            ###   ########lyon.fr   */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "Tester.hpp"
 
 /*
@@ -9,6 +21,9 @@ capacity_test = 3
 element_access_test = 4
 modifiers_test = 5
 modifiers2_test = 6
+operator_test = 7
+operations2_test = 8
+operations3_test = 9
 
 */
 
@@ -275,9 +290,9 @@ void modifiers2_test(int size)
 	describe_list(std_lst, ft_lst);
 }
 
-void operator_test(int size)
+void operations1_test(int size)
 {
-	title("Operator size", size);
+	title("Operations size", size);
 
 	std::list<int> std_lst_a;
     std::list<int> std_lst_b;
@@ -326,13 +341,9 @@ void operator_test(int size)
 	ft::List<int> ft_lst_a_splice(size + 1, size);
 	ft::List<int> ft_lst_b_splice(size + 3, size - 1);
 
-	// TODO
-	
 	title("splice itr, lst, lst_itr :");
 	std_lst_b_splice.splice(std_lst_b_splice.begin(), std_lst_a_splice, std_lst_a_splice.begin());
 	ft_lst_b_splice.splice(ft_lst_b_splice.begin(), ft_lst_a_splice, ft_lst_a_splice.begin());
-	
-	// END TODO
 
 	describe_list(std_lst_a_splice, ft_lst_a_splice);
 	describe_list(std_lst_b_splice, ft_lst_b_splice);
@@ -359,7 +370,7 @@ bool test_paire_int_unique(const int, const int rhs) { return (rhs % 2 == 1); }
 
 void operations2_test(int size)
 {
-	title("Operations size", size);
+	title("Operations - 2 size", size);
 	std::list<int> std_lst;
 	ft::List<int> ft_lst;
 	for (int i = 0; i < size; i++)
@@ -415,7 +426,7 @@ void operations2_test(int size)
 
 void operations3_test(int size)
 {
-	title("Operations - 2 size", size);
+	title("Operations - 3 size", size);
 	std::list<int> std_lst;
 	ft::List<int> ft_lst;
 
@@ -467,7 +478,7 @@ int main()
 
 #if TEST_LIST == 0 || TEST_LIST == 1
 
-	// constructor_test(1000); // OK Sur linux (juste chiant a afficher)
+	constructor_test(1000); // OK Sur linux (juste chiant a afficher)
 	constructor_test(10);
 	constructor_test(5);
 	constructor_test(2);
@@ -477,7 +488,7 @@ int main()
 #endif
 #if TEST_LIST == 0 || TEST_LIST == 2
 
-	// iterator_test(1000); // OK Sur linux (juste chiant a afficher)
+	iterator_test(1000); // OK Sur linux (juste chiant a afficher)
 	iterator_test(10);
 	iterator_test(5);
 	iterator_test(2);
@@ -487,7 +498,7 @@ int main()
 #endif
 #if TEST_LIST == 0 || TEST_LIST == 3
 
-	// capacity_test(1000); // OK Sur linux (juste chiant a afficher)
+	capacity_test(1000); // OK Sur linux (juste chiant a afficher)
 	capacity_test(10);
 	capacity_test(5);
 	capacity_test(2);
@@ -497,7 +508,7 @@ int main()
 #endif
 #if TEST_LIST == 0 || TEST_LIST == 4
 
-	// element_access_test(1000); // OK Sur linux (juste chiant a afficher)
+	element_access_test(1000); // OK Sur linux (juste chiant a afficher)
 	element_access_test(10);
 	element_access_test(5);
 	element_access_test(2);
@@ -507,7 +518,7 @@ int main()
 #endif
 #if TEST_LIST == 0 || TEST_LIST == 5
 
-	// modifiers_test(1000); // OK Sur linux (juste chiant a afficher)
+	modifiers_test(1000); // OK Sur linux (juste chiant a afficher)
 	modifiers_test(10);
 	modifiers_test(5);
 	modifiers_test(2);
@@ -517,7 +528,7 @@ int main()
 #endif
 #if TEST_LIST == 0 || TEST_LIST == 6
 
-	// modifiers2_test(1000); // OK Sur linux (juste chiant a afficher)
+	modifiers2_test(1000); // OK Sur linux (juste chiant a afficher)
 	modifiers2_test(10);
 	modifiers2_test(5);
 	modifiers2_test(2);
@@ -527,16 +538,16 @@ int main()
 #endif
 #if TEST_LIST == 0 || TEST_LIST == 7
 
-	// operator_test(1000); // OK Sur linux (juste chiant a afficher)
-	operator_test(10);
-	operator_test(5);
-	operator_test(2);
-	operator_test(1);
-	operator_test(0);
+	operations1_test(1000); // OK Sur linux (juste chiant a afficher)
+	operations1_test(10);
+	operations1_test(5);
+	operations1_test(2);
+	operations1_test(1);
+	operations1_test(0);
 #endif
 #if TEST_LIST == 0 || TEST_LIST == 8
 
-	// operations2_test(1000); // OK Sur linux (juste chiant a afficher)
+	operations2_test(1000); // OK Sur linux (juste chiant a afficher)
 	operations2_test(10);
 	operations2_test(5);
 	operations2_test(2);
@@ -545,7 +556,7 @@ int main()
 #endif
 #if TEST_LIST == 0 || TEST_LIST == 9
 
-	// operations3_test(1000); // OK Sur linux (juste chiant a afficher)
+	operations3_test(1000); // OK Sur linux (juste chiant a afficher)
 	operations3_test(10);
 	operations3_test(5);
 	operations3_test(2);
@@ -553,77 +564,4 @@ int main()
 	operations3_test(0);
 #endif
 
-	/*
-	std::cout << "INT TESTS" << std::endl;
-	ft::List<int> testint;
-	testint.push_back(2);
-	testint.push_back(1);
-	testint.push_back(3);
-	std::list<int> testint_base;
-	testint_base.push_back(2);
-	testint_base.push_back(1);
-	testint_base.push_back(4);
-
-	//testint.clear();
-	//test erase END
-	std::cout << "sizeTest base --> " << testint_base.max_size() << std::endl;
-	std::cout << "sizeTest new  --> " << testint.max_size() << std::endl;
-	testint_base.assign(testint_base.begin(), testint_base.end());
-	testint.assign(testint_base.begin(), testint_base.end());
-	std::cout<< "ft::List front()  --> " << testint.front() << std::endl;
-	std::cout<< "std::list front() --> " << testint_base.front() << std::endl;
-	std::cout<< "ft::List back()  --> " << testint.back() << std::endl;
-	std::cout<< "std::list back() --> " << testint_base.back() << std::endl;
-	std::cout<< "ft::List begin()  --> " << *(testint.begin()) << std::endl;
-	std::cout<< "std::list begin() --> " << *(testint_base.begin()) << std::endl;
-
-	std::cout << std::endl << "STRING TESTS" << std::endl;
-	ft::List<std::string> teststring;
-	teststring.push_back("string_1");
-	teststring.push_back("string_2");
-	teststring.push_back("string_3");
-	std::list<std::string> teststring_base;
-	teststring_base.push_back("string_1");
-	teststring_base.push_back("string_2");
-	teststring_base.push_back("string_4");
-
-	teststring_base.insert(teststring_base.begin(), "ble");
-	std::cout << "Base" << std::endl;
-	teststring_base.assign(teststring_base.begin(), teststring_base.end());
-	std::cout << "Mine" << std::endl;
-	teststring.assign(teststring_base.begin(), teststring_base.end());
-	std::cout<< "ft::List front()  --> " << teststring.front() << std::endl;
-	std::cout<< "std::list front() --> " << teststring_base.front() << std::endl;
-	std::cout<< "ft::List back()  --> " << teststring.back() << std::endl;
-	std::cout<< "std::list back() --> " << teststring_base.back() << std::endl;
-	std::cout<< "ft::List begin()  --> " << *(++teststring.begin()) << std::endl;
-	std::cout<< "std::list begin() --> " << *(++teststring_base.begin()) << std::endl;
-	std::cout<< "ft::List --end()  --> " << *(--teststring.end()) << std::endl;
-	std::cout<< "std::List --end() --> " << *(--teststring_base.end()) << std::endl;
-	std::cout<< "ft::List rbegin()  --> " << *(teststring.rbegin()) << std::endl;
-	std::cout<< "std::List rbegin() --> " << *(teststring_base.rbegin()) << std::endl;
-	std::cout<< "ft::List --rend()  --> " << *(--teststring.rend()) << std::endl;
-	std::cout<< "std::List --rend() --> " << *(--teststring_base.rend()) << std::endl;
-
-
-	std::cout << "SORT TESTS" << std::endl;
-	std::cout<< "ft::List front()  --> " << testint.front() << std::endl;
-	std::cout<< "std::list front()  --> " << testint_base.front() << std::endl;
-	testint.sort();
-	testint_base.sort();
-	std::cout<< "ft::List front()  --> " << testint.front() << std::endl;
-	std::cout<< "std::list front()  --> " << testint_base.front() << std::endl;
-
-
-	std::cout << "ERASE / CLEAR TESTS" << std::endl;
-	std::cout << "erase begin val = " << testint.front() << std::endl;
-	testint.erase(testint.begin());
-	testint.erase(testint.begin());
-	testint.erase(testint.begin());
-	std::cout << "erase from begin to end - 1" << std::endl;
-	testint.erase(testint.begin(), --testint.end());
-	std::cout << "clear" << std::endl;
-	testint.clear();
-	std::cout << "clear on cleared list" << std::endl;
-	testint.clear();*/
 }
