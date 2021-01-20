@@ -3,6 +3,10 @@
 
 # include "List.hpp"
 # include <list>
+# include "Stack.hpp"
+# include <stack>
+# include "Queue.hpp"
+# include <queue>
 
 # include <sstream>
 static int g_test = 0;
@@ -12,6 +16,72 @@ void title(std::string title);
 void title(std::string title, int size);
 void check(std::stringstream *ss_std, std::stringstream *ss_ft);
 void end_test();
+
+template < class T >
+void describe_stack(std::stack<T> std_stack, ft::Stack<T> ft_stack)
+{
+	std::stringstream ss_std;
+	std::stringstream ss_ft;
+
+	ss_std << "- ";
+	ss_ft << "- ";
+
+	int i = 0;
+	if (std_stack.empty())
+		ss_std << "(empty)";
+	else
+		while (!std_stack.empty())
+		{
+			ss_std << i << ":[" << std_stack.top() << "] ";
+			std_stack.pop();
+			i++;
+		}
+
+	i = 0;
+	if (ft_stack.empty())
+		ss_ft << "(empty)";
+	else
+		while (!ft_stack.empty())
+		{
+			ss_ft << i << ":[" << ft_stack.top() << "] ";
+			ft_stack.pop();
+			i++;
+		}
+	check(&ss_std, &ss_ft);
+}
+
+template < class T >
+void describe_queue(std::queue<T> std_queue, ft::Queue<T> ft_queue)
+{
+	std::stringstream ss_std;
+	std::stringstream ss_ft;
+
+	ss_std << "- ";
+	ss_ft << "- ";
+
+	int i = 0;
+	if (std_queue.empty())
+		ss_std << "(empty)";
+	else
+		while (!std_queue.empty())
+		{
+			ss_std << i << ":[" << std_queue.front() << "] ";
+			std_queue.pop();
+			i++;
+		}
+
+	i = 0;
+	if (ft_queue.empty())
+		ss_ft << "(empty)";
+	else
+		while (!ft_queue.empty())
+		{
+			ss_ft << i << ":[" << ft_queue.front() << "] ";
+			ft_queue.pop();
+			i++;
+		}
+	check(&ss_std, &ss_ft);
+}
 
 template < class T >
 void describe_list(std::list<T> std_lst, ft::List<T> ft_lst)
