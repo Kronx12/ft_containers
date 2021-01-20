@@ -3,9 +3,11 @@
 
 # Exec #
 LIST			=	list_test
+STACK			=	stack_test
+QUEUE			=	queue_test
 
 # Test #
-TEST			=	$(LIST)
+TEST			=	$(LIST) $(STACK) $(QUEUE)
 
 # Path #
 TEST_DIR		=	test
@@ -29,6 +31,8 @@ INCS			=	$(notdir $(INCS_PATH))
 TEST_INCS		=	$(addprefix $(MAIN_DIR),/Tester.hpp)
 TEST_MAIN		=	$(addprefix $(MAIN_DIR),/mainglobal.cpp)
 LIST_MAIN		=	$(addprefix $(MAIN_DIR),/mainlist.cpp)
+STACK_MAIN		=	$(addprefix $(MAIN_DIR),/mainstack.cpp)
+QUEUE_MAIN		=	$(addprefix $(MAIN_DIR),/mainqueue.cpp)
 
 # Compile #
 CC				=	clang++
@@ -54,6 +58,16 @@ $(OBJS_DIR)/%.o	:	%.cpp $(INCS)
 list			:	all $(LIST_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
 	$(CALLFLIB) $(LIST_MAIN) $(TEST_MAIN) -I $(TEST_INCS) -o $(addprefix $(TEST_DIR)/,$(LIST))
 	./$(addprefix $(TEST_DIR)/,$(LIST))
+
+# Containers test #
+stack			:	all $(STACK_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
+	$(CALLFLIB) $(STACK_MAIN) $(TEST_MAIN) -I $(TEST_INCS) -o $(addprefix $(TEST_DIR)/,$(STACK))
+	./$(addprefix $(TEST_DIR)/,$(STACK))
+
+# Containers test #
+queue			:	all $(QUEUE_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
+	$(CALLFLIB) $(QUEUE_MAIN) $(TEST_MAIN) -I $(TEST_INCS) -o $(addprefix $(TEST_DIR)/,$(QUEUE))
+	./$(addprefix $(TEST_DIR)/,$(QUEUE))
 
 # Make the Directories #
 directories		:

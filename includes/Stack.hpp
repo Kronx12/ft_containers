@@ -50,10 +50,7 @@ namespace ft
     }
 
     template< class T, class Container >
-    Stack<T, Container>::~Stack()
-    {
-        C.~Container();
-    }
+    Stack<T, Container>::~Stack() {}
 
     // Element access
     template< class T, class Container >
@@ -112,17 +109,17 @@ namespace ft
     }
 
     template< class T >
-    bool operator==(Stack<T> &lhs, Stack<T> &rhs) { return (lhs == rhs); }
+    bool operator==(Stack<T> &lhs, Stack<T> &rhs) { return (lhs.C == rhs.C); }
     template< class T >
-    bool operator!=(Stack<T> &lhs, Stack<T> &rhs) { return (lhs != rhs); }
+    bool operator!=(Stack<T> &lhs, Stack<T> &rhs) { return (lhs.C != rhs.C); }
     template< class T >
-    bool operator>(Stack<T> &lhs, Stack<T> &rhs) { return (lhs > rhs); }
+    bool operator>(Stack<T> &lhs, Stack<T> &rhs) { return (lhs.C > rhs.C); }
     template< class T >
-    bool operator>=(Stack<T> &lhs, Stack<T> &rhs) { return (lhs >= rhs); }
+    bool operator>=(Stack<T> &lhs, Stack<T> &rhs) { return (lhs.C >= rhs.C); }
     template< class T >
-    bool operator<(Stack<T> &lhs, Stack<T> &rhs) { return (lhs < rhs); }
+    bool operator<(Stack<T> &lhs, Stack<T> &rhs) { return (lhs.C < rhs.C); }
     template< class T >
-    bool operator<=(Stack<T> &lhs, Stack<T> &rhs) { return (lhs <= rhs); }
+    bool operator<=(Stack<T> &lhs, Stack<T> &rhs) { return (lhs.C <= rhs.C); }
 }
 
 #endif
