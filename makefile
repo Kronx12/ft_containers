@@ -3,9 +3,10 @@
 
 # Exec #
 LIST			=	list_test
+MAP				=	map_test
 
 # Test #
-TEST			=	$(LIST)
+TEST			=	$(LIST) $(MAP)
 
 # Path #
 TEST_DIR		=	test
@@ -29,6 +30,7 @@ INCS			=	$(notdir $(INCS_PATH))
 TEST_INCS		=	$(addprefix $(MAIN_DIR),/Tester.hpp)
 TEST_MAIN		=	$(addprefix $(MAIN_DIR),/mainglobal.cpp)
 LIST_MAIN		=	$(addprefix $(MAIN_DIR),/mainlist.cpp)
+MAP_MAIN		=	$(addprefix $(MAIN_DIR),/mainmap.cpp)
 
 # Compile #
 CC				=	clang++
