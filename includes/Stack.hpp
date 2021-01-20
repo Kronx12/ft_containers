@@ -77,7 +77,7 @@ namespace ft
 	{
 		return (C.size()); 
 	}
-	
+
 	// Modifiers
 	template< class T, class Container >
 	void Stack<T, Container>::push(const T &value) 
@@ -90,7 +90,7 @@ namespace ft
 	{
 		C.pop_back();
 	}
-    
+
 	template< class T, class Container >
 	void Stack<T, Container>::swap(const Stack<T, Container> &other)
 	{

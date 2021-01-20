@@ -71,6 +71,11 @@ queue			:	all $(QUEUE_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
 	$(CALLFLIB) $(QUEUE_MAIN) $(TEST_MAIN) -I $(TEST_INCS) -o $(addprefix $(TEST_DIR)/,$(QUEUE))
 	./$(addprefix $(TEST_DIR)/,$(QUEUE))
 
+# Containers test #
+map				:	all $(MAP_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
+	$(CALLFLIB) $(MAP_MAIN) $(TEST_MAIN) -I $(TEST_INCS) -o $(addprefix $(TEST_DIR)/,$(MAP))
+	./$(addprefix $(TEST_DIR)/,$(MAP))
+
 # Make the Directories #
 directories		:
 	@mkdir -p $(OBJS_DIR)

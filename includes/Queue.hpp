@@ -18,8 +18,8 @@ namespace ft
 
 		// member functions
 			explicit Queue(const Container &cont = Container());
-			~Queue();
 			Queue<T, Container> &operator=(const Queue<T, Container> &other);
+			~Queue();
 //--
 		// Element access
 			reference front();
@@ -83,7 +83,7 @@ namespace ft
 	template< class T, class Container >
 	bool Queue<T, Container>::empty() const 
 	{
-	return (C.empty()); 
+		return (C.empty()); 
 	}
     
 	template< class T, class Container >
@@ -96,7 +96,7 @@ namespace ft
 	template< class T, class Container >
 	void Queue<T, Container>::push(const T &value) 
 	{
-	C.push_back(value); 
+		C.push_back(value); 
 	}
 
 	template< class T, class Container >
@@ -122,16 +122,6 @@ namespace ft
 		rhs.C = tmp;
 	}
 
-	template< class T >
-	bool operator==(Queue<T> &lhs, Queue<T> &rhs) { return (lhs == rhs); }
-	template< class T >
-	bool operator!=(Queue<T> &lhs, Queue<T> &rhs) { return (lhs != rhs); }
-	template< class T >
-	bool operator>(Queue<T> &lhs, Queue<T> &rhs) { return (lhs > rhs); }
-	template< class T >
-	bool operator>=(Queue<T> &lhs, Queue<T> &rhs) { return (lhs >= rhs); }
-	template< class T >
-	bool operator<(Queue<T> &lhs, Queue<T> &rhs) { return (lhs < rhs); }
 	template< class T >
 	bool operator==(Queue<T> &lhs, Queue<T> &rhs) { return (lhs.C == rhs.C); }
 	template< class T >
