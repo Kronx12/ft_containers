@@ -1,3 +1,4 @@
+#include "Tester.hpp"
 #include "List.hpp"
 #include <list>
 #include <sstream>
@@ -9,7 +10,7 @@
 
 // Use for auto exit on error
 #ifndef EXIT_ERR
-# define EXIT_ERR
+# define EXIT_ERR 0
 #endif
 
 void title(std::string title)
@@ -34,16 +35,26 @@ void check(std::stringstream *ss_std, std::stringstream *ss_ft)
 		#else
 		std::cout << "\033[1;32mOK\033[0m";
 		#endif
+		g_valid++;
 	}
 	else
 	{
 		std::cout << "\033[1;31mKO\n" << ss_std->str() << std::endl << ss_ft->str() << "\033[0m";
-		#ifdef EXIT_ERR
+		#if EXIT_ERR==1
 			e = true;
 		#endif
 	}
 	std::cout << std::endl;
 	ss_std->str("");
 	ss_ft->str("");
+	g_test++;
 	if (e) exit(1);
+}
+
+void end_test()
+{
+	if (g_valid == g_test)
+		std::cout << "\033[1;32m=====[ " << g_valid << "/" << g_test << " ]=====\033[0m" << std::endl;
+	else
+		std::cout << "\033[1;33m=====[ " << g_valid << "/" << g_test << " ]=====\033[0m" << std::endl;
 }

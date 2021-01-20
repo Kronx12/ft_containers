@@ -134,8 +134,8 @@ namespace ft
 			void unique(BinaryPredicate p);
 			void unique();
 //--		
+		// Operators (en bas)
 	};
-
 
 	//-------------------------- CONSTRUCTOR --------------------------
 	template < typename T >
@@ -651,6 +651,116 @@ namespace ft
 		}
 	}
 
+	//---------------------------------- OPERATORS --------------------------------------------------
+
+	template < typename T >
+	bool operator==(List<T> &lhs, List<T> &rhs)
+	{
+		if (lhs.size() != rhs.size())
+			return (false);
+
+		typename ft::List<T>::iterator itr_l = lhs.begin();
+		typename ft::List<T>::iterator itr_r = rhs.begin();
+		while (itr_l != lhs.end() && itr_r != rhs.end())
+		{
+			if (*itr_l != *itr_r)
+				return (false);
+			itr_l++;
+			itr_r++;
+		}
+		return (true);
+	}
+
+	template < typename T >
+	bool operator!=(List<T> &lhs, List<T> &rhs)
+	{
+		if (lhs.size() != rhs.size())
+			return (true);
+
+		typename ft::List<T>::iterator itr_l = lhs.begin();
+		typename ft::List<T>::iterator itr_r = rhs.begin();
+		while (itr_l != lhs.end() && itr_r != rhs.end())
+		{
+			if (*itr_l != *itr_r)
+				return (true);
+			itr_l++;
+			itr_r++;
+		}
+		return (false);
+	}
+
+	template < typename T >
+	bool operator<(List<T> &lhs, List<T> &rhs)
+	{
+		typename ft::List<T>::iterator itr_l = lhs.begin();
+		typename ft::List<T>::iterator itr_r = rhs.begin();
+		while (itr_l != lhs.end() && itr_r != rhs.end())
+		{
+			if (*itr_l < *itr_r)
+				return (true);
+			else if (*itr_l > *itr_r)
+				return (false);
+			itr_l++;
+			itr_r++;
+		}
+		return (false);
+	}
+
+	template < typename T >
+	bool operator<=(List<T> &lhs, List<T> &rhs)
+	{
+		typename ft::List<T>::iterator itr_l = lhs.begin();
+		typename ft::List<T>::iterator itr_r = rhs.begin();
+		if (lhs.empty() && rhs.empty())
+			return (true);
+		while (itr_l != lhs.end() && itr_r != rhs.end())
+		{
+			if (*itr_l <= *itr_r)
+				return (true);
+			else if (*itr_l > *itr_r)
+				return (false);
+			itr_l++;
+			itr_r++;
+		}
+		return (false);
+	}
+
+	template < typename T >
+	bool operator>(List<T> &lhs, List<T> &rhs)
+	{
+		typename ft::List<T>::iterator itr_l = lhs.begin();
+		typename ft::List<T>::iterator itr_r = rhs.begin();
+		while (itr_l != lhs.end() && itr_r != rhs.end())
+		{
+			if (*itr_l > *itr_r)
+				return (true);
+			else if (*itr_l < *itr_r)
+				return (false);
+			itr_l++;
+			itr_r++;
+		}
+		return (false);
+	}
+
+	template < typename T >
+	bool operator>=(List<T> &lhs, List<T> &rhs)
+	{
+		typename ft::List<T>::iterator itr_l = lhs.begin();
+		typename ft::List<T>::iterator itr_r = rhs.begin();
+		if (lhs.empty() && rhs.empty())
+			return (true);
+		while (itr_l != lhs.end() && itr_r != rhs.end())
+		{
+			if (*itr_l >= *itr_r)
+				return (true);
+			else if (*itr_l < *itr_r)
+				return (false);
+			itr_l++;
+			itr_r++;
+		}
+		return (false);
+	}
+	
 	//----------------------------------OUR OWN PRIVATE STUFF--------------------------------------------------
 	
 	template < typename T >

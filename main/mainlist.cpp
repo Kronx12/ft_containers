@@ -6,7 +6,7 @@
 /*   By: gbaud <gbaud@42lyon.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/20 08:56:11 by gbaud             #+#    #+#             */
-/*   Updated: 2021/01/20 09:59:43 by gbaud            ###   ########lyon.fr   */
+/*   Updated: 2021/01/20 10:54:23 by gbaud            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ modifiers2_test = 6
 operator_test = 7
 operations2_test = 8
 operations3_test = 9
+operators_test = 10
 
 */
 
@@ -473,8 +474,86 @@ void operations3_test(int size)
 	describe_list(std_lst_merge_comp, ft_lst_merge_comp);
 }
 
+void operators_test(int size)
+{
+	title("Operators size", size);
+	std::list<int> std_lst_a;
+	std::list<int> std_lst_b;
+	ft::List<int> ft_lst_a;
+	ft::List<int> ft_lst_b;
+	
+	for (int i = 0; i < size; i++)
+	{
+		std_lst_a.push_back(i);
+		std_lst_b.push_front(i);
+		ft_lst_a.push_back(i);
+		ft_lst_b.push_front(i);
+	}
+
+	title("operator== :");
+	std::stringstream std_ss;
+	std::stringstream ft_ss;
+	
+	std_ss << (std_lst_a == std_lst_a);
+	ft_ss << (ft_lst_a == ft_lst_a);
+	check(&std_ss, &ft_ss);
+	
+	std_ss << (std_lst_a == std_lst_b);
+	ft_ss << (ft_lst_a == ft_lst_b);
+	check(&std_ss, &ft_ss);
+	
+	title("operator!= :");
+	std_ss << (std_lst_a != std_lst_a);
+	ft_ss << (ft_lst_a != ft_lst_a);
+	check(&std_ss, &ft_ss);
+	
+	std_ss << (std_lst_a != std_lst_b);
+	ft_ss << (ft_lst_a != ft_lst_b);
+	check(&std_ss, &ft_ss);
+	
+	title("operator< :");
+	std_ss << (std_lst_a < std_lst_a);
+	ft_ss << (ft_lst_a < ft_lst_a);
+	check(&std_ss, &ft_ss);
+	
+	std_ss << (std_lst_a < std_lst_b);
+	ft_ss << (ft_lst_a < ft_lst_b);
+	check(&std_ss, &ft_ss);
+	
+	title("operator<= :");
+	std_ss << (std_lst_a <= std_lst_a);
+	ft_ss << (ft_lst_a <= ft_lst_a);
+	check(&std_ss, &ft_ss);
+	
+	std_ss << (std_lst_a <= std_lst_b);
+	ft_ss << (ft_lst_a <= ft_lst_b);
+	check(&std_ss, &ft_ss);
+	
+	title("operator> :");
+	std_ss << (std_lst_a > std_lst_a);
+	ft_ss << (ft_lst_a > ft_lst_a);
+	check(&std_ss, &ft_ss);
+	
+	std_ss << (std_lst_a > std_lst_b);
+	ft_ss << (ft_lst_a > ft_lst_b);
+	check(&std_ss, &ft_ss);
+	
+	title("operator>= :");
+	std_ss << (std_lst_a >= std_lst_a);
+	ft_ss << (ft_lst_a >= ft_lst_a);
+	check(&std_ss, &ft_ss);
+	
+	std_ss << (std_lst_a >= std_lst_b);
+	ft_ss << (ft_lst_a >= ft_lst_b);
+	check(&std_ss, &ft_ss);
+	
+
+}
+
 int main()
 {
+	g_test = 0;
+	g_valid = 0;
 
 #if TEST_LIST == 0 || TEST_LIST == 1
 
@@ -563,5 +642,16 @@ int main()
 	operations3_test(1);
 	operations3_test(0);
 #endif
+#if TEST_LIST == 0 || TEST_LIST == 10
+
+	operators_test(1000); // OK Sur linux (juste chiant a afficher)
+	operators_test(10);
+	operators_test(5);
+	operators_test(2);
+	operators_test(1);
+	operators_test(0);
+#endif
+
+end_test();
 
 }

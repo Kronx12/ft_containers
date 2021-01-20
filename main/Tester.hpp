@@ -5,10 +5,13 @@
 # include <list>
 
 # include <sstream>
+static int g_test = 0;
+static int g_valid = 0;
 
 void title(std::string title);
 void title(std::string title, int size);
 void check(std::stringstream *ss_std, std::stringstream *ss_ft);
+void end_test();
 
 template < class T >
 void describe_list(std::list<T> std_lst, ft::List<T> ft_lst)
