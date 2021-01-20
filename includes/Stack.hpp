@@ -1,7 +1,7 @@
 #ifndef STACK_HPP
-#define STACK_HPP
+# define STACK_HPP
 
-#include <deque>
+# include <deque>
 
 namespace ft
 {
@@ -9,14 +9,14 @@ namespace ft
 	class Stack
 	{
 		public:
-		// member types
+		// Member types
 			typedef Container container_type;
 			typedef typename Container::value_type value_type;
 			typedef typename Container::size_type size_type;
 			typedef typename Container::reference reference;
 			typedef typename Container::const_reference const_reference;
 
-		// member functions
+		// Member functions
 			explicit Stack(const Container &cont = Container());
 			Stack<T, Container> &operator=(const Stack<T, Container> &other);
 			~Stack();
