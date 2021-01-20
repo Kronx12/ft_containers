@@ -3,6 +3,7 @@ Splice dans le main de test dangereux x) A debug #jdesbord
 Test de tous les unique a faire 
 
 Il est 00h10 je vais me coucher j'essaye d'etre la a 7h demain (jamais je suis la) bonne nuit les enfants
+Je suis la wtf
 
 To Compile:
     make list INPUT="-D TEST_LIST=5"
