@@ -6,7 +6,7 @@
 /*   By: jdesbord <jdesbord@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/20 08:56:11 by gbaud             #+#    #+#             */
-/*   Updated: 2021/01/20 12:22:25 by jdesbord         ###   ########lyon.fr   */
+/*   Updated: 2021/01/20 14:27:33 by jdesbord         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,55 +32,72 @@ operators_test = 10
 # define TEST_LIST 0
 #endif
 
+template <typename T>
+void lstfor(std::list<T> &stdlst, ft::List<T> &ftlst, int size, int)
+{
+	for (int i = 0; i < size; i++)
+	{
+		stdlst.push_back(i);
+		ftlst.push_back(i);
+	}
+	describe_list(stdlst, ftlst);
+}
 
-void constructor_test(int size)
+template <typename T>
+void lstfor(std::list<T> &stdlst, ft::List<T> &ftlst, int size, void *)
+{
+	for (int i = 0; i < size; i++)
+	{
+		stdlst.push_back(T());
+		ftlst.push_back(T());
+	}
+	describe_list(stdlst, ftlst);
+}
+
+template <typename T>
+void constructor_test(int size, T type)
 {
 	title("Constructor size", size);
 // default constructor
 	title("Default constructor");
-	std::list<int> std_lst;
-	ft::List<int> ft_lst;
+	std::list<T> std_lst;
+	ft::List<T> ft_lst;
 	describe_list(std_lst, ft_lst);
 
-	for (int i = 0; i < size; i++)
-	{
-		std_lst.push_back(i);
-		ft_lst.push_back(i);
-	}
-	describe_list(std_lst, ft_lst);
+	lstfor(std_lst, ft_lst, size, typename ft::is_integral<T>::type());
 
 // fill constructor
 	title("Fill constructor");
-	std::list<int> std_lst_fill(size);
-	ft::List<int> ft_lst_fill(size);
+	std::list<T> std_lst_fill(size);
+	ft::List<T> ft_lst_fill(size);
 	describe_list(std_lst_fill, ft_lst_fill);
 
-	std_lst_fill = std::list<int>(size, 5);
-	ft_lst_fill = ft::List<int>(size, 5);
+	std_lst_fill = std::list<T>(size, type);
+	ft_lst_fill = ft::List<T>(size, type);
 	describe_list(std_lst_fill, ft_lst_fill);
 
 // range constructor
 	title("Range constructor");
-	std::list<int> std_lst_range(std_lst.begin(), std_lst.end());
-	ft::List<int> ft_lst_range(ft_lst.begin(), ft_lst.end());
+	std::list<T> std_lst_range(std_lst.begin(), std_lst.end());
+	ft::List<T> ft_lst_range(ft_lst.begin(), ft_lst.end());
 	describe_list(std_lst_range, ft_lst_range);
 
 	title("Range constructor with STL Iterators");
-	std::list<int> std_lst_range2(std_lst.begin(), std_lst.end());
-	ft::List<int> ft_lst_range2(std_lst.begin(), std_lst.end());
+	std::list<T> std_lst_range2(std_lst.begin(), std_lst.end());
+	ft::List<T> ft_lst_range2(std_lst.begin(), std_lst.end());
 	describe_list(std_lst_range2, ft_lst_range2);
 
 // copy constructor
 	title("Copy constructor");
-	std::list<int> std_lst_copy(std_lst);
-	ft::List<int> ft_lst_copy(ft_lst);
+	std::list<T> std_lst_copy(std_lst);
+	ft::List<T> ft_lst_copy(ft_lst);
 	describe_list(std_lst_copy, ft_lst_copy);
 
 
 // assignment constructor
 	title("assignment operator");
-	std::list<int> std_lst_assignment;
-	ft::List<int> ft_lst_assignment;
+	std::list<T> std_lst_assignment;
+	ft::List<T> ft_lst_assignment;
 	std_lst_assignment = std_lst_range;
 	ft_lst_assignment = ft_lst_range;
 	describe_list(std_lst_assignment, ft_lst_assignment);
@@ -572,12 +589,20 @@ int main()
 
 #if TEST_LIST == 0 || TEST_LIST == 1
 
-	constructor_test(1000); // OK Sur linux (juste chiant a afficher)
-	constructor_test(10);
-	constructor_test(5);
-	constructor_test(2);
-	constructor_test(1);
-	constructor_test(0);
+	constructor_test(1000, 5); // OK Sur linux (juste chiant a afficher)
+	constructor_test(10, 5);
+	constructor_test(5, 5);
+	constructor_test(2, 5);
+	constructor_test(1, 5);
+	constructor_test(0, 5);
+
+	std::string str = "bonjour";
+	constructor_test(1000, str); // OK Sur linux (juste chiant a afficher)
+	constructor_test(10, str);
+	constructor_test(5, str);
+	constructor_test(2, str);
+	constructor_test(1, str);
+	constructor_test(0, str);
 
 #endif
 #if TEST_LIST == 0 || TEST_LIST == 2
