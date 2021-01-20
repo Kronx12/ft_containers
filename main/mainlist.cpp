@@ -415,6 +415,19 @@ void operations2_test(int size)
 	ft_lst.merge(ft_lst_merge);
 	describe_list(std_lst, ft_lst);
 	describe_list(std_lst_merge, ft_lst_merge);
+	
+	title("merge_comp :");
+	std::list<int> std_lst_merge_comp(std_lst);
+	ft::List<int> ft_lst_merge_comp(ft_lst);
+
+	describe_list(std_lst_merge_comp, ft_lst_merge_comp);
+
+	std_lst_merge_comp.merge(std_lst, test_max_int);
+	ft_lst_merge_comp.merge(ft_lst, test_max_int);
+
+	describe_list(std_lst_merge_comp, ft_lst_merge_comp);
+
+
 }
 
 int main()

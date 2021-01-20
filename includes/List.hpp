@@ -500,7 +500,7 @@ namespace ft
 		while (itr.current != _end || itr_other.current != other._end)
 			if (itr.current != _end && itr_other.current != other._end)
 			{
-				if (comp(*itr_other, *itr))
+				if (!comp(*itr_other, *itr))
 				{
 					tmp.push_back(*itr);
 					itr++;
