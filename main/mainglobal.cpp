@@ -25,16 +25,21 @@ void title(std::string title, int size)
 	std::cout << "\033[33;1m" << "=========================\n\n" << "\033[0m";
 }
 
-void check(std::stringstream *ss_std, std::stringstream *ss_ft)
+void check(std::stringstream *ss_std, std::stringstream *ss_ft, int flag)
 {
 	bool e = false;
-	if (!ss_std->str().compare(ss_ft->str()))
+	if (!ss_std->str().compare(ss_ft->str()) && !flag)
 	{
 		#ifdef SHOW
 		std::cout << "\033[1;32mOK\033[2;37m\n" << ss_std->str() << std::endl << ss_ft->str() << "\033[0m";
 		#else
 		std::cout << "\033[1;32mOK\033[0m";
 		#endif
+		g_valid++;
+	}
+	else if (flag == 1)
+	{
+		std::cout << "\033[3;33mUNDEFINED\n" << ss_std->str() << std::endl << ss_ft->str() << "\033[0m";
 		g_valid++;
 	}
 	else

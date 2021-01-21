@@ -39,9 +39,10 @@ namespace ft
 			typedef typename allocator_type::pointer pointer;
 			typedef typename allocator_type::const_pointer const_pointer;
 			// # created for Iterator #
+		private:
 			typedef Link<value_type> link_type;
 			typedef link_type* link_pointer;
-			// # end #
+		public:
 			typedef Iterator<value_type, link_type> iterator;
 			typedef ConstIterator<value_type, link_type> const_iterator;
 			typedef ReverseIterator<iterator> reverse_iterator;
@@ -91,7 +92,9 @@ namespace ft
 //---
 			//Element access
 			reference front();
+			const_reference front() const;
 			reference back();
+			const_reference back() const;
 //---
 			//Modifiers
 			void assign(size_type n, const value_type& val);
@@ -265,7 +268,20 @@ namespace ft
 	}
 
 	template < typename T >
+	typename List<T>::const_reference List<T>::front() const
+	{
+		return(_begin->value);
+	}
+
+	template < typename T >
 	typename List<T>::reference List<T>::back()
+	{
+
+		return(_end->previous->value);
+	}
+
+	template < typename T >
+	typename List<T>::const_reference List<T>::back() const
 	{
 		return(_end->previous->value);
 	}

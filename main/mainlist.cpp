@@ -21,8 +21,9 @@ operators_test = 10
 #endif
 
 template <typename T>
-void lstfor(std::list<T> &stdlst, ft::List<T> &ftlst, int size, int)
+void lstfor(std::list<T> &stdlst, ft::List<T> &ftlst, int size, T type, int)
 {
+	(void)type;
 	for (int i = 0; i < size; i++)
 	{
 		stdlst.push_back(i);
@@ -32,12 +33,12 @@ void lstfor(std::list<T> &stdlst, ft::List<T> &ftlst, int size, int)
 }
 
 template <typename T>
-void lstfor(std::list<T> &stdlst, ft::List<T> &ftlst, int size, void *)
+void lstfor(std::list<T> &stdlst, ft::List<T> &ftlst, int size, T type, void *)
 {
 	for (int i = 0; i < size; i++)
 	{
-		stdlst.push_back(T());
-		ftlst.push_back(T());
+		stdlst.push_back(type);
+		ftlst.push_back(type);
 	}
 	describe_list(stdlst, ftlst);
 }
@@ -52,7 +53,7 @@ void constructor_test(int size, T type)
 	ft::List<T> ft_lst;
 	describe_list(std_lst, ft_lst);
 
-	lstfor(std_lst, ft_lst, size, typename ft::is_integral<T>::type());
+	lstfor(std_lst, ft_lst, size, type, typename ft::is_integral<T>::type());
 
 // fill constructor
 	title("Fill constructor");
@@ -92,17 +93,14 @@ void constructor_test(int size, T type)
 
 }
 
-void iterator_test(int size)
+template <typename T>
+void iterator_test(int size, T type)
 {
 	title("Iterator size", size);
-	std::list<int> std_lst;
-	ft::List<int> ft_lst;
+	std::list<T> std_lst;
+	ft::List<T> ft_lst;
 
-	for (int i = 0; i < size; i++)
-	{
-		std_lst.push_back(i);
-		ft_lst.push_back(i);
-	}
+	lstfor(std_lst, ft_lst, size, type, typename ft::is_integral<T>::type());
 
 // iterators
 	describe_list(std_lst, ft_lst);
@@ -117,17 +115,14 @@ void iterator_test(int size)
 	const_reverse_describe_list(std_lst, ft_lst);
 }
 
-void capacity_test(int size)
+template <typename T>
+void capacity_test(int size, T type)
 {
 	title("Capacity size", size);
-	std::list<int> std_lst;
-	std::list<int> ft_lst;
+	std::list<T> std_lst;
+	ft::List<T> ft_lst;
 
-	for (int i = 0; i < size; i++)
-	{
-		std_lst.push_back(i);
-		ft_lst.push_back(i);
-	}
+	lstfor(std_lst, ft_lst, size, type, typename ft::is_integral<T>::type());
 
 // capacity
 	std::stringstream ss_std;
@@ -135,40 +130,36 @@ void capacity_test(int size)
 
 	ss_std << "size : " << std_lst.size();
 	ss_ft << "size : " << ft_lst.size();
-	check(&ss_std, &ss_ft);
+	check(&ss_std, &ss_ft, 0);
 
 	ss_std << "max_size : " << std_lst.max_size();
 	ss_ft << "max_size : " << ft_lst.max_size();
-	check(&ss_std, &ss_ft);
+	check(&ss_std, &ss_ft, 0);
 
 	ss_std << "empty : " << std_lst.empty();
 	ss_ft << "empty : " << ft_lst.empty();
-	check(&ss_std, &ss_ft);
+	check(&ss_std, &ss_ft, 0);
 }
 
-void element_access_test(int size)
+template <typename T>
+void element_access_test(int size, T type)
 {
 	title("Element_access", size);
-	std::list<int> std_lst;
-	std::list<int> ft_lst;
+	std::list<T> std_lst;
+	ft::List<T> ft_lst;
 
-	for (int i = 0; i < size; i++)
-	{
-		std_lst.push_back(i);
-		ft_lst.push_back(i);
-	}
-
+	lstfor(std_lst, ft_lst, size, type, typename ft::is_integral<T>::type());
 // element access
 	std::stringstream ss_std;
 	std::stringstream ss_ft;
 
 	ss_std << "front : " << std_lst.front();
 	ss_ft << "front : " << ft_lst.front();
-	check(&ss_std, &ss_ft);
+	check(&ss_std, &ss_ft, !size);
 
 	ss_std << "back : " << std_lst.back();
 	ss_ft << "back : " << ft_lst.back();
-	check(&ss_std, &ss_ft);
+	check(&ss_std, &ss_ft, !size);
 }
 
 void modifiers_test(int size)
@@ -516,56 +507,56 @@ void operators_test(int size)
 	
 	std_ss << (std_lst_a == std_lst_a);
 	ft_ss << (ft_lst_a == ft_lst_a);
-	check(&std_ss, &ft_ss);
+	check(&std_ss, &ft_ss, 0);
 	
 	std_ss << (std_lst_a == std_lst_b);
 	ft_ss << (ft_lst_a == ft_lst_b);
-	check(&std_ss, &ft_ss);
+	check(&std_ss, &ft_ss, 0);
 	
 	title("operator!= :");
 	std_ss << (std_lst_a != std_lst_a);
 	ft_ss << (ft_lst_a != ft_lst_a);
-	check(&std_ss, &ft_ss);
+	check(&std_ss, &ft_ss, 0);
 	
 	std_ss << (std_lst_a != std_lst_b);
 	ft_ss << (ft_lst_a != ft_lst_b);
-	check(&std_ss, &ft_ss);
+	check(&std_ss, &ft_ss, 0);
 	
 	title("operator< :");
 	std_ss << (std_lst_a < std_lst_a);
 	ft_ss << (ft_lst_a < ft_lst_a);
-	check(&std_ss, &ft_ss);
+	check(&std_ss, &ft_ss, 0);
 	
 	std_ss << (std_lst_a < std_lst_b);
 	ft_ss << (ft_lst_a < ft_lst_b);
-	check(&std_ss, &ft_ss);
+	check(&std_ss, &ft_ss, 0);
 	
 	title("operator<= :");
 	std_ss << (std_lst_a <= std_lst_a);
 	ft_ss << (ft_lst_a <= ft_lst_a);
-	check(&std_ss, &ft_ss);
+	check(&std_ss, &ft_ss, 0);
 	
 	std_ss << (std_lst_a <= std_lst_b);
 	ft_ss << (ft_lst_a <= ft_lst_b);
-	check(&std_ss, &ft_ss);
+	check(&std_ss, &ft_ss, 0);
 	
 	title("operator> :");
 	std_ss << (std_lst_a > std_lst_a);
 	ft_ss << (ft_lst_a > ft_lst_a);
-	check(&std_ss, &ft_ss);
+	check(&std_ss, &ft_ss, 0);
 	
 	std_ss << (std_lst_a > std_lst_b);
 	ft_ss << (ft_lst_a > ft_lst_b);
-	check(&std_ss, &ft_ss);
+	check(&std_ss, &ft_ss, 0);
 	
 	title("operator>= :");
 	std_ss << (std_lst_a >= std_lst_a);
 	ft_ss << (ft_lst_a >= ft_lst_a);
-	check(&std_ss, &ft_ss);
+	check(&std_ss, &ft_ss, 0);
 	
 	std_ss << (std_lst_a >= std_lst_b);
 	ft_ss << (ft_lst_a >= ft_lst_b);
-	check(&std_ss, &ft_ss);
+	check(&std_ss, &ft_ss, 0);
 	
 
 }
@@ -575,6 +566,9 @@ int main()
 	g_test = 0;
 	g_valid = 0;
 
+	std::string str = "bonjour";
+	Testclass ble;
+
 #if TEST_LIST == 0 || TEST_LIST == 1
 
 	constructor_test(1000, 5); // OK Sur linux (juste chiant a afficher)
@@ -583,8 +577,6 @@ int main()
 	constructor_test(2, 5);
 	constructor_test(1, 5);
 	constructor_test(0, 5);
-
-	std::string str = "bonjour";
 	constructor_test(1000, str); // OK Sur linux (juste chiant a afficher)
 	constructor_test(10, str);
 	constructor_test(5, str);
@@ -592,35 +584,84 @@ int main()
 	constructor_test(1, str);
 	constructor_test(0, str);
 
+	constructor_test(1000, ble); // OK Sur linux (juste chiant a afficher)
+	constructor_test(10, ble);
+	constructor_test(5, ble);
+	constructor_test(2, ble);
+	constructor_test(1, ble);
+	constructor_test(0, ble);
+
 #endif
 #if TEST_LIST == 0 || TEST_LIST == 2
 
-	iterator_test(1000); // OK Sur linux (juste chiant a afficher)
-	iterator_test(10);
-	iterator_test(5);
-	iterator_test(2);
-	iterator_test(1);
-	iterator_test(0);
+	iterator_test(1000, 5); // OK Sur linux (juste chiant a afficher)
+	iterator_test(10, 5);
+	iterator_test(5, 5);
+	iterator_test(2, 5);
+	iterator_test(1, 5);
+	iterator_test(0, 5);
+
+	iterator_test(1000, str); // OK Sur linux (juste chiant a afficher)
+	iterator_test(10, str);
+	iterator_test(5, str);
+	iterator_test(2, str);
+	iterator_test(1, str);
+	iterator_test(0, str);
+
+	iterator_test(1000, ble); // OK Sur linux (juste chiant a afficher)
+	iterator_test(10, ble);
+	iterator_test(5, ble);
+	iterator_test(2, ble);
+	iterator_test(1, ble);
+	iterator_test(0, ble);
 
 #endif
 #if TEST_LIST == 0 || TEST_LIST == 3
 
-	capacity_test(1000); // OK Sur linux (juste chiant a afficher)
-	capacity_test(10);
-	capacity_test(5);
-	capacity_test(2);
-	capacity_test(1);
-	capacity_test(0);
+	capacity_test(1000, 5); // OK Sur linux (juste chiant a afficher)
+	capacity_test(10, 5);
+	capacity_test(5, 5);
+	capacity_test(2, 5);
+	capacity_test(1, 5);
+	capacity_test(0, 5);
+
+	capacity_test(1000, str); // OK Sur linux (juste chiant a afficher)
+	capacity_test(10, str);
+	capacity_test(5, str);
+	capacity_test(2, str);
+	capacity_test(1, str);
+	capacity_test(0, str);
+
+	capacity_test(1000, ble); // OK Sur linux (juste chiant a afficher)
+	capacity_test(10, ble);
+	capacity_test(5, ble);
+	capacity_test(2, ble);
+	capacity_test(1, ble);
+	capacity_test(0, ble);
 
 #endif
 #if TEST_LIST == 0 || TEST_LIST == 4
 
-	element_access_test(1000); // OK Sur linux (juste chiant a afficher)
-	element_access_test(10);
-	element_access_test(5);
-	element_access_test(2);
-	element_access_test(1);
-	element_access_test(0);
+	element_access_test(1000, 5); // OK Sur linux (juste chiant a afficher)
+	element_access_test(10, 5);
+	element_access_test(5, 5);
+	element_access_test(2, 5);
+	element_access_test(1, 5);
+	element_access_test(0, 5);
+
+	element_access_test(1000, str); // OK Sur linux (juste chiant a afficher)
+	element_access_test(10, str);
+	element_access_test(5, str);
+	element_access_test(2, str);
+	element_access_test(1, str);
+	element_access_test(0, str);
+
+	element_access_test(1000, ble); // OK Sur linux (juste chiant a afficher)
+	element_access_test(10, ble);
+	element_access_test(5, ble);
+	element_access_test(2, ble);
+	element_access_test(1, ble);
+	element_access_test(0, ble);
 
 #endif
 #if TEST_LIST == 0 || TEST_LIST == 5

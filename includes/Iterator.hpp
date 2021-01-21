@@ -278,6 +278,17 @@ namespace ft
 			bool isIter(){return(1);};
 	};
 
+	template< class T, class L >
+	class VectorIterator
+	{
+
+	};
+
+	template< class T, class L >
+	class ConstVectorIterator
+	{
+
+	};
 }
 
 #endif
