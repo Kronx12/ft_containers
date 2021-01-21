@@ -289,6 +289,18 @@ namespace ft
 	{
 
 	};
+
+	template < class T, class L >
+	class MapIterator
+	{
+
+	};
+
+	template < class T, class L >
+	class ConstMapIterator
+	{
+
+	};
 }
 
 #endif
