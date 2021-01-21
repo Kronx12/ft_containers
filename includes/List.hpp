@@ -92,7 +92,9 @@ namespace ft
 //---
 			//Element access
 			reference front();
+			const_reference front() const;
 			reference back();
+			const_reference back() const;
 //---
 			//Modifiers
 			void assign(size_type n, const value_type& val);
@@ -266,7 +268,20 @@ namespace ft
 	}
 
 	template < typename T >
+	typename List<T>::const_reference List<T>::front() const
+	{
+		return(_begin->value);
+	}
+
+	template < typename T >
 	typename List<T>::reference List<T>::back()
+	{
+
+		return(_end->previous->value);
+	}
+
+	template < typename T >
+	typename List<T>::const_reference List<T>::back() const
 	{
 		return(_end->previous->value);
 	}
