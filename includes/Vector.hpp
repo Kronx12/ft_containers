@@ -12,30 +12,12 @@ namespace ft
 
 	};
 
-	template< class Allocator >
-	class Vector<bool, Allocator>
-	{
-		public:
-			// typedef
-
-			// Iterator invalidation ??
-
-			// constructors
-
-			// element access
-
-			// capacity
-
-			// modifiers
-
-			// TODO
-	};
-
 	template< class T, class Allocator = std::allocator<T> >
 	class Vector
 	{
 		private:
 			typedef Node<T> _node;
+
 		public:
 			// typedef
 			typedef T value_type;
@@ -51,8 +33,14 @@ namespace ft
 			typedef typename ReverseIterator<iterator> reverse_iterator;
 			typedef typename ReverseIterator<const_iterator> const_reverse_iterator;
 
-			// Iterator invalidation ??
+		private:
+			pointer _data;
+			size_type _size;
+			size_type _capacity;
 
+			void realloc(size_type len);
+
+		public:
 			// constructors
 			Vector();
 			explicit Vector(const Allocator &alloc);
@@ -122,6 +110,26 @@ namespace ft
 			void swap(Vector &other);
 	};
 
+	// private:
+	template< class T, class L >
+	void Vector<T, L>::realloc(size_type len)
+	{
+		pointer tmp = new T[len];
+
+		for (size_type i = 0; i < (len < _size) ? len : _size; i++)
+			tmp[i] = _data[i];
+		delete[] _data;
+		_data = tmp;
+		_capacity = len;
+	}
+
+	template< class T, class L >
+	void Vector<T, L>::push_back(const T &value)
+	{
+		if (_size >= _capacity)
+			realloc(_capacity + _capacity / 2);
+		_data[_size++] = value;
+	}
 
 	// TODO non-member functions
 	template< class T, class Alloc >
