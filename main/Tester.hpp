@@ -12,6 +12,23 @@
 static int g_test = 0;
 static int g_valid = 0;
 
+class Testclass
+{
+	public:
+		std::string str;
+		Testclass()
+		{
+			str = "string_ICI";
+		};
+		~Testclass(){};
+};
+
+inline std::ostream &operator<<(std::ostream &o, Testclass const &rhs)
+{
+	o << rhs.str;
+	return o;
+};
+
 void title(std::string title);
 void title(std::string title, int size);
 void check(std::stringstream *ss_std, std::stringstream *ss_ft);
@@ -101,7 +118,6 @@ void describe_list(std::list<T> std_lst, ft::List<T> ft_lst)
 			ss_std << i << ":[" << *itr << "] ";
 			i++;
 		}
-
 	i = 0;
 	if (ft_lst.empty())
 		ss_ft << "(empty)";

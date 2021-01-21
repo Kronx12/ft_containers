@@ -23,7 +23,7 @@ namespace ft
 			Link	*previous;
 			Link(const T& val) : value(val), next(NULL), previous(NULL) {};
 			Link(Link *pre, const T& val, Link *_next) :value(val), next(_next), previous(pre) {};
-			Link() : value(T()), next(NULL), previous(NULL) {};
+			Link() : next(NULL), previous(NULL) {};
 	};
 
 	template < class T >
@@ -89,7 +89,9 @@ namespace ft
 //---
 			//Element access
 			reference front();
+			const_reference front() const;
 			reference back();
+			const_reference back() const;
 //---
 			//Modifiers
 			void assign(size_type n, const value_type& val);
@@ -263,7 +265,20 @@ namespace ft
 	}
 
 	template < typename T >
+	typename List<T>::const_reference List<T>::front() const
+	{
+		return(_begin->value);
+	}
+
+	template < typename T >
 	typename List<T>::reference List<T>::back()
+	{
+
+		return(_end->previous->value);
+	}
+
+	template < typename T >
+	typename List<T>::const_reference List<T>::back() const
 	{
 		return(_end->previous->value);
 	}
