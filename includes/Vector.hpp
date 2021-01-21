@@ -6,18 +6,9 @@
 
 namespace ft
 {
-	template< class T >
-	class Node
-	{
-
-	};
-
 	template< class T, class Allocator = std::allocator<T> >
 	class Vector
 	{
-		private:
-			typedef Node<T> _node;
-
 		public:
 			// typedef
 			typedef T value_type;
@@ -28,15 +19,16 @@ namespace ft
 			typedef typename Allocator::const_reference const_reference;
 			typedef typename Allocator::pointer pointer;
 			typedef typename Allocator::const_pointer const_pointer;
-			typedef typename VectorIterator< T, _node > iterator;
-			typedef typename ConstVectorIterator< T, _node > const_iterator;
-			typedef typename ReverseIterator<iterator> reverse_iterator;
-			typedef typename ReverseIterator<const_iterator> const_reverse_iterator;
+			typedef VectorIterator< T, T* > iterator;
+			typedef ConstVectorIterator< T, T* > const_iterator;
+			typedef ReverseIterator<iterator> reverse_iterator;
+			typedef ReverseIterator<const_iterator> const_reverse_iterator;
 
 		private:
 			pointer _data;
 			size_type _size;
 			size_type _capacity;
+			allocator_type _alloc;
 
 			void realloc(size_type len);
 
@@ -44,7 +36,7 @@ namespace ft
 			// constructors
 			Vector();
 			explicit Vector(const Allocator &alloc);
-			explicit Vector(size_type count, cont T &value = T(), const Allocator &alloc = Allocator());
+			explicit Vector(size_type count, const T &value = T(), const Allocator &alloc = Allocator());
 			template< class InputIterator >
 			Vector(InputIterator first, InputIterator last, const Allocator &alloc = Allocator());
 			Vector(const Vector &other);
@@ -111,20 +103,141 @@ namespace ft
 	};
 
 	// private:
-	template< class T, class L >
-	void Vector<T, L>::realloc(size_type len)
+	template< class T, class Allocator >
+	void Vector<T, Allocator>::realloc(size_type len)
 	{
-		pointer tmp = new T[len];
+		pointer tmp = _alloc.allocate(len);
 
 		for (size_type i = 0; i < (len < _size) ? len : _size; i++)
 			tmp[i] = _data[i];
-		delete[] _data;
+		_alloc.deallocate(_data);
 		_data = tmp;
 		_capacity = len;
 	}
 
-	template< class T, class L >
-	void Vector<T, L>::push_back(const T &value)
+	// constructors:
+	template< class T, class Allocator >
+	Vector<T, Allocator>::Vector() : _data(NULL), _size(0), _capacity(0), _alloc(allocator_type()) {}
+	
+	template< class T, class Allocator >
+	Vector<T, Allocator>::Vector(const Allocator &alloc) : _data(NULL), _size(0), _capacity(0), _alloc(alloc) {}
+	
+	template< class T, class Allocator >
+	Vector<T, Allocator>::Vector(size_type count, const T &value, const Allocator &alloc) : _alloc(alloc)
+	{
+		_size = 0;
+		_capacity = 0;
+		_data = NULL;
+		for (int i = 0; i < count; i++)
+			push_back(value);
+	}
+	
+	template< class T, class Allocator >
+	template< class InputIterator >
+	Vector<T, Allocator>::Vector(InputIterator first, InputIterator last, const Allocator &alloc) : _alloc(alloc)
+	{
+		_size = 0;
+		_capacity = 0;
+		_data = NULL;
+		for (;first != last; first++)
+			push_back(*first);
+	}
+	
+	template< class T, class Allocator >
+	Vector<T, Allocator>::Vector(const Vector &other)
+	{
+		_size = 0;
+		_capacity = 0;
+		_data = NULL;
+		_alloc = other._alloc;
+		for (iterator itr = other.begin(); itr != other.end(); itr++)
+			push_back(*itr);
+	}
+
+	template< class T, class Allocator >
+	Vector<T, Allocator> &Vector<T, Allocator>::operator=(const Vector &other)
+	{
+		if (this == &other) return(*this);
+		this->~Vector();
+		return *new(this) Vector(other);
+	}
+
+	template< class T, class Allocator >
+	void Vector<T, Allocator>::assign(size_type count, const T &value)
+	{
+		clear();
+		for (size_type i = 0; i < count; i++)
+			push_back(value);
+	}
+
+	template< class T, class Allocator >
+	template<class InputIterator>
+	void Vector<T, Allocator>::assign(InputIterator first, InputIterator last)
+	{
+		clear();
+		for (; first != last; first++)
+			push_back(*first);
+	}
+
+	template< class T, class Allocator >
+	Vector<T, Allocator>::~Vector()
+	{
+		_alloc.deallocate(_data, _size);
+	}
+
+	// element access
+	template< class T, class Allocator >
+	typename Vector<T, Allocator>::reference Vector<T, Allocator>::at(size_type pos)
+	{
+		if (pos >= 0 && pos < _size)
+			return (_data[pos]); // TODO With invalid index
+		throw std::out_of_range("");
+	}
+	template< class T, class Allocator >
+	typename Vector<T, Allocator>::const_reference Vector<T, Allocator>::at(size_type pos) const
+	{
+		if (pos >= 0 && pos < _size)
+			return (_data[pos]); // TODO With invalid index
+		throw std::out_of_range("");
+	}
+		
+	template< class T, class Allocator >
+	typename Vector<T, Allocator>::reference Vector<T, Allocator>::operator[](size_type pos)
+	{
+		if (pos >= 0 && pos < _size)
+			return (_data[pos]); // TODO With invalid index
+	}
+	template< class T, class Allocator >
+	typename Vector<T, Allocator>::const_reference Vector<T, Allocator>::operator[](size_type pos) const
+	{
+		if (pos >= 0 && pos < _size)
+			return (_data[pos]); // TODO With invalid index
+	}
+
+	template< class T, class Allocator >
+	typename Vector<T, Allocator>::reference Vector<T, Allocator>::front()
+	{
+
+	}
+	template< class T, class Allocator >
+	typename Vector<T, Allocator>::const_reference Vector<T, Allocator>::front() const
+	{
+
+	}
+
+	template< class T, class Allocator >
+	typename Vector<T, Allocator>::reference Vector<T, Allocator>::back()
+	{
+
+	}
+	template< class T, class Allocator >
+	typename Vector<T, Allocator>::const_reference Vector<T, Allocator>::back() const
+	{
+
+	}
+
+	template< class T, class Allocator >
+	void Vector<T, Allocator>::push_back(const T &value)
 	{
 		if (_size >= _capacity)
 			realloc(_capacity + _capacity / 2);

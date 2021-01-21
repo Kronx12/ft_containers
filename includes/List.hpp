@@ -29,8 +29,6 @@ namespace ft
 	template < class T >
 	class List
 	{
-		private:
-			typedef link_type* link_pointer;
 		public:
 			typedef T value_type;
 			typedef typename std::allocator<value_type> allocator_type;
@@ -41,7 +39,10 @@ namespace ft
 			typedef typename allocator_type::pointer pointer;
 			typedef typename allocator_type::const_pointer const_pointer;
 			// # created for Iterator #
+		private:
 			typedef Link<value_type> link_type;
+			typedef link_type* link_pointer;
+		public:
 			typedef Iterator<value_type, link_type> iterator;
 			typedef ConstIterator<value_type, link_type> const_iterator;
 			typedef ReverseIterator<iterator> reverse_iterator;
