@@ -33,7 +33,7 @@ inline std::ostream &operator<<(std::ostream &o, Testclass const &rhs)
 
 void title(std::string title);
 void title(std::string title, int size);
-void check(std::stringstream *ss_std, std::stringstream *ss_ft);
+void check(std::stringstream *ss_std, std::stringstream *ss_ft, int flag);
 void end_test();
 
 template < class T >
@@ -66,7 +66,7 @@ void describe_stack(std::stack<T> std_stack, ft::Stack<T> ft_stack)
 			ft_stack.pop();
 			i++;
 		}
-	check(&ss_std, &ss_ft);
+	check(&ss_std, &ss_ft, 0);
 }
 
 template < class T >
@@ -99,7 +99,7 @@ void describe_queue(std::queue<T> std_queue, ft::Queue<T> ft_queue)
 			ft_queue.pop();
 			i++;
 		}
-	check(&ss_std, &ss_ft);
+	check(&ss_std, &ss_ft, 0);
 }
 
 template < class T >
@@ -129,7 +129,7 @@ void describe_list(std::list<T> std_lst, ft::List<T> ft_lst)
 			ss_ft << i << ":[" << *itr << "] ";
 			i++;
 		}
-	check(&ss_std, &ss_ft);
+	check(&ss_std, &ss_ft, 0);
 }
 
 template < class T >
@@ -160,7 +160,7 @@ void const_describe_list(const std::list<T> std_lst, const ft::List<T> ft_lst)
 			ss_ft << i << ":[" << *itr << "] ";
 			i++;
 		}
-	check(&ss_std, &ss_ft);
+	check(&ss_std, &ss_ft, 0);
 }
 
 template < class T >
@@ -191,7 +191,7 @@ void reverse_describe_list(std::list<T> std_lst, ft::List<T> ft_lst)
 			ss_ft << i << ":[" << *itr << "] ";
 			i++;
 		}
-	check(&ss_std, &ss_ft);
+	check(&ss_std, &ss_ft, 0);
 }
 
 template < class T >
@@ -223,7 +223,7 @@ void const_reverse_describe_list(const std::list<T> std_lst, const ft::List<T> f
 			i++;
 		}
 	}
-	check(&ss_std, &ss_ft);
+	check(&ss_std, &ss_ft, 0);
 }
 
 #endif

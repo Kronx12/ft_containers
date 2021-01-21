@@ -23,7 +23,7 @@ namespace ft
 			Link	*previous;
 			Link(const T& val) : value(val), next(NULL), previous(NULL) {};
 			Link(Link *pre, const T& val, Link *_next) :value(val), next(_next), previous(pre) {};
-			Link() : next(NULL), previous(NULL) {};
+			Link() : value(T()), next(NULL), previous(NULL) {};
 	};
 
 	template < class T >

@@ -130,15 +130,15 @@ void capacity_test(int size, T type)
 
 	ss_std << "size : " << std_lst.size();
 	ss_ft << "size : " << ft_lst.size();
-	check(&ss_std, &ss_ft);
+	check(&ss_std, &ss_ft, 0);
 
 	ss_std << "max_size : " << std_lst.max_size();
 	ss_ft << "max_size : " << ft_lst.max_size();
-	check(&ss_std, &ss_ft);
+	check(&ss_std, &ss_ft, 0);
 
 	ss_std << "empty : " << std_lst.empty();
 	ss_ft << "empty : " << ft_lst.empty();
-	check(&ss_std, &ss_ft);
+	check(&ss_std, &ss_ft, 0);
 }
 
 template <typename T>
@@ -153,16 +153,13 @@ void element_access_test(int size, T type)
 	std::stringstream ss_std;
 	std::stringstream ss_ft;
 
-	ss_std << "size : " << std_lst.size();
-	ss_ft << "size : " << ft_lst.size();
-
 	ss_std << "front : " << std_lst.front();
 	ss_ft << "front : " << ft_lst.front();
-	check(&ss_std, &ss_ft);
+	check(&ss_std, &ss_ft, !size);
 
 	ss_std << "back : " << std_lst.back();
 	ss_ft << "back : " << ft_lst.back();
-	check(&ss_std, &ss_ft);
+	check(&ss_std, &ss_ft, !size);
 }
 
 void modifiers_test(int size)
@@ -510,56 +507,56 @@ void operators_test(int size)
 	
 	std_ss << (std_lst_a == std_lst_a);
 	ft_ss << (ft_lst_a == ft_lst_a);
-	check(&std_ss, &ft_ss);
+	check(&std_ss, &ft_ss, 0);
 	
 	std_ss << (std_lst_a == std_lst_b);
 	ft_ss << (ft_lst_a == ft_lst_b);
-	check(&std_ss, &ft_ss);
+	check(&std_ss, &ft_ss, 0);
 	
 	title("operator!= :");
 	std_ss << (std_lst_a != std_lst_a);
 	ft_ss << (ft_lst_a != ft_lst_a);
-	check(&std_ss, &ft_ss);
+	check(&std_ss, &ft_ss, 0);
 	
 	std_ss << (std_lst_a != std_lst_b);
 	ft_ss << (ft_lst_a != ft_lst_b);
-	check(&std_ss, &ft_ss);
+	check(&std_ss, &ft_ss, 0);
 	
 	title("operator< :");
 	std_ss << (std_lst_a < std_lst_a);
 	ft_ss << (ft_lst_a < ft_lst_a);
-	check(&std_ss, &ft_ss);
+	check(&std_ss, &ft_ss, 0);
 	
 	std_ss << (std_lst_a < std_lst_b);
 	ft_ss << (ft_lst_a < ft_lst_b);
-	check(&std_ss, &ft_ss);
+	check(&std_ss, &ft_ss, 0);
 	
 	title("operator<= :");
 	std_ss << (std_lst_a <= std_lst_a);
 	ft_ss << (ft_lst_a <= ft_lst_a);
-	check(&std_ss, &ft_ss);
+	check(&std_ss, &ft_ss, 0);
 	
 	std_ss << (std_lst_a <= std_lst_b);
 	ft_ss << (ft_lst_a <= ft_lst_b);
-	check(&std_ss, &ft_ss);
+	check(&std_ss, &ft_ss, 0);
 	
 	title("operator> :");
 	std_ss << (std_lst_a > std_lst_a);
 	ft_ss << (ft_lst_a > ft_lst_a);
-	check(&std_ss, &ft_ss);
+	check(&std_ss, &ft_ss, 0);
 	
 	std_ss << (std_lst_a > std_lst_b);
 	ft_ss << (ft_lst_a > ft_lst_b);
-	check(&std_ss, &ft_ss);
+	check(&std_ss, &ft_ss, 0);
 	
 	title("operator>= :");
 	std_ss << (std_lst_a >= std_lst_a);
 	ft_ss << (ft_lst_a >= ft_lst_a);
-	check(&std_ss, &ft_ss);
+	check(&std_ss, &ft_ss, 0);
 	
 	std_ss << (std_lst_a >= std_lst_b);
 	ft_ss << (ft_lst_a >= ft_lst_b);
-	check(&std_ss, &ft_ss);
+	check(&std_ss, &ft_ss, 0);
 	
 
 }
