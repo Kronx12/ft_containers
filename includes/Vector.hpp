@@ -19,8 +19,8 @@ namespace ft
 			typedef typename Allocator::const_reference const_reference;
 			typedef typename Allocator::pointer pointer;
 			typedef typename Allocator::const_pointer const_pointer;
-			typedef VectorIterator< T, T* > iterator;
-			typedef ConstVectorIterator< T, T* > const_iterator;
+			typedef VectorIterator< T > iterator;
+			typedef ConstVectorIterator< T > const_iterator;
 			typedef ReverseIterator<iterator> reverse_iterator;
 			typedef ReverseIterator<const_iterator> const_reverse_iterator;
 
@@ -61,7 +61,8 @@ namespace ft
 
 			reference back();
 			const_reference back() const;
-
+//--
+// TODO Iterator
 			// iterator
 			iterator begin();
 			const_iterator begin() const;
@@ -74,17 +75,17 @@ namespace ft
 			
 			iterator rend();
 			const_iterator rend() const;
-
+//-- END TODO
 			// capacity
 			bool empty() const;
 			size_type size() const;
 			size_type max_size() const;
 			void reserve(size_type new_cap);
 			size_type capacity() const;
-
+//--
 			// modifiers
 			void clear();
-
+//--
 			iterator insert(iterator pos, const T &value);
 			void insert(iterator pos, size_type count, const T &value);
 			template< class InputIterator >
@@ -190,50 +191,158 @@ namespace ft
 	typename Vector<T, Allocator>::reference Vector<T, Allocator>::at(size_type pos)
 	{
 		if (pos >= 0 && pos < _size)
-			return (_data[pos]); // TODO With invalid index
+			return (_data[pos]);
 		throw std::out_of_range("");
 	}
 	template< class T, class Allocator >
 	typename Vector<T, Allocator>::const_reference Vector<T, Allocator>::at(size_type pos) const
 	{
 		if (pos >= 0 && pos < _size)
-			return (_data[pos]); // TODO With invalid index
+			return (_data[pos]);
 		throw std::out_of_range("");
 	}
 		
 	template< class T, class Allocator >
 	typename Vector<T, Allocator>::reference Vector<T, Allocator>::operator[](size_type pos)
 	{
-		if (pos >= 0 && pos < _size)
-			return (_data[pos]); // TODO With invalid index
+		return (_data[pos]);
 	}
 	template< class T, class Allocator >
 	typename Vector<T, Allocator>::const_reference Vector<T, Allocator>::operator[](size_type pos) const
 	{
-		if (pos >= 0 && pos < _size)
-			return (_data[pos]); // TODO With invalid index
+		return (_data[pos]);
 	}
 
 	template< class T, class Allocator >
 	typename Vector<T, Allocator>::reference Vector<T, Allocator>::front()
 	{
-
+		return (_data[0]);
 	}
 	template< class T, class Allocator >
 	typename Vector<T, Allocator>::const_reference Vector<T, Allocator>::front() const
 	{
-
+		return (_data[0]);
 	}
 
 	template< class T, class Allocator >
 	typename Vector<T, Allocator>::reference Vector<T, Allocator>::back()
 	{
-
+		return (_data[_size - 1]);
 	}
 	template< class T, class Allocator >
 	typename Vector<T, Allocator>::const_reference Vector<T, Allocator>::back() const
 	{
+		return (_data[_size - 1]);
+	}
 
+	template< class T, class Allocator >
+	bool Vector<T, Allocator>::empty() const
+	{
+		retrun (_size == 0);
+	}
+
+	template< class T, class Allocator >
+	typename Vector<T, Allocator>::size_type Vector<T, Allocator>::size() const
+	{
+		return (_size);
+	}
+
+	template< class T, class Allocator >
+	typename Vector<T, Allocator>::size_type Vector<T, Allocator>::max_size() const
+	{
+		return (std::numeric_limits<size_type>::max() / sizeof(T));
+	}
+
+	template< class T, class Allocator >
+	void Vector<T, Allocator>::reserve(size_type new_cap)
+	{
+		realloc(new_cap);
+	}
+
+	template< class T, class Allocator >
+	typename Vector<T, Allocator>::size_type Vector<T, Allocator>::capacity() const
+	{
+		return (_capacity);
+	}
+
+	// modifiers
+	template< class T, class Allocator >
+	void Vector<T, Allocator>::clear()
+	{
+		_alloc.deallocate(_data, _size);
+		_size = 0;
+		_data = NULL;
+		_capacity = 0;
+	}
+	
+	template< class T, class Allocator >
+	typename Vector<T, Allocator>::iterator Vector<T, Allocator>::insert(iterator pos, const T &value)
+	{
+		const T &last_value = value;
+		const T &tmp;
+
+		while (pos != end())
+		{
+			tmp = *pos;
+			*pos = last_value;
+			last_value = tmp;
+		}
+		push_back(last_value);
+	}
+
+	template< class T, class Allocator >
+	void Vector<T, Allocator>::insert(iterator pos, size_type count, const T &value)
+	{
+		if (_size + count > _capacity)
+			realloc(_size + count);
+		// const T &last_value = value;
+		// const T &tmp;
+
+		// while (count-- > 0 && pos != end())
+		// {
+		// 	tmp = *pos;
+		// 	*pos = last_value;
+		// 	last_value = tmp;
+		// }
+
+		// TODO Attention, fonction a tester apres implementation d'un iterateur
+		// TODO pour savoir si "pos" est toujours disponible apres realloc
+	}
+
+	template< class T, class Allocator >
+	template< class InputIterator >
+	void Vector<T, Allocator>::insert(iterator pos, InputIterator first, InputIterator last)
+	{
+		// TODO Attention, fonction a tester apres implementation d'un iterateur
+		// TODO pour savoir si "pos" est toujours disponible apres realloc
+	}
+
+	template< class T, class Allocator >
+	typename Vector<T, Allocator>::iterator Vector<T, Allocator>::erase(iterator pos)
+	{
+		iterator copy(pos);
+		while (pos != end())
+		{
+			pos++;
+			*copy = *pos;
+			copy++;
+		}
+		_size--;
+	}
+
+	template< class T, class Allocator >
+	typename Vector<T, Allocator>::iterator Vector<T, Allocator>::erase(iterator first, iterator last)
+	{ // TODO Check si "last" est inclu ou pas 
+		int len = 0;
+		iterator copy(last);
+		while (first != last)
+		{
+			len++;
+			copy++;
+			*first = *copy;
+			first++;
+		}
+		_size -= len;
 	}
 
 	template< class T, class Allocator >
@@ -243,7 +352,36 @@ namespace ft
 			realloc(_capacity + _capacity / 2);
 		_data[_size++] = value;
 	}
+	
+	template< class T, class Allocator >
+	void Vector<T, Allocator>::pop_back()
+	{
+		_size--;
+	}
 
+	template< class T, class Allocator >
+	void Vector<T, Allocator>::resize(size_type count)
+	{
+		if (_size > count)
+			_size = count;
+		else
+		{
+			realloc(count);
+		}
+	}
+
+	template< class T, class Allocator >
+	void Vector<T, Allocator>::resize(size_type count, T value = T())
+	{
+		// TODO
+	}
+
+	template< class T, class Allocator >
+	void Vector<T, Allocator>::swap(Vector<T, Allocator> &other)
+	{
+		// TODO
+	}
+	
 	// TODO non-member functions
 	template< class T, class Alloc >
 	void swap(Vector<T, Alloc> &lhs, Vector<T, Alloc> &rhs);
