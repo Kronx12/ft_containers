@@ -7,6 +7,8 @@
 # include <stack>
 # include "Queue.hpp"
 # include <queue>
+# include "Vector.hpp"
+# include <vector>
 
 # include <sstream>
 static int g_test = 0;

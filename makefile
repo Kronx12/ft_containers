@@ -6,6 +6,7 @@ LIST			=	list_test
 MAP				=	map_test
 QUEUE			=	queue_test
 STACK			=	stack_test
+VECTOR			=	vector_test
 
 # Test #
 TEST			=	$(LIST) $(STACK) $(QUEUE) $(MAP)
@@ -35,6 +36,7 @@ LIST_MAIN		=	$(addprefix $(MAIN_DIR),/mainlist.cpp)
 MAP_MAIN		=	$(addprefix $(MAIN_DIR),/mainmap.cpp)
 STACK_MAIN		=	$(addprefix $(MAIN_DIR),/mainstack.cpp)
 QUEUE_MAIN		=	$(addprefix $(MAIN_DIR),/mainqueue.cpp)
+VECTOR_MAIN		=	$(addprefix $(MAIN_DIR),/mainvector.cpp)
 
 # Compile #
 CC				=	clang++
@@ -75,6 +77,11 @@ queue			:	all $(QUEUE_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
 map				:	all $(MAP_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
 	$(CALLFLIB) $(MAP_MAIN) $(TEST_MAIN) -I $(TEST_INCS) -o $(addprefix $(TEST_DIR)/,$(MAP))
 	./$(addprefix $(TEST_DIR)/,$(MAP))
+
+# Containers test #
+vector				:	all $(VECTOR_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
+	$(CALLFLIB) $(VECTOR_MAIN) $(TEST_MAIN) -I $(TEST_INCS) -o $(addprefix $(TEST_DIR)/,$(VECTOR))
+	./$(addprefix $(TEST_DIR)/,$(VECTOR))
 
 # Make the Directories #
 directories		:
