@@ -2,24 +2,26 @@
 # define MAP_HPP
 
 # include <map>
-// # include "Iterator.hpp"
+# include "MapIterator.hpp"
 
 namespace ft
 {
-	// template < typename T >
-	// class Link
-	// {
-	// 	public :
-	// 		T		value;
-	// 		Link	*next;
-	// 		Link	*previous;
-	// 		Link(const T& val) : value(val), next(NULL), previous(NULL) {};
-	// 		Link(Link *pre, const T& val, Link *_next) :value(val), next(_next), previous(pre) {};
-	// 		Link() : value(T()), next(NULL), previous(NULL) {};
-	// };
+	template < typename Key, typename T >
+	class Map_list
+	{
+		public :
+			Key			key;
+			T			value;
+			Map_list	*parent;
+			Map_list	*left;
+			Map_list	*right;
+			Map_list(const Key& k, const T& val) : key(k), value(val), left(NULL), right(NULL), parent(NULL) {};
+			Map_list(Map_list *parent, const Key& k, const T& val) : key(k), value(val), left(NULL), right(NULL), parent(parent) {};
+			Map_list() : key(Key()), value(T()), left(NULL), right(NULL), parent(NULL) {};
+	};
 
 
-	template < typename Key, typename T, class Compare = std::less<Key> >
+	template < class Key, class T, class Compare = std::less<Key> >
 	class Map
 	{
 		public:
@@ -34,24 +36,16 @@ namespace ft
 			typedef typename allocator_type::const_reference const_reference;
 			typedef typename allocator_type::pointer pointer;
 			typedef typename allocator_type::const_pointer const_pointer;
-			typedef Iterator<value_type, link_type> iterator;
-			typedef ConstIterator<value_type, link_type> const_iterator;
+			typedef Iterator<value_type, Map_list> iterator;
+			typedef ConstIterator<value_type, Map_list> const_iterator;
 			typedef ReverseIterator<iterator> reverse_iterator;
 			typedef ReverseIterator<const_iterator> const_reverse_iterator;
 	
-		protected:
-		// Member classes
-			class value_compare( Compare c );
-
-		public:
 		// Member functions
-		explicit Map( const Compare& comp, const Allocator& alloc = Allocator() );
+		explicit Map( const Compare& comp, const Allocator& alloc = allocator_type() );
 		~Map();
 		Map<Key, T, Compare>& operator=( const Map<Key, T, Compare>& other );
 		allocator_type get_allocator() const;
-
-		// Element acces
-		T& operator[]( const Key& key );
 
 		// Iterators
 		iterator begin();
@@ -69,34 +63,38 @@ namespace ft
 		size_type size() const;
 		size_type max_size() const;
 
+		// Element acces
+		T& operator[]( const Key& key );
+
 		// Modifiers
-		void clear();
 		std::pair<iterator,bool> insert( const value_type& value );
-	
 		template< class InputIt >
 		void insert( InputIt first, InputIt last );
-
+	
 		void erase( iterator pos );
 		void erase( iterator first, iterator last );
 		size_type erase( const key_type& key );
-	
-		void swap( map& other );
 
-		// Lookup
-		size_type count( const Key& key ) const;
-		iterator find( const Key& key );
-		const_iterator find( const Key& key ) const;
-		std::pair<iterator,iterator> equal_range( const Key& key );
-		std::pair<const_iterator,const_iterator> equal_range( const Key& key ) const;
-		iterator lower_bound( const Key& key );
-		const_iterator lower_bound( const Key& key ) const;
-		iterator upper_bound( const Key& key );
-		const_iterator upper_bound( const Key& key ) const;
+		void clear();
+		void swap( map& other );
 
 		// Observers
 		key_compare key_comp() const;
 		std::map::value_compare value_comp() const;
 
+		// Operations
+		iterator find( const Key& key );
+		const_iterator find( const Key& key ) const;
+		size_type count( const Key& key ) const;
+		iterator lower_bound( const Key& key );
+		const_iterator lower_bound( const Key& key ) const;
+		iterator upper_bound( const Key& key );
+		const_iterator upper_bound( const Key& key ) const;
+		std::pair<iterator,iterator> equal_range( const Key& key );
+		std::pair<const_iterator,const_iterator> equal_range( const Key& key ) const;	
+
+		// Allocator
+		allocator_type get_allocator() const;
 
 		// Non-member functions
 		template< class Key, class T, class Compare, class Alloc >
@@ -118,6 +116,16 @@ namespace ft
 		bool operator>=( const std::map<Key,T,Compare,Alloc>& lhs,
 		const std::map<Key,T,Compare,Alloc>& rhs );
 	};
+	
+	//-------------------------- CONSTRUCTOR --------------------------
+	template< class Key, class T, class Compare >
+	Map<Key, T, Compare>::Map(const Compare&, const allocator_type& alloc)
+	{
+		;
+	}
+
+
+	//-------------------------- ... --------------------------
 }
 
 #endif
