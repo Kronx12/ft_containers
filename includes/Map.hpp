@@ -140,8 +140,8 @@ namespace ft
 		// const std::map<Key,T,Compare,Alloc>& rhs );
 	};
 	//-------------------------- Class --------------------------
-	template< class Key, class T, class Compare, class Allocator >
-	void Map<Key, T, Compare, Allocator>::value_compare(key_compare c) : comp(c) {};
+	// template< class Key, class T, class Compare, class Allocator >
+	// void Map<Key, T, Compare, Allocator>::value_compare(key_compare c) : comp(c) {};
 
 	//-------------------------- Private --------------------------
 	template< class Key, class T, class Compare, class Allocator >
