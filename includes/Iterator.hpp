@@ -38,39 +38,39 @@ namespace ft
 			using typename It::const_reference;
 		
 		
-			ReverseIterator() : It(){};
-			ReverseIterator(It const & it) : It(it){};
-			ReverseIterator(ReverseIterator const & rhs)
-			{
-				this->current = rhs.current;
-			};
-			~ReverseIterator(){};
+			ReverseIterator() : It(){}
+			ReverseIterator(It const & it) : It(it){}
+			ReverseIterator(ReverseIterator const & rhs) : It(rhs) {}
+			~ReverseIterator() {}
 			ReverseIterator &operator=( ReverseIterator const & rhs )
 			{
-				this->current = rhs->current;
+				if (this == &rhs) return(*this);
+				this->~ReverseIterator();
+				return *new(this) ReverseIterator(rhs);
 			}
 
 			ReverseIterator &operator++()
 			{
-				this->current = this->current->previous;
+				It::operator--();
 				return(*this);
 			}
+
 			ReverseIterator operator++(int)
 			{
 				ReverseIterator tmp(*this);
-				this->current = this->current->previous;
+				It::operator--(0);
 				return(tmp);
 			}
 
 			virtual ReverseIterator &operator--()
 			{
-				this->current = this->current->next;
+				It::operator++();
 				return(*this);
 			}
 			virtual ReverseIterator operator--(int)
 			{
 				ReverseIterator tmp(*this);
-				this->current = this->current->next;
+				It::operator++(0);
 				return(tmp);
 			}
 	};
@@ -278,14 +278,26 @@ namespace ft
 			bool isIter(){return(1);};
 	};
 
-	template< class T, class L >
+	template< class T >
 	class VectorIterator
 	{
 
 	};
 
-	template< class T, class L >
+	template< class T >
 	class ConstVectorIterator
+	{
+
+	};
+
+	template < class T, class L >
+	class MapIterator
+	{
+
+	};
+
+	template < class T, class L >
+	class ConstMapIterator
 	{
 
 	};

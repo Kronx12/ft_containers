@@ -7,6 +7,8 @@
 # include <stack>
 # include "Queue.hpp"
 # include <queue>
+# include "Map.hpp"
+# include <map>
 # include "Vector.hpp"
 # include <vector>
 
