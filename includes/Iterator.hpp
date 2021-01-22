@@ -262,15 +262,13 @@ namespace ft
 			//BASICS INCREMENTATION
 			VectorIterator &operator++()
 			{
-				if (_index <= _size)
-					_index++;
+				_index++;
 				return (*this);
 			}
 			VectorIterator operator++(int)
 			{
 				VectorIterator tmp(*this);
-				if (_index <= _size)
-					_index++;
+				_index++;
 				return (tmp);
 			}
 
@@ -293,15 +291,13 @@ namespace ft
 			//Bidirectional Category
 			VectorIterator &operator--()
 			{
-				if (_index > _index > static_cast<size_type>(-1))
-					_index--;
+				_index--;
 				return (*this);
 			}
 			VectorIterator operator--(int)
 			{
 				VectorIterator tmp(*this);
-				if (_index > static_cast<size_type>(-1))
-					_index--;
+				_index--;
 				return (tmp);
 			}
 

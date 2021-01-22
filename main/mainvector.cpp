@@ -11,17 +11,14 @@ void constructor_test(int size)
 		std_vec.push_back(i);
 		ft_vec.push_back(i);
 	}
-	// for (std::vector<int>::iterator itr = std_vec.begin(); itr != std_vec.end(); itr++)
-	// 	std::cout << *itr << std::endl;
-
-	// for (std::vector<int>::reverse_iterator itr = std_vec.rbegin(); itr != std_vec.rend(); itr++)
-	// 	std::cout << *itr << std::endl;
-
-	for (ft::Vector<int>::iterator itr = ft_vec.begin(); itr != ft_vec.end(); itr++)
-	{
-		std::cout << itr._size << " " << itr._data << " " << itr._index << std::endl;
+	for (std::vector<int>::iterator itr = std_vec.begin(); itr != std_vec.end(); itr++)
 		std::cout << *itr << std::endl;
-	}
+
+	for (std::vector<int>::reverse_iterator itr = std_vec.rbegin(); itr != std_vec.rend(); itr++)
+		std::cout << *itr << std::endl;
+
+	for (ft::Vector<int>::iterator itr_std = ft_vec.begin(); itr_std != ft_vec.end(); itr_std++)
+		std::cout << *itr_std << std::endl;
 
 	for (ft::Vector<int>::reverse_iterator itr = ft_vec.rbegin(); itr != ft_vec.rend(); itr++)
 		std::cout << *itr << std::endl;
@@ -29,8 +26,8 @@ void constructor_test(int size)
 
 int main()
 {
-    // constructor_test(1000); // OK Sur linux (juste chiant a afficher)
-	 constructor_test(10);
+    //  constructor_test(1000); // OK Sur linux (juste chiant a afficher)
+	constructor_test(10);
 	// constructor_test(5);
 	// constructor_test(2);
 	// constructor_test(1);
