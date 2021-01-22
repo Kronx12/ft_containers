@@ -281,17 +281,6 @@ namespace ft
 	template< class T >
 	class VectorIterator
 	{
-		
-
-		public:
-			typedef L link_type;
-			typedef link_type* link_pointer;
-			typedef T value_type;
-			typedef value_type* pointer;
-			typedef const value_type* const_pointer;
-			typedef value_type& reference;
-			typedef const value_type& const_reference;
-			typedef const_reference iterator_category;
 
 	};
 

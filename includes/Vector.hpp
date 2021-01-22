@@ -21,8 +21,8 @@ namespace ft
 			typedef typename Allocator::const_pointer const_pointer;
 			typedef VectorIterator< T > iterator;
 			typedef ConstVectorIterator< T > const_iterator;
-			typedef ReverseVectorIterator< T > reverse_iterator;
-			typedef ConstReverseVectorIterator< T > const_reverse_iterator;
+			typedef ReverseIterator< iterator > reverse_iterator;
+			typedef ReverseIterator< const_iterator > const_reverse_iterator;
 
 		private:
 			pointer _data;
