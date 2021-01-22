@@ -31,6 +31,12 @@ inline std::ostream &operator<<(std::ostream &o, Testclass const &rhs)
 	return o;
 };
 
+inline bool operator< (const Testclass& lhs, const Testclass& rhs){ return (lhs.str < rhs.str); };
+inline bool operator> (const Testclass& lhs, const Testclass& rhs){ return (lhs.str > rhs.str); };
+inline bool operator==(const Testclass& lhs, const Testclass& rhs){ return (lhs.str == rhs.str); };
+inline bool operator!=(const Testclass& lhs, const Testclass& rhs){ return (lhs.str != rhs.str); };
+
+
 void title(std::string title);
 void title(std::string title, int size);
 void check(std::stringstream *ss_std, std::stringstream *ss_ft, int flag);

@@ -334,6 +334,7 @@ namespace ft
 		iterator next = pos;
 		iterator prev = pos;
 		link_pointer n;
+		prev--;
 		for (size_t i = 0; i < count; i++)
 		{
 			if (_begin == _end)
@@ -345,12 +346,12 @@ namespace ft
 			}
 			else
 			{
-				prev--;
 				n = new Link<T>(prev.current, value, next.current);
 				prev.current->next = n;
 				next.current->previous = n;
 				if (pos.current == _begin)
 					_begin = n;
+				prev++;
 			}
 			_size++;
 		}
