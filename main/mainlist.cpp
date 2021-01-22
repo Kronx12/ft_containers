@@ -44,6 +44,29 @@ void lstfor(std::list<T> &stdlst, ft::List<T> &ftlst, int size, T type, void *)
 }
 
 template <typename T>
+void lstforfront(std::list<T> &stdlst, ft::List<T> &ftlst, int size, T type, int)
+{
+	(void)type;
+	for (int i = 0; i < size; i++)
+	{
+		stdlst.push_front(i);
+		ftlst.push_front(i);
+	}
+	describe_list(stdlst, ftlst);
+}
+
+template <typename T>
+void lstforfront(std::list<T> &stdlst, ft::List<T> &ftlst, int size, T type, void *)
+{
+	for (int i = 0; i < size; i++)
+	{
+		stdlst.push_front(type);
+		ftlst.push_front(type);
+	}
+	describe_list(stdlst, ftlst);
+}
+
+template <typename T>
 void constructor_test(int size, T type)
 {
 	title("Constructor size", size);
@@ -162,24 +185,25 @@ void element_access_test(int size, T type)
 	check(&ss_std, &ss_ft, !size);
 }
 
-void modifiers_test(int size)
+template <typename T>
+void modifiers_test(int size, T type)
 {
 	title("Modifiers size", size);
 
-	std::list<int> std_lst;
-	ft::List<int> ft_lst;
+	std::list<T> std_lst;
+	ft::List<T> ft_lst;
 
 	title("assign :");
-	std_lst.assign(size, size);
-	ft_lst.assign(size, size);
+	std_lst.assign(size, type);
+	ft_lst.assign(size, type);
 	describe_list(std_lst, ft_lst);
 
-	std_lst = std::list<int>(size);
-	ft_lst = ft::List<int>(size);
+	std_lst = std::list<T>(size);
+	ft_lst = ft::List<T>(size);
 	title("initial :");
 	describe_list(std_lst, ft_lst);
-	std::list<int> std_lst_assign;
-	ft::List<int> ft_lst_assign;
+	std::list<T> std_lst_assign;
+	ft::List<T> ft_lst_assign;
 
 	title("assign from iterator :");
 	std_lst_assign.assign(std_lst.begin(), std_lst.end());
@@ -192,62 +216,57 @@ void modifiers_test(int size)
 	describe_list(std_lst_assign, ft_lst_assign);
 
 	title("push_back :");
-	std::list<int> std_lst_back;
-	ft::List<int> ft_lst_back;
-	for (int i = 0; i < size; i++)
-	{
-		std_lst_back.push_back(i);
-		ft_lst_back.push_back(i);
-	}
-	describe_list(std_lst_back, ft_lst_back);
+	std::list<T> std_lst_back;
+	ft::List<T> ft_lst_back;
+	lstfor(std_lst_back, ft_lst_back, size, type, typename ft::is_integral<T>::type());
 
 	title("push_front :");
-	std::list<int> std_lst_front;
-	ft::List<int> ft_lst_front;
-	for (int i = 1; i < size; i++)
-	{
-		std_lst_front.push_front(i);
-		ft_lst_front.push_front(i);
-	}
-	describe_list(std_lst_front, ft_lst_front);
+	std::list<T> std_lst_front;
+	ft::List<T> ft_lst_front;
+	lstforfront(std_lst_front, ft_lst_front, size, type, typename ft::is_integral<T>::type());
 	
 	title("pop_back :");
-	while (!std_lst.empty() && !ft_lst.empty())
+	if (!std_lst.empty() && !ft_lst.empty())
 	{
 		std_lst.pop_back();
 		ft_lst.pop_back();
 		describe_list(std_lst, ft_lst);
 	}
+	while (!std_lst.empty() && !ft_lst.empty())
+	{
+		std_lst.pop_back();
+		ft_lst.pop_back();
+	}
+	describe_list(std_lst, ft_lst);
 
 	title("pop_front :");
-	while (!std_lst_assign.empty() && !ft_lst_assign.empty())
+	if (!std_lst.empty() && !ft_lst.empty())
 	{
 		std_lst_assign.pop_front();
 		ft_lst_assign.pop_front();
 		describe_list(std_lst_assign, ft_lst_assign);
 	}
+	while (!std_lst_assign.empty() && !ft_lst_assign.empty())
+	{
+		std_lst_assign.pop_front();
+		ft_lst_assign.pop_front();
+	}
+	describe_list(std_lst_assign, ft_lst_assign);
 }
 
-void modifiers2_test(int size)
+template <typename T>
+void modifiers2_test(int size, T type)
 {
 	title("Modifiers size", size);
 
-	std::list<int> std_lst;
-	ft::List<int> ft_lst;
-	for (int i = 0; i < size; i++)
-	{
-		std_lst.push_back(i);
-		ft_lst.push_back(i);
-	}
+	std::list<T> std_lst;
+	ft::List<T> ft_lst;
+	lstfor(std_lst, ft_lst, size, type, typename ft::is_integral<T>::type());
 
 	title("swap :");
-	std::list<int> std_lst_swap;
-	ft::List<int> ft_lst_swap;
-	for (int i = 0; i < size; i++)
-	{
-		std_lst_swap.push_back(size - i);
-		ft_lst_swap.push_back(size - i);
-	}
+	std::list<T> std_lst_swap;
+	ft::List<T> ft_lst_swap;
+	lstfor(std_lst_swap, ft_lst_swap, size + 10, type, typename ft::is_integral<T>::type());
 	std_lst.swap(std_lst_swap);
 	ft_lst.swap(ft_lst_swap);
 	describe_list(std_lst, ft_lst);
@@ -265,11 +284,7 @@ void modifiers2_test(int size)
 	{
 		//erase nb
 		title("erase with one nb :");
-		for (int i = 0; i < size; i++)
-		{
-			std_lst.push_back(size - i);
-			ft_lst.push_back(size - i);
-		}
+		lstfor(std_lst, ft_lst, size, type, typename ft::is_integral<T>::type());
 		std_lst.erase(std_lst.begin());
 		ft_lst.erase(ft_lst.begin());
 		describe_list(std_lst, ft_lst);
@@ -277,11 +292,7 @@ void modifiers2_test(int size)
 		title("erase with one itr range :");
 		std_lst.clear();
 		ft_lst.clear();
-		for (int i = 0; i < size; i++)
-		{
-			std_lst.push_back(size - i);
-			ft_lst.push_back(size - i);
-		}
+		lstfor(std_lst, ft_lst, size, type, typename ft::is_integral<T>::type());
 		std_lst.erase(std_lst.begin(), std_lst.end());
 		ft_lst.erase(ft_lst.begin(), ft_lst.end());
 		describe_list(std_lst, ft_lst);
@@ -302,26 +313,22 @@ void modifiers2_test(int size)
 	describe_list(std_lst, ft_lst);
 }
 
-void operations1_test(int size)
+template <typename T>
+void operations1_test(int size, T type)
 {
 	title("Operations size", size);
 
-	std::list<int> std_lst_a;
-    std::list<int> std_lst_b;
+	std::list<T> std_lst_a;
+    std::list<T> std_lst_b;
 
-	ft::List<int> ft_lst_a;
-    ft::List<int> ft_lst_b;
+	ft::List<T> ft_lst_a;
+    ft::List<T> ft_lst_b;
 
-	for (int i = 0; i < size; i++)
-	{
-		std_lst_a.push_back(i);
-		std_lst_b.push_back(i * 10);
-		ft_lst_a.push_back(i);
-		ft_lst_b.push_back(i * 10);
-	}
+	lstfor(std_lst_a, ft_lst_a, size, type, typename ft::is_integral<T>::type());
+	lstfor(std_lst_b, ft_lst_b, size, type, typename ft::is_integral<T>::type());
  
-    std::list<int>::iterator std_it = std_lst_a.begin();
-    ft::List<int>::iterator ft_it = ft_lst_a.begin();
+    typename std::list<T>::iterator std_it = std_lst_a.begin();
+    typename ft::List<T>::iterator ft_it = ft_lst_a.begin();
     
 	if (size > 2)
 	{
@@ -341,17 +348,16 @@ void operations1_test(int size)
 	describe_list(std_lst_b, ft_lst_b);
 	
 	title("insert itr, size_t, value :");
-	std_lst_a.insert(std_lst_a.begin(), size, size);
-	ft_lst_a.insert(ft_lst_a.begin(), size, size);
+	std_lst_a.insert(std_lst_a.begin(), size, type);
+	ft_lst_a.insert(ft_lst_a.begin(), size, type);
 
 	describe_list(std_lst_a, ft_lst_a);
 	describe_list(std_lst_b, ft_lst_b);
 	
-
-	std::list<int> std_lst_a_splice(size + 1, size);
-	std::list<int> std_lst_b_splice(size + 3, size - 1);
-	ft::List<int> ft_lst_a_splice(size + 1, size);
-	ft::List<int> ft_lst_b_splice(size + 3, size - 1);
+	std::list<T> std_lst_a_splice(size + 1, type);
+	std::list<T> std_lst_b_splice(size + 3, type);
+	ft::List<T> ft_lst_a_splice(size + 1, type);
+	ft::List<T> ft_lst_b_splice(size + 3, type);
 
 	title("splice itr, lst, lst_itr :");
 	std_lst_b_splice.splice(std_lst_b_splice.begin(), std_lst_a_splice, std_lst_a_splice.begin());
@@ -361,8 +367,8 @@ void operations1_test(int size)
 	describe_list(std_lst_b_splice, ft_lst_b_splice);
 
 	title("insert itr, size_t, value :");
-	std_lst_a.insert(std_lst_a.begin(), size, size);
-	ft_lst_a.insert(ft_lst_a.begin(), size, size);
+	std_lst_a.insert(std_lst_a.begin(), size, type);
+	ft_lst_a.insert(ft_lst_a.begin(), size, type);
 
 	describe_list(std_lst_a, ft_lst_a);
 	describe_list(std_lst_b, ft_lst_b);
@@ -377,19 +383,18 @@ void operations1_test(int size)
 }
 
 bool test_max_int(const int lhs, const int rhs) { return (lhs > rhs ? true : false); }
+bool test_max_troll(const Testclass lhs, const Testclass rhs) {return (lhs > rhs); }
 bool test_paire_int(const int lhs) { return (lhs % 2 == 1); }
 bool test_paire_int_unique(const int, const int rhs) { return (rhs % 2 == 1); }
+static int ble = 0;
+bool remhalf(const Testclass tc) { (void)tc; ble++; return (ble % 2); };
 
 void operations2_test(int size)
 {
 	title("Operations - 2 size", size);
 	std::list<int> std_lst;
 	ft::List<int> ft_lst;
-	for (int i = 0; i < size; i++)
-	{
-		std_lst.push_back(i);
-		ft_lst.push_back(i);
-	}
+	lstfor(std_lst, ft_lst, size, 1, 1);
 
 	title("remove : 0 (first)");
 	std_lst.remove(0);
@@ -397,11 +402,7 @@ void operations2_test(int size)
 	describe_list(std_lst, ft_lst);
 	std_lst.clear();
 	ft_lst.clear();
-	for (int i = 0; i < size; i++)
-	{
-		std_lst.push_back(i);
-		ft_lst.push_back(i);
-	}
+	lstfor(std_lst, ft_lst, size, 1, 1);
 
 	title("remove : size (last)");
 	std_lst.remove(size - 1);
@@ -409,11 +410,7 @@ void operations2_test(int size)
 	describe_list(std_lst, ft_lst);
 	std_lst.clear();
 	ft_lst.clear();
-	for (int i = 0; i < size; i++)
-	{
-		std_lst.push_back(i);
-		ft_lst.push_back(i);
-	}
+	lstfor(std_lst, ft_lst, size, 1, 1);
 
 	title("reverse :");
 	std_lst.reverse();
@@ -436,29 +433,64 @@ void operations2_test(int size)
 	describe_list(std_lst, ft_lst);
 }
 
+void operations2_testclass(int size, Testclass type)
+{
+	title("Operations - 2 class size", size);
+	std::list<Testclass> std_lst;
+	ft::List<Testclass> ft_lst;
+	lstfor(std_lst, ft_lst, size, type, ft::is_integral<Testclass>::type());
+
+	title("reverse :");
+	std_lst.reverse();
+	ft_lst.reverse();
+	describe_list(std_lst, ft_lst);
+
+	title("sort :");
+	if (size > 1)
+	{
+		(*(++std_lst.begin())).str = "zblebasesort";
+		(*(++ft_lst.begin())).str = "zblebasesort";
+	}
+	std_lst.sort();
+	ft_lst.sort();
+	describe_list(std_lst, ft_lst);
+
+	title("sort with Compare :");
+	if (size > 1)
+	{
+		(*(++std_lst.begin())).str = "ble2";
+		(*(++ft_lst.begin())).str = "ble2";
+	}
+	std_lst.sort(test_max_troll);
+	ft_lst.sort(test_max_troll);
+	describe_list(std_lst, ft_lst);
+
+	title("removeif : 1 out of 2");
+	ble = 0;
+	std_lst.remove_if(remhalf);
+	ble = 0;
+	ft_lst.remove_if(remhalf);
+	describe_list(std_lst, ft_lst);
+
+	title("remove : type (aka 'all')");
+	std_lst.remove(type);
+	ft_lst.remove(type);
+	describe_list(std_lst, ft_lst);
+}
+
 void operations3_test(int size)
 {
 	title("Operations - 3 size", size);
 	std::list<int> std_lst;
 	ft::List<int> ft_lst;
-
-	for (int i = 0; i < size; i++)
-	{
-		std_lst.push_back(i);
-		ft_lst.push_back(i);
-	}
-
+	lstfor(std_lst, ft_lst, size, 1, 1);
+	
 	title("merge :");
 	std::list<int> std_lst_merge;
 	ft::List<int> ft_lst_merge;
 	std_lst.sort();
 	ft_lst.sort();
-	for (int i = 0; i / 2 < size; i++)
-	{
-		i++;
-		std_lst_merge.push_back(i);
-		ft_lst_merge.push_back(i);
-	}
+	lstfor(std_lst, ft_lst, size, 1, 1);
 	describe_list(std_lst, ft_lst);
 	describe_list(std_lst_merge, ft_lst_merge);
 	std_lst.merge(std_lst_merge);
@@ -482,6 +514,45 @@ void operations3_test(int size)
 	title("unique_comp :");
 	std_lst_merge_comp.unique(test_paire_int_unique);
 	ft_lst_merge_comp.unique(test_paire_int_unique);
+	describe_list(std_lst_merge_comp, ft_lst_merge_comp);
+}
+
+void operations3_testclass(int size, Testclass type)
+{
+	title("Operations - 3 class size", size);
+	std::list<Testclass> std_lst;
+	ft::List<Testclass> ft_lst;
+	std::list<Testclass> std_lst_merge;
+	ft::List<Testclass> ft_lst_merge;
+	lstfor(std_lst, ft_lst, size, type, ft::is_integral<Testclass>::type());
+	lstfor(std_lst_merge, ft_lst_merge, size, type, ft::is_integral<Testclass>::type());
+
+	title("merge :");
+	std_lst.sort();
+	ft_lst.sort();
+	describe_list(std_lst, ft_lst);
+	describe_list(std_lst_merge, ft_lst_merge);
+	std_lst.merge(std_lst_merge);
+	ft_lst.merge(ft_lst_merge);
+	describe_list(std_lst, ft_lst);
+	describe_list(std_lst_merge, ft_lst_merge);
+	
+	title("merge_comp :");
+	std::list<Testclass> std_lst_merge_comp(std_lst);
+	ft::List<Testclass> ft_lst_merge_comp(ft_lst);
+	describe_list(std_lst_merge_comp, ft_lst_merge_comp);
+	std_lst_merge_comp.merge(std_lst, test_max_troll);
+	ft_lst_merge_comp.merge(ft_lst, test_max_troll);
+	describe_list(std_lst_merge_comp, ft_lst_merge_comp);
+
+	title("unique :");
+	std_lst_merge_comp.unique();
+	ft_lst_merge_comp.unique();
+	describe_list(std_lst_merge_comp, ft_lst_merge_comp);
+
+	title("unique_comp :");
+	std_lst_merge_comp.unique(test_max_troll);
+	ft_lst_merge_comp.unique(test_max_troll);
 	describe_list(std_lst_merge_comp, ft_lst_merge_comp);
 }
 
@@ -557,8 +628,95 @@ void operators_test(int size)
 	std_ss << (std_lst_a >= std_lst_b);
 	ft_ss << (ft_lst_a >= ft_lst_b);
 	check(&std_ss, &ft_ss, 0);
-	
+}
 
+void operators_testclass(int size)
+{
+	title("Operators size class", size);
+	std::list<Testclass> std_lst_a;
+	std::list<Testclass> std_lst_b;
+	ft::List<Testclass> ft_lst_a;
+	ft::List<Testclass> ft_lst_b;
+	int r;
+	if (size != 0)
+		r = rand() % size;
+	
+	for (int i = 0; i < size; i++)
+	{
+		std::string s;
+		std::stringstream out;
+		
+		out << i;
+		s = out.str();
+		std_lst_a.push_back(Testclass(s));
+		ft_lst_a.push_back(Testclass(s));
+
+		if (i == r)
+			out << i + 1;
+		s = out.str();
+		std_lst_b.push_back(Testclass(s));
+		ft_lst_b.push_back(Testclass(s));
+	}
+
+	describe_list(std_lst_a, ft_lst_a);
+	describe_list(std_lst_b, ft_lst_b);
+
+	title("operator== :");
+	std::stringstream std_ss;
+	std::stringstream ft_ss;
+	
+	std_ss << (std_lst_a == std_lst_a);
+	ft_ss << (ft_lst_a == ft_lst_a);
+	check(&std_ss, &ft_ss, 0);
+	
+	std_ss << (std_lst_a == std_lst_b);
+	ft_ss << (ft_lst_a == ft_lst_b);
+	check(&std_ss, &ft_ss, 0);
+	
+	title("operator!= :");
+	std_ss << (std_lst_a != std_lst_a);
+	ft_ss << (ft_lst_a != ft_lst_a);
+	check(&std_ss, &ft_ss, 0);
+	
+	std_ss << (std_lst_a != std_lst_b);
+	ft_ss << (ft_lst_a != ft_lst_b);
+	check(&std_ss, &ft_ss, 0);
+	
+	title("operator< :");
+	std_ss << (std_lst_a < std_lst_a);
+	ft_ss << (ft_lst_a < ft_lst_a);
+	check(&std_ss, &ft_ss, 0);
+	
+	std_ss << (std_lst_a < std_lst_b);
+	ft_ss << (ft_lst_a < ft_lst_b);
+	check(&std_ss, &ft_ss, 0);
+	
+	title("operator<= :");
+	std_ss << (std_lst_a <= std_lst_a);
+	ft_ss << (ft_lst_a <= ft_lst_a);
+	check(&std_ss, &ft_ss, 0);
+	
+	std_ss << (std_lst_a <= std_lst_b);
+	ft_ss << (ft_lst_a <= ft_lst_b);
+	check(&std_ss, &ft_ss, 0);
+	
+	title("operator> :");
+	std_ss << (std_lst_a > std_lst_a);
+	ft_ss << (ft_lst_a > ft_lst_a);
+	check(&std_ss, &ft_ss, 0);
+	
+	std_ss << (std_lst_a > std_lst_b);
+	ft_ss << (ft_lst_a > ft_lst_b);
+	check(&std_ss, &ft_ss, 0);
+	
+	title("operator>= :");
+	std_ss << (std_lst_a >= std_lst_a);
+	ft_ss << (ft_lst_a >= ft_lst_a);
+	check(&std_ss, &ft_ss, 0);
+	
+	std_ss << (std_lst_a >= std_lst_b);
+	ft_ss << (ft_lst_a >= ft_lst_b);
+	check(&std_ss, &ft_ss, 0);
 }
 
 int main()
@@ -666,32 +824,74 @@ int main()
 #endif
 #if TEST_LIST == 0 || TEST_LIST == 5
 
-	modifiers_test(1000); // OK Sur linux (juste chiant a afficher)
-	modifiers_test(10);
-	modifiers_test(5);
-	modifiers_test(2);
-	modifiers_test(1);
-	modifiers_test(0);
+	modifiers_test(1000, 5); // OK Sur linux (juste chiant a afficher)
+	modifiers_test(10, 5);
+	modifiers_test(5, 5);
+	modifiers_test(2, 5);
+	modifiers_test(1, 5);
+	modifiers_test(0, 5);
+
+	modifiers_test(1000, str); // OK Sur linux (juste chiant a afficher)
+	modifiers_test(10, str);
+	modifiers_test(5, str);
+	modifiers_test(2, str);
+	modifiers_test(1, str);
+	modifiers_test(0, str);
+
+	modifiers_test(1000, ble); // OK Sur linux (juste chiant a afficher)
+	modifiers_test(10, ble);
+	modifiers_test(5, ble);
+	modifiers_test(2, ble);
+	modifiers_test(1, ble);
+	modifiers_test(0, ble);
 
 #endif
 #if TEST_LIST == 0 || TEST_LIST == 6
 
-	modifiers2_test(1000); // OK Sur linux (juste chiant a afficher)
-	modifiers2_test(10);
-	modifiers2_test(5);
-	modifiers2_test(2);
-	modifiers2_test(1);
-	modifiers2_test(0);
+	modifiers2_test(1000, 5); // OK Sur linux (juste chiant a afficher)
+	modifiers2_test(10, 5);
+	modifiers2_test(5, 5);
+	modifiers2_test(2, 5);
+	modifiers2_test(1, 5);
+	modifiers2_test(0, 5);
+
+	modifiers2_test(1000, str); // OK Sur linux (juste chiant a afficher)
+	modifiers2_test(10, str);
+	modifiers2_test(5, str);
+	modifiers2_test(2, str);
+	modifiers2_test(1, str);
+	modifiers2_test(0, str);
+
+	modifiers2_test(1000, ble); // OK Sur linux (juste chiant a afficher)
+	modifiers2_test(10, ble);
+	modifiers2_test(5, ble);
+	modifiers2_test(2, ble);
+	modifiers2_test(1, ble);
+	modifiers2_test(0, ble);
 
 #endif
 #if TEST_LIST == 0 || TEST_LIST == 7
 
-	operations1_test(1000); // OK Sur linux (juste chiant a afficher)
-	operations1_test(10);
-	operations1_test(5);
-	operations1_test(2);
-	operations1_test(1);
-	operations1_test(0);
+	operations1_test(1000, 5); // OK Sur linux (juste chiant a afficher)
+	operations1_test(10, 5);
+	operations1_test(5, 5);
+	operations1_test(2, 5);
+	operations1_test(1, 5);
+	operations1_test(0, 5);
+
+	operations1_test(1000, str); // OK Sur linux (juste chiant a afficher)
+	operations1_test(10, str);
+	operations1_test(5, str);
+	operations1_test(2, str);
+	operations1_test(1, str);
+	operations1_test(0, str);
+
+	operations1_test(1000, ble); // OK Sur linux (juste chiant a afficher)
+	operations1_test(10, ble);
+	operations1_test(5, ble);
+	operations1_test(2, ble);
+	operations1_test(1, ble);
+	operations1_test(0, ble);
 #endif
 #if TEST_LIST == 0 || TEST_LIST == 8
 
@@ -701,6 +901,14 @@ int main()
 	operations2_test(2);
 	operations2_test(1);
 	operations2_test(0);
+
+	operations2_testclass(1000, ble);
+	operations2_testclass(10,ble);
+	operations2_testclass(5, ble);
+	operations2_testclass(2, ble);
+	operations2_testclass(1, ble);
+	operations2_testclass(0, ble);
+
 #endif
 #if TEST_LIST == 0 || TEST_LIST == 9
 
@@ -710,6 +918,13 @@ int main()
 	operations3_test(2);
 	operations3_test(1);
 	operations3_test(0);
+
+	operations3_testclass(1000, ble); // OK Sur linux (juste chiant a afficher)
+	operations3_testclass(10, ble);
+	operations3_testclass(5, ble);
+	operations3_testclass(2, ble);
+	operations3_testclass(1, ble);
+	operations3_testclass(0, ble);
 #endif
 #if TEST_LIST == 0 || TEST_LIST == 10
 
@@ -719,6 +934,14 @@ int main()
 	operators_test(2);
 	operators_test(1);
 	operators_test(0);
+
+	operators_testclass(1000); // OK Sur linux (juste chiant a afficher)
+	operators_testclass(10);
+	operators_testclass(5);
+	operators_testclass(2);
+	operators_testclass(1);
+	operators_testclass(0);
+
 #endif
 
 end_test();

@@ -334,6 +334,7 @@ namespace ft
 		iterator next = pos;
 		iterator prev = pos;
 		link_pointer n;
+		prev--;
 		for (size_t i = 0; i < count; i++)
 		{
 			if (_begin == _end)
@@ -345,12 +346,12 @@ namespace ft
 			}
 			else
 			{
-				prev--;
 				n = new Link<T>(prev.current, value, next.current);
 				prev.current->next = n;
 				next.current->previous = n;
 				if (pos.current == _begin)
 					_begin = n;
+				prev++;
 			}
 			_size++;
 		}
@@ -737,14 +738,14 @@ namespace ft
 			return (true);
 		while (itr_l != lhs.end() && itr_r != rhs.end())
 		{
-			if (*itr_l <= *itr_r)
+			if (*itr_l < *itr_r)
 				return (true);
-			else if (*itr_l > *itr_r)
+			if (*itr_l > *itr_r)
 				return (false);
 			itr_l++;
 			itr_r++;
 		}
-		return (false);
+		return (true);
 	}
 
 	template < typename T >
@@ -773,14 +774,14 @@ namespace ft
 			return (true);
 		while (itr_l != lhs.end() && itr_r != rhs.end())
 		{
-			if (*itr_l >= *itr_r)
+			if (*itr_l > *itr_r)
 				return (true);
-			else if (*itr_l < *itr_r)
+			if (*itr_l < *itr_r)
 				return (false);
 			itr_l++;
 			itr_r++;
 		}
-		return (false);
+		return (true);
 	}
 	
 	//----------------------------------OUR OWN PRIVATE STUFF--------------------------------------------------

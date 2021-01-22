@@ -5,7 +5,7 @@
 
 // Use for show test result
 #ifndef SHOW
-# define SHOW
+# define SHOW 0
 #endif
 
 // Use for auto exit on error
@@ -30,7 +30,7 @@ void check(std::stringstream *ss_std, std::stringstream *ss_ft, int flag)
 	bool e = false;
 	if (!ss_std->str().compare(ss_ft->str()) && !flag)
 	{
-		#ifdef SHOW
+		#if SHOW==1
 		std::cout << "\033[1;32mOK\033[2;37m\n" << ss_std->str() << std::endl << ss_ft->str() << "\033[0m";
 		#else
 		std::cout << "\033[1;32mOK\033[0m";
@@ -39,12 +39,20 @@ void check(std::stringstream *ss_std, std::stringstream *ss_ft, int flag)
 	}
 	else if (flag == 1)
 	{
+		#if SHOW==1
 		std::cout << "\033[3;33mUNDEFINED\n" << ss_std->str() << std::endl << ss_ft->str() << "\033[0m";
+		#else
+		std::cout << "\033[3;33mUNDEFINED\033[0m";
+		#endif
 		g_valid++;
 	}
 	else
 	{
+		#if SHOW==1
 		std::cout << "\033[1;31mKO\n" << ss_std->str() << std::endl << ss_ft->str() << "\033[0m";
+		#else
+		std::cout << "\033[1;31mKO\033[0m";
+		#endif
 		#if EXIT_ERR==1
 			e = true;
 		#endif
