@@ -21,8 +21,8 @@ namespace ft
 			typedef typename Allocator::const_pointer const_pointer;
 			typedef VectorIterator< T > iterator;
 			typedef ConstVectorIterator< T > const_iterator;
-			typedef ReverseIterator<iterator> reverse_iterator;
-			typedef ReverseIterator<const_iterator> const_reverse_iterator;
+			typedef ReverseVectorIterator< T > reverse_iterator;
+			typedef ConstReverseVectorIterator< T > const_reverse_iterator;
 
 		private:
 			pointer _data;
@@ -62,7 +62,6 @@ namespace ft
 			reference back();
 			const_reference back() const;
 //--
-// TODO Iterator
 			// iterator
 			iterator begin();
 			const_iterator begin() const;
@@ -70,12 +69,12 @@ namespace ft
 			iterator end();
 			const_iterator end() const;
 
-			iterator regin();
+			iterator rbegin();
 			const_iterator rbegin() const;
 			
 			iterator rend();
 			const_iterator rend() const;
-//-- END TODO
+//--
 			// capacity
 			bool empty() const;
 			size_type size() const;
@@ -109,19 +108,19 @@ namespace ft
 	{
 		pointer tmp = _alloc.allocate(len);
 
-		for (size_type i = 0; i < (len < _size) ? len : _size; i++)
+		for (size_type i = 0; i < _size; i++)
 			tmp[i] = _data[i];
-		_alloc.deallocate(_data);
+		_alloc.deallocate(_data, _capacity);
 		_data = tmp;
 		_capacity = len;
 	}
 
 	// constructors:
 	template< class T, class Allocator >
-	Vector<T, Allocator>::Vector() : _data(NULL), _size(0), _capacity(0), _alloc(allocator_type()) {}
+	Vector<T, Allocator>::Vector() : _data(NULL), _size(0), _capacity(0), _alloc(allocator_type()) { realloc(2); }
 	
 	template< class T, class Allocator >
-	Vector<T, Allocator>::Vector(const Allocator &alloc) : _data(NULL), _size(0), _capacity(0), _alloc(alloc) {}
+	Vector<T, Allocator>::Vector(const Allocator &alloc) : _data(NULL), _size(0), _capacity(0), _alloc(alloc) { realloc(2); }
 	
 	template< class T, class Allocator >
 	Vector<T, Allocator>::Vector(size_type count, const T &value, const Allocator &alloc) : _alloc(alloc)
@@ -129,7 +128,8 @@ namespace ft
 		_size = 0;
 		_capacity = 0;
 		_data = NULL;
-		for (int i = 0; i < count; i++)
+		realloc(2);
+		for (std::size_t i = 0; i < count; i++)
 			push_back(value);
 	}
 	
@@ -140,6 +140,7 @@ namespace ft
 		_size = 0;
 		_capacity = 0;
 		_data = NULL;
+		realloc(2);
 		for (;first != last; first++)
 			push_back(*first);
 	}
@@ -151,6 +152,7 @@ namespace ft
 		_capacity = 0;
 		_data = NULL;
 		_alloc = other._alloc;
+		realloc(2);
 		for (iterator itr = other.begin(); itr != other.end(); itr++)
 			push_back(*itr);
 	}
@@ -235,6 +237,27 @@ namespace ft
 		return (_data[_size - 1]);
 	}
 
+	// iterator
+	template< class T, class Allocator >
+	typename Vector<T, Allocator>::iterator Vector<T, Allocator>::begin() { return (iterator(_data, 0, _size)); }
+	template< class T, class Allocator >
+	typename Vector<T, Allocator>::const_iterator Vector<T, Allocator>::begin() const { return (const_iterator(_data, 0, _size)); }
+
+	template< class T, class Allocator >
+	typename Vector<T, Allocator>::iterator Vector<T, Allocator>::end() { return (iterator(_data, _size, _size)); }
+	template< class T, class Allocator >
+	typename Vector<T, Allocator>::const_iterator Vector<T, Allocator>::end() const { return (const_iterator(_data, _size, _size)); }
+
+	template< class T, class Allocator >
+	typename Vector<T, Allocator>::iterator Vector<T, Allocator>::rbegin() { return (reverse_iterator(_data, _size - 1, _size)); }
+	template< class T, class Allocator >
+	typename Vector<T, Allocator>::const_iterator Vector<T, Allocator>::rbegin() const { return (const_reverse_iterator(_data, _size - 1, _size)); }
+			
+	template< class T, class Allocator >
+	typename Vector<T, Allocator>::iterator Vector<T, Allocator>::rend() { return (reverse_iterator(_data, -1, _size)); }
+	template< class T, class Allocator >
+	typename Vector<T, Allocator>::const_iterator Vector<T, Allocator>::rend() const { return (const_reverse_iterator(_data, -1, _size)); }
+
 	template< class T, class Allocator >
 	bool Vector<T, Allocator>::empty() const
 	{
@@ -279,7 +302,7 @@ namespace ft
 	typename Vector<T, Allocator>::iterator Vector<T, Allocator>::insert(iterator pos, const T &value)
 	{
 		const T &last_value = value;
-		const T &tmp;
+		const T &tmp = *pos;
 
 		while (pos != end())
 		{
@@ -293,6 +316,8 @@ namespace ft
 	template< class T, class Allocator >
 	void Vector<T, Allocator>::insert(iterator pos, size_type count, const T &value)
 	{
+		(void)pos;
+		(void)value;
 		if (_size + count > _capacity)
 			realloc(_size + count);
 		// const T &last_value = value;
@@ -313,6 +338,9 @@ namespace ft
 	template< class InputIterator >
 	void Vector<T, Allocator>::insert(iterator pos, InputIterator first, InputIterator last)
 	{
+		(void)pos;
+		(void)last;
+		(void)first;
 		// TODO Attention, fonction a tester apres implementation d'un iterateur
 		// TODO pour savoir si "pos" est toujours disponible apres realloc
 	}
@@ -371,14 +399,17 @@ namespace ft
 	}
 
 	template< class T, class Allocator >
-	void Vector<T, Allocator>::resize(size_type count, T value = T())
+	void Vector<T, Allocator>::resize(size_type count, T value)
 	{
+		(void)value;
+		(void)count;
 		// TODO
 	}
 
 	template< class T, class Allocator >
 	void Vector<T, Allocator>::swap(Vector<T, Allocator> &other)
 	{
+		(void)other;
 		// TODO
 	}
 	
