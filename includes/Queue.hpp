@@ -37,6 +37,7 @@ namespace ft
 			void swap(const Queue<T, Container> &other);
 //--
 		// member obbjects
+		protected:
 			container_type C;
 	};
 

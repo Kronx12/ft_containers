@@ -6,7 +6,8 @@ void map_test(int size)
 {
     title("Map", size);
 	
-	// std::map<std::string, int> std_map {{"CPU", 10}};
+	std::map<std::string, int> std_map;
+	ft::Map<std::string, int> ft_map;
 
 	std::map<char, std::string> m;
 	m['a'] = "str1" ;
