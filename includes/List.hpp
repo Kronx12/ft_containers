@@ -738,14 +738,14 @@ namespace ft
 			return (true);
 		while (itr_l != lhs.end() && itr_r != rhs.end())
 		{
-			if (*itr_l <= *itr_r)
+			if (*itr_l < *itr_r)
 				return (true);
-			else if (*itr_l > *itr_r)
+			if (*itr_l > *itr_r)
 				return (false);
 			itr_l++;
 			itr_r++;
 		}
-		return (false);
+		return (true);
 	}
 
 	template < typename T >
@@ -774,14 +774,14 @@ namespace ft
 			return (true);
 		while (itr_l != lhs.end() && itr_r != rhs.end())
 		{
-			if (*itr_l >= *itr_r)
+			if (*itr_l > *itr_r)
 				return (true);
-			else if (*itr_l < *itr_r)
+			if (*itr_l < *itr_r)
 				return (false);
 			itr_l++;
 			itr_r++;
 		}
-		return (false);
+		return (true);
 	}
 	
 	//----------------------------------OUR OWN PRIVATE STUFF--------------------------------------------------

@@ -628,8 +628,95 @@ void operators_test(int size)
 	std_ss << (std_lst_a >= std_lst_b);
 	ft_ss << (ft_lst_a >= ft_lst_b);
 	check(&std_ss, &ft_ss, 0);
-	
+}
 
+void operators_testclass(int size)
+{
+	title("Operators size class", size);
+	std::list<Testclass> std_lst_a;
+	std::list<Testclass> std_lst_b;
+	ft::List<Testclass> ft_lst_a;
+	ft::List<Testclass> ft_lst_b;
+	int r;
+	if (size != 0)
+		r = rand() % size;
+	
+	for (int i = 0; i < size; i++)
+	{
+		std::string s;
+		std::stringstream out;
+		
+		out << i;
+		s = out.str();
+		std_lst_a.push_back(Testclass(s));
+		ft_lst_a.push_back(Testclass(s));
+
+		if (i == r)
+			out << i + 1;
+		s = out.str();
+		std_lst_b.push_back(Testclass(s));
+		ft_lst_b.push_back(Testclass(s));
+	}
+
+	describe_list(std_lst_a, ft_lst_a);
+	describe_list(std_lst_b, ft_lst_b);
+
+	title("operator== :");
+	std::stringstream std_ss;
+	std::stringstream ft_ss;
+	
+	std_ss << (std_lst_a == std_lst_a);
+	ft_ss << (ft_lst_a == ft_lst_a);
+	check(&std_ss, &ft_ss, 0);
+	
+	std_ss << (std_lst_a == std_lst_b);
+	ft_ss << (ft_lst_a == ft_lst_b);
+	check(&std_ss, &ft_ss, 0);
+	
+	title("operator!= :");
+	std_ss << (std_lst_a != std_lst_a);
+	ft_ss << (ft_lst_a != ft_lst_a);
+	check(&std_ss, &ft_ss, 0);
+	
+	std_ss << (std_lst_a != std_lst_b);
+	ft_ss << (ft_lst_a != ft_lst_b);
+	check(&std_ss, &ft_ss, 0);
+	
+	title("operator< :");
+	std_ss << (std_lst_a < std_lst_a);
+	ft_ss << (ft_lst_a < ft_lst_a);
+	check(&std_ss, &ft_ss, 0);
+	
+	std_ss << (std_lst_a < std_lst_b);
+	ft_ss << (ft_lst_a < ft_lst_b);
+	check(&std_ss, &ft_ss, 0);
+	
+	title("operator<= :");
+	std_ss << (std_lst_a <= std_lst_a);
+	ft_ss << (ft_lst_a <= ft_lst_a);
+	check(&std_ss, &ft_ss, 0);
+	
+	std_ss << (std_lst_a <= std_lst_b);
+	ft_ss << (ft_lst_a <= ft_lst_b);
+	check(&std_ss, &ft_ss, 0);
+	
+	title("operator> :");
+	std_ss << (std_lst_a > std_lst_a);
+	ft_ss << (ft_lst_a > ft_lst_a);
+	check(&std_ss, &ft_ss, 0);
+	
+	std_ss << (std_lst_a > std_lst_b);
+	ft_ss << (ft_lst_a > ft_lst_b);
+	check(&std_ss, &ft_ss, 0);
+	
+	title("operator>= :");
+	std_ss << (std_lst_a >= std_lst_a);
+	ft_ss << (ft_lst_a >= ft_lst_a);
+	check(&std_ss, &ft_ss, 0);
+	
+	std_ss << (std_lst_a >= std_lst_b);
+	ft_ss << (ft_lst_a >= ft_lst_b);
+	check(&std_ss, &ft_ss, 0);
 }
 
 int main()
@@ -847,7 +934,14 @@ int main()
 	operators_test(2);
 	operators_test(1);
 	operators_test(0);
-	
+
+	operators_testclass(1000); // OK Sur linux (juste chiant a afficher)
+	operators_testclass(10);
+	operators_testclass(5);
+	operators_testclass(2);
+	operators_testclass(1);
+	operators_testclass(0);
+
 #endif
 
 end_test();
