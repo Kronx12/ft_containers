@@ -24,6 +24,10 @@ class Testclass
 		{
 			str = "string_ICI";
 		};
+		Testclass(std::string strcp)
+		{
+			str = strcp;
+		};
 		~Testclass(){};
 };
 
@@ -37,7 +41,8 @@ inline bool operator< (const Testclass& lhs, const Testclass& rhs){ return (lhs.
 inline bool operator> (const Testclass& lhs, const Testclass& rhs){ return (lhs.str > rhs.str); };
 inline bool operator==(const Testclass& lhs, const Testclass& rhs){ return (lhs.str == rhs.str); };
 inline bool operator!=(const Testclass& lhs, const Testclass& rhs){ return (lhs.str != rhs.str); };
-
+inline bool operator<= (const Testclass& lhs, const Testclass& rhs){ return (lhs.str <= rhs.str); };
+inline bool operator>= (const Testclass& lhs, const Testclass& rhs){ return (lhs.str >= rhs.str); };
 
 void title(std::string title);
 void title(std::string title, int size);
