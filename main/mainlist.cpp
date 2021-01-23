@@ -944,6 +944,6 @@ int main()
 
 #endif
 
-end_test();
+	end_test();
 
 }

@@ -15,6 +15,7 @@
 
 void title(std::string title)
 {
+	std::map<int, int> ble;
 	std::cout << "\033[33;1m" << std::endl << title << "\n\033[0m";
 }
 
