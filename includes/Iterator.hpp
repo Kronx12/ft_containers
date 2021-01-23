@@ -24,13 +24,13 @@ namespace ft
 
 	template < class T, class L >
 	class ConstIterator;
+	template< class T >
+	class ConstVectorIterator;
 
 	template < typename It >
 	class ReverseIterator : public It
 	{
 		public:
-			using typename It::link_type;
-			using typename It::link_pointer;
 			using typename It::value_type;
 			using typename It::pointer;
 			using typename It::const_pointer;
@@ -38,11 +38,12 @@ namespace ft
 			using typename It::const_reference;
 		
 		
-			ReverseIterator() : It(){}
-			ReverseIterator(It const & it) : It(it){}
-			ReverseIterator(ReverseIterator const & rhs) : It(rhs) {}
+			ReverseIterator() : It() {}
+			ReverseIterator(pointer data, size_t size, size_t index) : It(data, size, index) {}
+			ReverseIterator(It const &it) : It(it) {}
+			ReverseIterator(ReverseIterator const &rhs) : It(rhs) {}
 			~ReverseIterator() {}
-			ReverseIterator &operator=( ReverseIterator const & rhs )
+			ReverseIterator &operator=( ReverseIterator const &rhs )
 			{
 				if (this == &rhs) return(*this);
 				this->~ReverseIterator();
@@ -92,21 +93,17 @@ namespace ft
 
 		public:
 			//BASICS
-			Iterator(link_pointer li)
-			{
-				this->current = li;
-			};
-
-			Iterator( Iterator const & rhs ) : current(rhs.current){};
-			Iterator( ConstIterator<T, L> const & rhs ) : current(rhs.current){};
-			~Iterator(){};
-			Iterator &operator=( Iterator const & rhs )
+			Iterator(link_pointer li) : current(li) {}
+			Iterator(Iterator const &rhs) : current(rhs.current) {}
+			Iterator(ConstIterator<T, L> const &rhs) : current(rhs.current) {}
+			~Iterator() {}
+			Iterator &operator=(Iterator const &rhs)
 			{
 				if (this == &rhs) return(*this);
         		this->~Iterator();
         		return *new(this) Iterator(rhs);
 			}
-			Iterator &operator=( ConstIterator<T, L> const & rhs )
+			Iterator &operator=(ConstIterator<T, L> const &rhs)
 			{
 				if (this == &rhs) return(*this);
         		this->~Iterator();
@@ -127,38 +124,17 @@ namespace ft
 			}
 
 			//Input Category
-			bool operator==(const Iterator & rhs)
-			{
-				return (this->current == rhs.current);
-			}
-			bool operator!=(const Iterator & rhs)
-			{
-				return (current != rhs.current);
-			}
-			bool operator==(const ConstIterator<T, L> & rhs)
-			{
-				return (this->current == rhs.current);
-			}
-			bool operator!=(const ConstIterator<T, L> & rhs)
-			{
-				return (current != rhs.current);
-			}
-			reference operator*()
-			{
-				return(this->current->value);
-			}
-			reference operator->()
-			{
-				return(this->current->value);
-			}
+			bool operator==(const Iterator & rhs) { return (this->current == rhs.current); }
+			bool operator!=(const Iterator & rhs) { return (current != rhs.current); }
+			bool operator==(const ConstIterator<T, L> & rhs) { return (this->current == rhs.current); }
+			bool operator!=(const ConstIterator<T, L> & rhs) { return (current != rhs.current); }
+			reference operator*() { return(this->current->value); }
+			reference operator->() { return(this->current->value); }
 
 			//Output Category ?????????????????????????? WHAT DO?
 
 			//Forward Specific Category
-			Iterator()
-			{
-				current = NULL;
-			};
+			Iterator() : current(NULL) {}
 
 			//Bidirectional Category
 			Iterator &operator--()
@@ -172,8 +148,6 @@ namespace ft
 				this->current = this->current->previous;
 				return(tmp);
 			}
-
-			bool isIter(){return(1);};
 	};
 
 	template < class T, class L >
@@ -193,22 +167,18 @@ namespace ft
 
 		public:
 			//BASICS
-			ConstIterator(link_pointer li)
-			{
-				this->current = li;
-			};
-
-			ConstIterator( ConstIterator const & rhs ) : current(rhs.current){};
-			ConstIterator( Iterator<T, L> const & rhs ) : current(rhs.current){};
-			~ConstIterator(){};
-			ConstIterator &operator=( ConstIterator const & rhs )
+			ConstIterator(link_pointer li) : current(li) {}
+			ConstIterator(ConstIterator const &rhs) : current(rhs.current) {}
+			ConstIterator(Iterator<T, L> const &rhs) : current(rhs.current) {}
+			~ConstIterator() {}
+			ConstIterator &operator=(ConstIterator const &rhs)
 			{
 				if (this == &rhs) return(*this);
         		this->~ConstIterator();
         		return *new(this) ConstIterator(rhs);
 			}
 
-			ConstIterator &operator=( Iterator<T, L> const & rhs )
+			ConstIterator &operator=(Iterator<T, L> const &rhs)
 			{
 				if (this == &rhs) return(*this);
         		this->~ConstIterator();
@@ -229,38 +199,15 @@ namespace ft
 			}
 
 			//Input Category
-			bool operator==(const ConstIterator & rhs)
-			{
-				return (this->current == rhs.current);
-			}
-			bool operator!=(const ConstIterator & rhs)
-			{
-				return (current != rhs.current);
-			}
-			bool operator==(const Iterator<T, L> & rhs)
-			{
-				return (this->current == rhs.current);
-			}
-			bool operator!=(const Iterator<T, L> & rhs)
-			{
-				return (current != rhs.current);
-			}
-			reference operator*() const
-			{
-				return(this->current->value);
-			}
-			reference operator->() const
-			{
-				return(this->current->value);
-			}
-
-			//Output Category ?????????????????????????? WHAT DO?
+			bool operator==(const ConstIterator & rhs) { return (this->current == rhs.current); }
+			bool operator!=(const ConstIterator & rhs) { return (current != rhs.current); }
+			bool operator==(const Iterator<T, L> & rhs) { return (this->current == rhs.current); }
+			bool operator!=(const Iterator<T, L> & rhs) { return (current != rhs.current); }
+			reference operator*() const { return(this->current->value); }
+			reference operator->() const { return(this->current->value); }
 
 			//Forward Specific Category
-			ConstIterator()
-			{
-				current = NULL;
-			};
+			ConstIterator() { current = NULL; }
 
 			//Bidirectional Category
 			ConstIterator &operator--()
@@ -274,14 +221,87 @@ namespace ft
 				this->current = this->current->previous;
 				return(tmp);
 			}
-
-			bool isIter(){return(1);};
 	};
 
 	template< class T >
 	class VectorIterator
 	{
+		public:
+			typedef T value_type;
+			typedef value_type* pointer;
+			typedef const value_type* const_pointer;
+			typedef value_type& reference;
+			typedef const value_type& const_reference;
+			typedef const_reference iterator_category;
+			typedef std::size_t size_type;
 
+			pointer _data;
+			size_type _size;
+			size_type _index;
+
+			VectorIterator(pointer data, size_type size, size_type index) : _data(data), _size(size), _index(index) {}
+			VectorIterator(VectorIterator const &rhs) : _data(rhs._data), _size(rhs._size), _index(rhs._index) {}
+			VectorIterator(VectorIterator const &rhs, pointer data) : _data(data), _size(rhs._size), _index(rhs._index) {}
+			VectorIterator(ConstVectorIterator<T> const &rhs) : _data(rhs._data), _size(rhs._size), _index(rhs._index) {}
+			VectorIterator(ConstVectorIterator<T> const &rhs, pointer data) : _data(data), _size(rhs._size), _index(rhs._index) {}
+			~VectorIterator() {}
+
+			VectorIterator &operator=( VectorIterator const & rhs )
+			{
+				if (this == &rhs) return(*this);
+        		this->~VectorIterator();
+        		return *new(this) VectorIterator(rhs);
+			}
+			VectorIterator &operator=( ConstVectorIterator<T> const & rhs )
+			{
+				if (this == &rhs) return(*this);
+        		this->~VectorIterator();
+        		return *new(this) VectorIterator(rhs);
+			}
+
+			//BASICS INCREMENTATION
+			VectorIterator &operator++()
+			{
+				_index++;
+				return (*this);
+			}
+			VectorIterator operator++(int)
+			{
+				VectorIterator tmp(*this);
+				_index++;
+				return (tmp);
+			}
+
+			//Input Category
+			bool operator==(const VectorIterator & rhs) { return (_data == rhs._data && _index == rhs._index); }
+			bool operator!=(const VectorIterator & rhs) { return (!(_data == rhs._data && _index == rhs._index)); }
+			bool operator==(const ConstVectorIterator<T> & rhs) { return (_data == rhs._data && _index == rhs._index); }
+			bool operator!=(const ConstVectorIterator<T> & rhs) { return (!(_data == rhs._data && _index == rhs._index)); }
+			reference operator*() { return(_data[_index]); }
+			reference operator->() { return(_data[_index]); }
+
+			//Forward Specific Category
+			VectorIterator()
+			{
+				_data = NULL;
+				_size = 0;
+				_index = 0;
+			};
+
+			//Bidirectional Category
+			VectorIterator &operator--()
+			{
+				_index--;
+				return (*this);
+			}
+			VectorIterator operator--(int)
+			{
+				VectorIterator tmp(*this);
+				_index--;
+				return (tmp);
+			}
+
+			
 	};
 
 	template< class T >

@@ -106,6 +106,7 @@ namespace ft
 	template< class T, class Allocator >
 	void Vector<T, Allocator>::realloc(size_type len)
 	{
+		len = len == 0 || len == 1 ? len + 1 : len;
 		pointer tmp = _alloc.allocate(len);
 
 		for (size_type i = 0; i < _size; i++)
@@ -117,10 +118,10 @@ namespace ft
 
 	// constructors:
 	template< class T, class Allocator >
-	Vector<T, Allocator>::Vector() : _data(NULL), _size(0), _capacity(0), _alloc(allocator_type()) { realloc(2); }
+	Vector<T, Allocator>::Vector() : _data(NULL), _size(0), _capacity(0), _alloc(allocator_type()) {}
 	
 	template< class T, class Allocator >
-	Vector<T, Allocator>::Vector(const Allocator &alloc) : _data(NULL), _size(0), _capacity(0), _alloc(alloc) { realloc(2); }
+	Vector<T, Allocator>::Vector(const Allocator &alloc) : _data(NULL), _size(0), _capacity(0), _alloc(alloc) {}
 	
 	template< class T, class Allocator >
 	Vector<T, Allocator>::Vector(size_type count, const T &value, const Allocator &alloc) : _alloc(alloc)
@@ -128,7 +129,6 @@ namespace ft
 		_size = 0;
 		_capacity = 0;
 		_data = NULL;
-		realloc(2);
 		for (std::size_t i = 0; i < count; i++)
 			push_back(value);
 	}
@@ -140,7 +140,6 @@ namespace ft
 		_size = 0;
 		_capacity = 0;
 		_data = NULL;
-		realloc(2);
 		for (;first != last; first++)
 			push_back(*first);
 	}
@@ -152,7 +151,6 @@ namespace ft
 		_capacity = 0;
 		_data = NULL;
 		_alloc = other._alloc;
-		realloc(2);
 		for (iterator itr = other.begin(); itr != other.end(); itr++)
 			push_back(*itr);
 	}
@@ -239,9 +237,9 @@ namespace ft
 
 	// iterator
 	template< class T, class Allocator >
-	typename Vector<T, Allocator>::iterator Vector<T, Allocator>::begin() { return (iterator(_data, 0, _size)); }
+	typename Vector<T, Allocator>::iterator Vector<T, Allocator>::begin() { return (iterator(_data, _size, 0)); }
 	template< class T, class Allocator >
-	typename Vector<T, Allocator>::const_iterator Vector<T, Allocator>::begin() const { return (const_iterator(_data, 0, _size)); }
+	typename Vector<T, Allocator>::const_iterator Vector<T, Allocator>::begin() const { return (const_iterator(_data, _size, 0)); }
 
 	template< class T, class Allocator >
 	typename Vector<T, Allocator>::iterator Vector<T, Allocator>::end() { return (iterator(_data, _size, _size)); }
@@ -249,14 +247,14 @@ namespace ft
 	typename Vector<T, Allocator>::const_iterator Vector<T, Allocator>::end() const { return (const_iterator(_data, _size, _size)); }
 
 	template< class T, class Allocator >
-	typename Vector<T, Allocator>::iterator Vector<T, Allocator>::rbegin() { return (reverse_iterator(_data, _size - 1, _size)); }
+	typename Vector<T, Allocator>::iterator Vector<T, Allocator>::rbegin() { return (reverse_iterator(_data, _size, _size - 1)); }
 	template< class T, class Allocator >
-	typename Vector<T, Allocator>::const_iterator Vector<T, Allocator>::rbegin() const { return (const_reverse_iterator(_data, _size - 1, _size)); }
+	typename Vector<T, Allocator>::const_iterator Vector<T, Allocator>::rbegin() const { return (const_reverse_iterator(_data, _size, _size - 1)); }
 			
 	template< class T, class Allocator >
-	typename Vector<T, Allocator>::iterator Vector<T, Allocator>::rend() { return (reverse_iterator(_data, -1, _size)); }
+	typename Vector<T, Allocator>::iterator Vector<T, Allocator>::rend() { return (reverse_iterator(_data, _size, -1)); }
 	template< class T, class Allocator >
-	typename Vector<T, Allocator>::const_iterator Vector<T, Allocator>::rend() const { return (const_reverse_iterator(_data, -1, _size)); }
+	typename Vector<T, Allocator>::const_iterator Vector<T, Allocator>::rend() const { return (const_reverse_iterator(_data, _size, -1)); }
 
 	template< class T, class Allocator >
 	bool Vector<T, Allocator>::empty() const
@@ -279,6 +277,8 @@ namespace ft
 	template< class T, class Allocator >
 	void Vector<T, Allocator>::reserve(size_type new_cap)
 	{
+		if (new_cap > max_size())
+			throw std::length_error("");
 		realloc(new_cap);
 	}
 
@@ -319,7 +319,7 @@ namespace ft
 		(void)pos;
 		(void)value;
 		if (_size + count > _capacity)
-			realloc(_size + count);
+			reserve(_size + count);
 		// const T &last_value = value;
 		// const T &tmp;
 
@@ -377,7 +377,7 @@ namespace ft
 	void Vector<T, Allocator>::push_back(const T &value)
 	{
 		if (_size >= _capacity)
-			realloc(_capacity + _capacity / 2);
+			reserve(_capacity + _capacity / 2);
 		_data[_size++] = value;
 	}
 	
@@ -394,7 +394,7 @@ namespace ft
 			_size = count;
 		else
 		{
-			realloc(count);
+			reserve(count);
 		}
 	}
 
