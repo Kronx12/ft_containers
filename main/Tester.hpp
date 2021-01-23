@@ -67,7 +67,6 @@ void describe_vector(std::vector<T> std_vector, ft::Vector<T> ft_vector)
 			ss_std << i << ":[" << *itr << "] ";
 			i++;
 		}
-
 	i = 0;
 	if (ft_vector.empty())
 		ss_ft << "(empty)";
@@ -78,6 +77,36 @@ void describe_vector(std::vector<T> std_vector, ft::Vector<T> ft_vector)
 			i++;
 		}
 	check(&ss_std, &ss_ft, 0);
+}
+
+template < class T >
+void describe_vector(ft::Vector<T> std_vector, ft::Vector<T> ft_vector)
+{
+	std::stringstream ss_std;
+	std::stringstream ss_ft;
+
+	ss_std << "- ";
+	ss_ft << "- ";
+
+	int i = 0;
+	if (std_vector.empty())
+		ss_std << "(empty)";
+	else
+		for (ft::Vector<int>::iterator itr = std_vector.begin(); itr != std_vector.end(); itr++)
+		{
+			ss_std << i << ":[" << *itr << "] ";
+			i++;
+		}
+	i = 0;
+	if (ft_vector.empty())
+		ss_ft << "(empty)";
+	else
+		for (ft::Vector<int>::iterator itr = ft_vector.begin(); itr != ft_vector.end(); itr++)
+		{
+			ss_ft << i << ":[" << *itr << "] ";
+			i++;
+		}
+	check(&ss_std, &ss_ft, 1);
 }
 
 template < class T >
