@@ -26,7 +26,7 @@ namespace ft
 			typedef Key key_type;
 			typedef T mapped_type;
 			typedef typename std::pair<const key_type, mapped_type> value_type;
-			typedef typename Compare::key_compare key_compare;
+			typedef Compare key_compare;
 			//typedef typename value_comp value_compare;
 			typedef Allocator allocator_type;
 			typedef typename Allocator::reference reference;
@@ -38,13 +38,14 @@ namespace ft
 			typedef ReverseIterator<iterator> reverse_iterator;
 			typedef ReverseIterator<const_iterator> const_reverse_iterator;
 			typedef typename std::ptrdiff_t difference_type;
-			typedef typename std::pair<const key_type, mapped_type> size_type;
+			typedef size_t size_type;
 	
 		private:
 			pointer _data;
 			size_type _size;
 			size_type _capacity;
 			allocator_type _alloc;
+			key_compare _comp;
 			Mtree<Key, T> *_tree;
 
 
@@ -52,12 +53,12 @@ namespace ft
 
 		public:
 	// Member functions
-		explicit Map( const Compare& comp, const Allocator& alloc = allocator_type() );
+		explicit Map( const Compare& comp = key_compare(), const Allocator& alloc = allocator_type() );
 //--
 		template <class InputIterator>
 		Map(InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type());
 		Map(const Map& x);
-		~Map();
+		~Map(){};
 		Map& operator=( const Map& other );
 
 	// Iterators
@@ -128,7 +129,7 @@ namespace ft
 	};
 
 	//-------------------------- Private --------------------------
-	template< class Key, class T, class Compare, class Allocator >
+	/*template< class Key, class T, class Compare, class Allocator >
 	void Map<Key, T, Compare, Allocator>::realloc(size_type len)
 	{
 		pointer tmp = _alloc.allocate(len);
@@ -138,14 +139,14 @@ namespace ft
 		_alloc.deallocate(_data);
 		_data = tmp;
 		_capacity = len;
-	}
+	}*/
 
 
 	//-------------------------- CONSTRUCTOR --------------------------
 	template< class Key, class T, class Compare, class Allocator >
-	Map<Key, T, Compare, Allocator>::Map(const Compare&, const allocator_type&)
-	: _data(NULL), _size(0), _capacity(0), _alloc(allocator_type()), _tree(new Mtree<Key, T>()) {}
-
+	Map<Key, T, Compare, Allocator>::Map(const Map<Key, T, Compare, Allocator>::key_compare& comp, const Map<Key, T, Compare, Allocator>::allocator_type& alloc)
+	: _data(NULL), _size(0), _capacity(0), _alloc(alloc), _comp(comp){}
+			//Mtree<Key, T> *_tree;
 	// template< class Key, class T, class Compare, class Allocator >
 	// template< class InputIterator >
 	// Map<Key, T, Compare, Allocator>::Map(InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type())
@@ -159,13 +160,13 @@ namespace ft
 	// 	;
 	// }
 
-	template< class Key, class T, class Compare, class Allocator >
+	/*template< class Key, class T, class Compare, class Allocator >
 	Map<Key, T, Compare, Allocator> &Map<Key, T, Compare, Allocator>::operator=(Map const & rhs)
 	{
         if (this == &rhs) return(*this);
 		this->~Map();
         return *new(this) Map(rhs);
-	}
+	}*/
 
 
 	//-------------------------- ... --------------------------
