@@ -31,6 +31,11 @@ namespace ft
 			allocator_type _alloc;
 
 			void realloc(size_type len);
+			template <class InputIterator>
+			void insert_helper(iterator pos, const InputIterator& first, const InputIterator& last, void *);
+			template <class InputIterator>
+			void insert_helper(iterator pos, const InputIterator& size, const InputIterator& count, int);
+	
 
 		public:
 			// constructors
@@ -114,6 +119,26 @@ namespace ft
 		_alloc.deallocate(_data, _capacity);
 		_data = tmp;
 		_capacity = len;
+	}
+	
+	template< class T, class Allocator >
+	template <class InputIterator>
+	void Vector<T, Allocator>::insert_helper(iterator pos, const InputIterator& first, const InputIterator& last, void *)
+	{
+		(void) pos;
+		(void) first;
+		(void) last;
+		// InputIterator & first_itr = const_cast<InputIterator&>(first);
+		// InputIterator from(first_itr);
+		// TODO ============
+	}
+
+	template< class T, class Allocator >
+	template <class InputIterator>
+	void Vector<T, Allocator>::insert_helper(iterator pos, const InputIterator& count, const InputIterator& value, int)
+	{
+		for (int i = 0; i < count; i++)
+			pos = insert(pos, value);
 	}
 
 	// constructors:
@@ -259,7 +284,7 @@ namespace ft
 	template< class T, class Allocator >
 	bool Vector<T, Allocator>::empty() const
 	{
-		retrun (_size == 0);
+		return (_size == 0);
 	}
 
 	template< class T, class Allocator >
@@ -301,53 +326,35 @@ namespace ft
 	template< class T, class Allocator >
 	typename Vector<T, Allocator>::iterator Vector<T, Allocator>::insert(iterator pos, const T &value)
 	{
-		const T &last_value = value;
-		const T &tmp = *pos;
-
-		while (pos != end())
-		{
-			tmp = *pos;
-			*pos = last_value;
-			last_value = tmp;
-		}
-		push_back(last_value);
+		Vector<int> tmp;
+		
+		for (iterator itr = begin(); itr != pos; itr++)
+			tmp.push_back(*itr);
+		tmp.push_back(value);
+		for (iterator itr = pos; itr != end(); itr++)
+			tmp.push_back(*itr);
+		swap(tmp);
+		return (iterator(pos, _data));
 	}
 
 	template< class T, class Allocator >
 	void Vector<T, Allocator>::insert(iterator pos, size_type count, const T &value)
 	{
-		(void)pos;
-		(void)value;
-		if (_size + count > _capacity)
-			reserve(_size + count);
-		// const T &last_value = value;
-		// const T &tmp;
-
-		// while (count-- > 0 && pos != end())
-		// {
-		// 	tmp = *pos;
-		// 	*pos = last_value;
-		// 	last_value = tmp;
-		// }
-
-		// TODO Attention, fonction a tester apres implementation d'un iterateur
-		// TODO pour savoir si "pos" est toujours disponible apres realloc
+		for (int i = 0; i < count; i++)
+			pos = insert(pos, value);
 	}
 
 	template< class T, class Allocator >
 	template< class InputIterator >
 	void Vector<T, Allocator>::insert(iterator pos, InputIterator first, InputIterator last)
 	{
-		(void)pos;
-		(void)last;
-		(void)first;
-		// TODO Attention, fonction a tester apres implementation d'un iterateur
-		// TODO pour savoir si "pos" est toujours disponible apres realloc
+		insert_helper(pos, first, last, typename ft::is_integral<InputIterator>::type());
 	}
 
 	template< class T, class Allocator >
 	typename Vector<T, Allocator>::iterator Vector<T, Allocator>::erase(iterator pos)
 	{
+		iterator ret(pos);
 		iterator copy(pos);
 		while (pos != end())
 		{
@@ -356,6 +363,7 @@ namespace ft
 			copy++;
 		}
 		_size--;
+		return (iterator(ret, _data));
 	}
 
 	template< class T, class Allocator >
@@ -377,8 +385,9 @@ namespace ft
 	void Vector<T, Allocator>::push_back(const T &value)
 	{
 		if (_size >= _capacity)
-			reserve(_capacity + _capacity / 2);
-		_data[_size++] = value;
+			reserve(_capacity + _capacity / 2 + _capacity % 2);
+		_data[_size] = value;
+		_size++;
 	}
 	
 	template< class T, class Allocator >
@@ -409,8 +418,20 @@ namespace ft
 	template< class T, class Allocator >
 	void Vector<T, Allocator>::swap(Vector<T, Allocator> &other)
 	{
-		(void)other;
-		// TODO
+		pointer tmp_data = other._data;
+		size_type tmp_size = other._size;
+		size_type tmp_capacity = other._capacity;
+		allocator_type tmp_alloc = other._alloc;
+
+		other._data = _data;
+		other._size = _size;
+		other._capacity = _capacity;
+		other._alloc = _alloc;
+
+		_data = tmp_data;
+		_size = tmp_size;
+		_capacity = tmp_capacity;
+		_alloc = tmp_alloc;
 	}
 	
 	// TODO non-member functions

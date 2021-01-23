@@ -299,15 +299,86 @@ namespace ft
 				VectorIterator tmp(*this);
 				_index--;
 				return (tmp);
-			}
-
-			
+			}			
 	};
 
 	template< class T >
 	class ConstVectorIterator
 	{
+		public:
+			typedef T value_type;
+			typedef value_type* pointer;
+			typedef const value_type* const_pointer;
+			typedef value_type& reference;
+			typedef const value_type& const_reference;
+			typedef const_reference iterator_category;
+			typedef std::size_t size_type;
 
+			pointer _data;
+			size_type _size;
+			size_type _index;
+
+			ConstVectorIterator(pointer data, size_type size, size_type index) : _data(data), _size(size), _index(index) {}
+			ConstVectorIterator(ConstVectorIterator const &rhs) : _data(rhs._data), _size(rhs._size), _index(rhs._index) {}
+			ConstVectorIterator(ConstVectorIterator const &rhs, pointer data) : _data(data), _size(rhs._size), _index(rhs._index) {}
+			ConstVectorIterator(VectorIterator<T> const &rhs) : _data(rhs._data), _size(rhs._size), _index(rhs._index) {}
+			ConstVectorIterator(VectorIterator<T> const &rhs, pointer data) : _data(data), _size(rhs._size), _index(rhs._index) {}
+			~ConstVectorIterator() {}
+
+			ConstVectorIterator &operator=( ConstVectorIterator const & rhs )
+			{
+				if (this == &rhs) return(*this);
+        		this->~ConstVectorIterator();
+        		return *new(this) ConstVectorIterator(rhs);
+			}
+			ConstVectorIterator &operator=( VectorIterator<T> const & rhs )
+			{
+				if (this == &rhs) return(*this);
+        		this->~ConstVectorIterator();
+        		return *new(this) ConstVectorIterator(rhs);
+			}
+
+			//BASICS INCREMENTATION
+			ConstVectorIterator &operator++()
+			{
+				_index++;
+				return (*this);
+			}
+			ConstVectorIterator operator++(int)
+			{
+				ConstVectorIterator tmp(*this);
+				_index++;
+				return (tmp);
+			}
+
+			//Input Category
+			bool operator==(const ConstVectorIterator & rhs) { return (_data == rhs._data && _index == rhs._index); }
+			bool operator!=(const ConstVectorIterator & rhs) { return (!(_data == rhs._data && _index == rhs._index)); }
+			bool operator==(const VectorIterator<T> & rhs) { return (_data == rhs._data && _index == rhs._index); }
+			bool operator!=(const VectorIterator<T> & rhs) { return (!(_data == rhs._data && _index == rhs._index)); }
+			reference operator*() const { return(_data[_index]); }
+			reference operator->() const { return(_data[_index]); }
+
+			//Forward Specific Category
+			ConstVectorIterator()
+			{
+				_data = NULL;
+				_size = 0;
+				_index = 0;
+			};
+
+			//Bidirectional Category
+			ConstVectorIterator &operator--()
+			{
+				_index--;
+				return (*this);
+			}
+			ConstVectorIterator operator--(int)
+			{
+				ConstVectorIterator tmp(*this);
+				_index--;
+				return (tmp);
+			}
 	};
 
 	template < class T, class L >
