@@ -45,7 +45,7 @@ void map_test(int size)
 	  std::cout << "Map2 contains " << "following elements" << std::endl; 
     do { 
         std::cout << i2->first << " = " << i2->second << std::endl; 
-    } while (m2.value_comp()(*i2++, last2)); 
+    } while (m2.value_comp()(*i2++, last2));
   
 }
 
