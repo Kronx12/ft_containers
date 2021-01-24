@@ -37,11 +37,20 @@ namespace ft
 			using typename It::reference;
 			using typename It::const_reference;
 		
-		
+		/*
+			TODO
+			ReverseIterator<ft::Vector<int, std::allocator<int>>::iterator>
+			to
+			ReverseIterator<ft::Vector<int, std::allocator<int>>::const_iterator>
+
+			TODO Make full random iterator vector
+		*/
+
+
 			ReverseIterator() : It() {}
 			ReverseIterator(pointer data, size_t size, size_t index) : It(data, size, index) {}
-			ReverseIterator(It const &it) : It(it) {}
 			ReverseIterator(ReverseIterator const &rhs) : It(rhs) {}
+			ReverseIterator(It const &it) : It(it) {}
 			~ReverseIterator() {}
 			ReverseIterator &operator=( ReverseIterator const &rhs )
 			{

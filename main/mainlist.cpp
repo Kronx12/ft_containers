@@ -153,15 +153,15 @@ void capacity_test(int size, T type)
 
 	ss_std << "size : " << std_lst.size();
 	ss_ft << "size : " << ft_lst.size();
-	check(&ss_std, &ss_ft, 0);
+	check(&ss_std, &ss_ft, DEFINED);
 
 	ss_std << "max_size : " << std_lst.max_size();
 	ss_ft << "max_size : " << ft_lst.max_size();
-	check(&ss_std, &ss_ft, 0);
+	check(&ss_std, &ss_ft, DEFINED);
 
 	ss_std << "empty : " << std_lst.empty();
 	ss_ft << "empty : " << ft_lst.empty();
-	check(&ss_std, &ss_ft, 0);
+	check(&ss_std, &ss_ft, DEFINED);
 }
 
 template <typename T>
@@ -176,13 +176,16 @@ void element_access_test(int size, T type)
 	std::stringstream ss_std;
 	std::stringstream ss_ft;
 
-	ss_std << "front : " << std_lst.front();
-	ss_ft << "front : " << ft_lst.front();
-	check(&ss_std, &ss_ft, !size);
+	if (!std_lst.empty())
+	{
+		ss_std << "front : " << std_lst.front();
+		ss_ft << "front : " << ft_lst.front();
+		check(&ss_std, &ss_ft, !size);
 
-	ss_std << "back : " << std_lst.back();
-	ss_ft << "back : " << ft_lst.back();
-	check(&ss_std, &ss_ft, !size);
+		ss_std << "back : " << std_lst.back();
+		ss_ft << "back : " << ft_lst.back();
+		check(&ss_std, &ss_ft, !size);
+	}
 }
 
 template <typename T>

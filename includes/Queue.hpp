@@ -36,6 +36,14 @@ namespace ft
 			void pop();
 			void swap(const Queue<T, Container> &other);
 //--
+		// Operators
+			bool operator==(Queue<T> &rhs);
+			bool operator!=(Queue<T> &rhs);
+			bool operator>(Queue<T> &rhs);
+			bool operator>=(Queue<T> &rhs);
+			bool operator<(Queue<T> &rhs);
+			bool operator<=(Queue<T> &rhs);
+
 		// member obbjects
 		protected:
 			container_type C;
@@ -114,27 +122,23 @@ namespace ft
 		other.C = tmp;
 	}
 
-	// Non-member functions
 	template< class T, class Container >
-	void swap(Queue<T, Container> &lhs, Queue<T, Container> &rhs)
-	{
-		Container tmp = lhs.C;
-		lhs.C = rhs.C;
-		rhs.C = tmp;
-	}
-
-	template< class T >
-	bool operator==(Queue<T> &lhs, Queue<T> &rhs) { return (lhs.C == rhs.C); }
-	template< class T >
-	bool operator!=(Queue<T> &lhs, Queue<T> &rhs) { return (lhs.C != rhs.C); }
-	template< class T >
-	bool operator>(Queue<T> &lhs, Queue<T> &rhs) { return (lhs.C > rhs.C); }
-	template< class T >
-	bool operator>=(Queue<T> &lhs, Queue<T> &rhs) { return (lhs.C >= rhs.C); }
-	template< class T >
-	bool operator<(Queue<T> &lhs, Queue<T> &rhs) { return (lhs.C < rhs.C); }
-	template< class T >
-	bool operator<=(Queue<T> &lhs, Queue<T> &rhs) { return (lhs.C <= rhs.C); }
+	bool Queue<T, Container>::operator==(Queue<T> &rhs) { return (C == rhs.C); }
+	
+	template< class T, class Container >
+	bool Queue<T, Container>::operator!=(Queue<T> &rhs) { return (C != rhs.C); }
+	
+	template< class T, class Container >
+	bool Queue<T, Container>::operator>(Queue<T> &rhs) { return (C > rhs.C); }
+	
+	template< class T, class Container >
+	bool Queue<T, Container>::operator>=(Queue<T> &rhs) { return (C >= rhs.C); }
+	
+	template< class T, class Container >
+	bool Queue<T, Container>::operator<(Queue<T> &rhs) { return (C < rhs.C); }
+	
+	template< class T, class Container >
+	bool Queue<T, Container>::operator<=(Queue<T> &rhs) { return (C <= rhs.C); }
 }
 
 #endif

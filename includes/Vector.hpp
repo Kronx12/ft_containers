@@ -31,6 +31,7 @@ namespace ft
 			allocator_type _alloc;
 
 			void realloc(size_type len);
+			size_type next_power_2(const size_type value);
 
 			template <class InputIterator>
 			void constructor_helper(const InputIterator& first, const InputIterator& last, void *);
@@ -83,44 +84,43 @@ namespace ft
 
 			iterator end();
 			const_iterator end() const;
-
-			reverse_iterator rbegin()
+			
+			reverse_iterator rbegin();
 			const_reverse_iterator rbegin() const;// TODO TEST
 			
 			reverse_iterator rend();
 			const_reverse_iterator rend() const;// TODO TEST
 //--
 			// capacity
-			bool empty() const;// TODO TEST
-			size_type size() const;// TODO TEST
-			size_type max_size() const;// TODO TEST
-			void reserve(size_type new_cap);// TODO TEST
-			size_type capacity() const;// TODO TEST
+			bool empty() const;
+			size_type size() const;
+			size_type max_size() const;
+			void reserve(size_type new_cap);
+			size_type capacity() const;
 //--
 			// modifiers
-			void clear();// TODO TEST
+			void clear();
 //--
-			iterator insert(iterator pos, const T &value);// TODO TEST
-			void insert(iterator pos, size_type count, const T &value);// TODO TEST
+			iterator insert(iterator pos, const T &value);
+			void insert(iterator pos, size_type count, const T &value);
 			template< class InputIterator >
-			void insert(iterator pos, InputIterator first, InputIterator last);// TODO TEST
+			void insert(iterator pos, InputIterator first, InputIterator last);
 
-			iterator erase(iterator pos);// TODO TEST
-			iterator erase(iterator first, iterator last);// TODO TEST
+			iterator erase(iterator pos);
+			iterator erase(iterator first, iterator last);
 
-			void push_back(const T &value);// TODO TEST
-			void pop_back();// TODO TEST
+			void push_back(const T &value);
+			void pop_back();
 
-			void resize(size_type count, T value = T());// TODO TEST
+			void resize(size_type count, T value = T());
 
-			void swap(Vector &other);// TODO TEST
+			void swap(Vector &other);
 	};
 
 	// private:
 	template< class T, class Allocator >
 	void Vector<T, Allocator>::realloc(size_type len)
 	{
-		len = len == 0 || len == 1 ? len + 1 : len;
 		pointer tmp = _alloc.allocate(len);
 
 		for (size_type i = 0; i < _size && i < len; i++)
@@ -128,6 +128,20 @@ namespace ft
 		_alloc.deallocate(_data, _capacity);
 		_data = tmp;
 		_capacity = len;
+	}
+
+	template< class T, class Allocator >
+	typename Vector<T, Allocator>::size_type Vector<T, Allocator>::next_power_2(size_type value)
+	{
+		size_type count = 0;
+		if (value && !(value & (value - 1)))
+			return (value);
+		while (value != 0)
+		{
+			value >>= 1;
+			count++;
+		}
+		return (1 << count);
 	}
 
 	template< class T, class Allocator >
@@ -339,7 +353,8 @@ namespace ft
 	{
 		if (new_cap > max_size())
 			throw std::length_error("");
-		realloc(new_cap);
+		if (new_cap >= _capacity)
+			realloc(new_cap);
 	}
 
 	template< class T, class Allocator >
@@ -379,7 +394,7 @@ namespace ft
 
 		for (iterator itr = begin(); itr != pos; itr++)
 			tmp.push_back(*itr);
-		for (int i = 0; i < count; i++)
+		for (size_type i = 0; i < count; i++)
 			pos = insert(pos, value);
 		for (iterator itr = pos; itr != end(); itr++)
 			tmp.push_back(*itr);
@@ -399,13 +414,16 @@ namespace ft
 	{
 		iterator ret(pos);
 		iterator copy(pos);
-		while (pos != end())
+		if (pos != end())
 		{
-			pos++;
-			*copy = *pos;
-			copy++;
+			while (pos != end())
+			{
+				pos++;
+				*copy = *pos;
+				copy++;
+			}
+			_size--;
 		}
-		_size--;
 		return (iterator(ret, _data));
 	}
 
@@ -432,7 +450,7 @@ namespace ft
 	void Vector<T, Allocator>::push_back(const T &value)
 	{
 		if (_size >= _capacity)
-			reserve(_capacity + _capacity / 2 + _capacity % 2);
+			reserve(next_power_2(_capacity + 1));
 		_data[_size] = value;
 		_size++;
 	}
@@ -448,8 +466,9 @@ namespace ft
 	void Vector<T, Allocator>::resize(size_type count, T value)
 	{
 		realloc(count);
-		for (size_type i = 0; i < count; i++)
+		for (size_type i = _size; i < count; i++)
 			_data[i] = value;
+		_size = count;
 	}
 
 	template< class T, class Allocator >

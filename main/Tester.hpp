@@ -13,6 +13,11 @@
 # include <vector>
 
 # include <sstream>
+# include <cstdlib>
+
+# define UNDEFINED 1
+# define DEFINED 0
+
 static int g_test = 0;
 static int g_valid = 0;
 
@@ -76,7 +81,7 @@ void describe_vector(std::vector<T> std_vector, ft::Vector<T> ft_vector)
 			ss_ft << i << ":[" << *itr << "] ";
 			i++;
 		}
-	check(&ss_std, &ss_ft, 0);
+	check(&ss_std, &ss_ft, DEFINED);
 }
 
 template < class T >
@@ -106,7 +111,7 @@ void describe_vector(ft::Vector<T> std_vector, ft::Vector<T> ft_vector)
 			ss_ft << i << ":[" << *itr << "] ";
 			i++;
 		}
-	check(&ss_std, &ss_ft, 1);
+	check(&ss_std, &ss_ft, UNDEFINED);
 }
 
 template < class T >
@@ -139,7 +144,7 @@ void describe_stack(std::stack<T> std_stack, ft::Stack<T> ft_stack)
 			ft_stack.pop();
 			i++;
 		}
-	check(&ss_std, &ss_ft, 0);
+	check(&ss_std, &ss_ft, DEFINED);
 }
 
 template < class T >
@@ -172,7 +177,7 @@ void describe_queue(std::queue<T> std_queue, ft::Queue<T> ft_queue)
 			ft_queue.pop();
 			i++;
 		}
-	check(&ss_std, &ss_ft, 0);
+	check(&ss_std, &ss_ft, DEFINED);
 }
 
 template < class T >
@@ -202,7 +207,7 @@ void describe_list(std::list<T> std_lst, ft::List<T> ft_lst)
 			ss_ft << i << ":[" << *itr << "] ";
 			i++;
 		}
-	check(&ss_std, &ss_ft, 0);
+	check(&ss_std, &ss_ft, DEFINED);
 }
 
 template < class T >
@@ -233,7 +238,7 @@ void const_describe_list(const std::list<T> std_lst, const ft::List<T> ft_lst)
 			ss_ft << i << ":[" << *itr << "] ";
 			i++;
 		}
-	check(&ss_std, &ss_ft, 0);
+	check(&ss_std, &ss_ft, DEFINED);
 }
 
 template < class T >
@@ -264,7 +269,7 @@ void reverse_describe_list(std::list<T> std_lst, ft::List<T> ft_lst)
 			ss_ft << i << ":[" << *itr << "] ";
 			i++;
 		}
-	check(&ss_std, &ss_ft, 0);
+	check(&ss_std, &ss_ft, DEFINED);
 }
 
 template < class T >
@@ -296,7 +301,7 @@ void const_reverse_describe_list(const std::list<T> std_lst, const ft::List<T> f
 			i++;
 		}
 	}
-	check(&ss_std, &ss_ft, 0);
+	check(&ss_std, &ss_ft, DEFINED);
 }
 
 #endif
