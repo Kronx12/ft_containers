@@ -5,80 +5,105 @@ void constructor_test(int size)
 {
 	title("Constructor Size", size);
 
+	title("Default Constructor :");
 	std::vector<int> std_vec;
 	ft::Vector<int> ft_vec;
+	
+	describe_vector(std_vec, ft_vec);
+
+	title("Allocator Constructor :");
+	std_vec = std::vector<int>(std::allocator<int>());
+	ft_vec = ft::Vector<int>(std::allocator<int>());
+
+	describe_vector(std_vec, ft_vec);
+
+	title("Size and Value Constructor :");
+	std_vec = std::vector<int>(size, size);
+	ft_vec = ft::Vector<int>(size, size);
+
+	describe_vector(std_vec, ft_vec);
+
+	std_vec = std::vector<int>(static_cast<std::size_t>(size), static_cast<std::size_t>(size));
+	ft_vec = ft::Vector<int>(static_cast<std::size_t>(size), static_cast<std::size_t>(size));
+
+	describe_vector(std_vec, ft_vec);
+
+	title("Range Constructor :");
+	std::vector<int> std_vec_bis(std_vec.begin(), std_vec.end());
+	ft::Vector<int> ft_vec_bis(ft_vec.begin(), ft_vec.end());
+
+	describe_vector(std_vec_bis, ft_vec_bis);
+
+	title("Copy Constructor :");
+	std_vec = std::vector<int>(std_vec_bis);
+	ft_vec = ft::Vector<int>(ft_vec_bis);
+
+	describe_vector(std_vec, ft_vec);
+	
+	std_vec = std::vector<int>();
+	ft_vec = ft::Vector<int>();
 
 	for (int i = 0; i < size; i++)
 	{
-		std_vec.push_back(i);
-		ft_vec.push_back(i);
+		std_vec.push_back(size - i);
+		ft_vec.push_back(size - i);
 	}
 
-	if (!std_vec.empty())
-		describe_vector(std_vec, ft_vec);
-
-	std_vec.insert(std_vec.begin(), size, size);
-	ft_vec.insert(ft_vec.begin(), size, size);
-
+	title("Assignment Operator :");
+	title("Before assignment :");
 	describe_vector(std_vec, ft_vec);
 
-	std_vec.insert(std_vec.begin(), std_vec.begin(), std_vec.end());
-	ft_vec.insert(ft_vec.begin(), ft_vec.begin(), ft_vec.end());
+	std_vec = std_vec_bis;
+	ft_vec = ft_vec_bis;
 
+	title("After assignment :");
 	describe_vector(std_vec, ft_vec);
+	title("Assign (count, value) :");
 
-	// TODO : ESSAYER De comprendre pk si je call empty()
-	// TODO : Sur un std::vector vide qui a subit un pop_back j'ai un bad_alloc
-	// TODO : C'est trite aled
-
-	/* 
-	TODO	std_vec.pop_back();		
-	TODO	ft_vec.pop_back();		
-	TODO	describe_vector(std_vec, ft_vec);
-	TODO	std::bad_alloc error
-	*/
-
-	if (!std_vec.empty())
-	{
-		std_vec.pop_back();
-		ft_vec.pop_back();
-		describe_vector(std_vec, ft_vec);
-	}
-
-	std::vector<int> std_vec_bis(std_vec);
-	ft::Vector<int> ft_vec_bis(ft_vec);
-
-	describe_vector(std_vec, ft_vec);
-
-	std_vec.swap(std_vec_bis);
-	ft_vec.swap(ft_vec_bis);
-}
-void test_test(int size)
-{
-	title("Operator Size", size);
-
-	std::vector<int> std_vector;
-	ft::Vector<int> ft_vector;
-
+	std_vec.clear();
+	ft_vec.clear();
 	for (int i = 0; i < size; i++)
 	{
-		std_vector.push_back(i);
-		ft_vector.push_back(i);
+		std_vec.push_back(size);
+		ft_vec.push_back(size);
 	}
 
-	describe_vector(std_vector, ft_vector);
+	std_vec.assign(size, size);
+	ft_vec.assign(size, size);
 
-	std::cout << *std_vector.erase(std_vector.begin(), ++(std_vector.begin())) << std::endl;
-	std::cout << *ft_vector.erase(ft_vector.begin(), ++(ft_vector.begin())) << std::endl;
+	describe_vector(std_vec, ft_vec);
 
-	describe_vector(std_vector, ft_vector);
+	std_vec.clear();
+	ft_vec.clear();
+	for (int i = 0; i < size; i++)
+	{
+		std_vec.push_back(size - i);
+		ft_vec.push_back(size - i);
+	}
 
-	std::cout << *std_vector.erase(std_vector.begin(), std_vector.end()) << std::endl;
-	std::cout << *ft_vector.erase(ft_vector.begin(), ft_vector.end()) << std::endl;
+	std_vec.assign(static_cast<std::size_t>(size), static_cast<std::size_t>(size));
+	ft_vec.assign(static_cast<std::size_t>(size), static_cast<std::size_t>(size));
 
-	describe_vector(std_vector, ft_vector);
+	describe_vector(std_vec, ft_vec);
+	title("Assign (range) :");
 
+	std_vec.clear();
+	ft_vec.clear();
+	for (int i = 0; i < size; i++)
+	{
+		std_vec.push_back(size - i);
+		ft_vec.push_back(size - i);
+	}
+
+	std_vec.assign(std_vec_bis.begin(), std_vec_bis.end());
+	ft_vec.assign(ft_vec_bis.begin(), ft_vec_bis.end());
+	describe_vector(std_vec, ft_vec);
 }
+
+void element_access_test(int size) {(void)size;}
+void iterator_test(int size) {(void)size;}
+void capacity_test(int size) {(void)size;}
+void modifiers_test(int size) {(void)size;}
 
 void operator_test(int size)
 {
@@ -201,22 +226,13 @@ int main()
 	constructor_test(0);
 #endif
 
-#if TEST_VECTOR == 0 || TEST_VECTOR == 2
+#if TEST_VECTOR == 0 || TEST_VECTOR == 5
     operator_test(1000); // OK Sur linux (juste chiant a afficher)
 	operator_test(10);
 	operator_test(5);
 	operator_test(2);
 	operator_test(1);
 	operator_test(0);
-#endif
-
-#if TEST_VECTOR == 0 || TEST_VECTOR == 3
-    // test_test(1000); // OK Sur linux (juste chiant a afficher)
-	test_test(10);
-	// test_test(5);
-	// test_test(2);
-	// test_test(1);
-	// test_test(0);
 #endif
 
     end_test();

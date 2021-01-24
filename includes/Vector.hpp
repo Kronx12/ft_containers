@@ -31,12 +31,22 @@ namespace ft
 			allocator_type _alloc;
 
 			void realloc(size_type len);
+
+			template <class InputIterator>
+			void constructor_helper(const InputIterator& first, const InputIterator& last, void *);
+			template <class InputIterator>
+			void constructor_helper(const InputIterator& count, const InputIterator& value, int);
+
+			template <class InputIterator>
+			void assign_helper(const InputIterator& first, const InputIterator& last, void *);
+			template <class InputIterator>
+			void assign_helper(const InputIterator& count, const InputIterator& value, int);
+
 			template <class InputIterator>
 			void insert_helper(iterator pos, const InputIterator& first, const InputIterator& last, void *);
 			template <class InputIterator>
-			void insert_helper(iterator pos, const InputIterator& size, const InputIterator& count, int);
+			void insert_helper(iterator pos, const InputIterator& count, const InputIterator& value, int);
 	
-
 		public:
 			// constructors
 			Vector();
@@ -46,64 +56,64 @@ namespace ft
 			Vector(InputIterator first, InputIterator last, const Allocator &alloc = Allocator());
 			Vector(const Vector &other);
 
-			Vector &operator=(const Vector &other);
+			Vector &operator=(const Vector &other); 
 
 			void assign(size_type count, const T &value);
 			template<class InputIterator>
 			void assign(InputIterator first, InputIterator last);
 
-			~Vector();
+			~Vector(); 
 
 			// element access
-			reference at(size_type pos);
-			const_reference at(size_type pos) const;
+			reference at(size_type pos); // TODO TEST
+			const_reference at(size_type pos) const; // TODO TEST
 			
-			reference operator[](size_type pos);
-			const_reference operator[](size_type pos) const;
+			reference operator[](size_type pos);// TODO TEST
+			const_reference operator[](size_type pos) const;// TODO TEST
 
-			reference front();
-			const_reference front() const;
+			reference front();// TODO TEST
+			const_reference front() const;// TODO TEST
 
-			reference back();
-			const_reference back() const;
+			reference back();// TODO TEST
+			const_reference back() const;// TODO TEST
 //--
 			// iterator
-			iterator begin();
-			const_iterator begin() const;
+			iterator begin();// TODO TEST
+			const_iterator begin() const;// TODO TEST
 
-			iterator end();
-			const_iterator end() const;
+			iterator end();// TODO TEST
+			const_iterator end() const;// TODO TEST
 
-			iterator rbegin();
-			const_iterator rbegin() const;
+			iterator rbegin();// TODO TEST
+			const_iterator rbegin() const;// TODO TEST
 			
-			iterator rend();
-			const_iterator rend() const;
+			iterator rend();// TODO TEST
+			const_iterator rend() const;// TODO TEST
 //--
 			// capacity
-			bool empty() const;
-			size_type size() const;
-			size_type max_size() const;
-			void reserve(size_type new_cap);
-			size_type capacity() const;
+			bool empty() const;// TODO TEST
+			size_type size() const;// TODO TEST
+			size_type max_size() const;// TODO TEST
+			void reserve(size_type new_cap);// TODO TEST
+			size_type capacity() const;// TODO TEST
 //--
 			// modifiers
-			void clear();
+			void clear();// TODO TEST
 //--
-			iterator insert(iterator pos, const T &value);
-			void insert(iterator pos, size_type count, const T &value);
+			iterator insert(iterator pos, const T &value);// TODO TEST
+			void insert(iterator pos, size_type count, const T &value);// TODO TEST
 			template< class InputIterator >
-			void insert(iterator pos, InputIterator first, InputIterator last);
+			void insert(iterator pos, InputIterator first, InputIterator last);// TODO TEST
 
-			iterator erase(iterator pos);
-			iterator erase(iterator first, iterator last);
+			iterator erase(iterator pos);// TODO TEST
+			iterator erase(iterator first, iterator last);// TODO TEST
 
-			void push_back(const T &value);
-			void pop_back();
+			void push_back(const T &value);// TODO TEST
+			void pop_back();// TODO TEST
 
-			void resize(size_type count, T value = T());
+			void resize(size_type count, T value = T());// TODO TEST
 
-			void swap(Vector &other);
+			void swap(Vector &other);// TODO TEST
 	};
 
 	// private:
@@ -119,7 +129,53 @@ namespace ft
 		_data = tmp;
 		_capacity = len;
 	}
+
+	template< class T, class Allocator >
+	template <class InputIterator>
+	void Vector<T, Allocator>::constructor_helper(const InputIterator& first, const InputIterator& last, void *)
+	{
+		InputIterator & first_itr = const_cast<InputIterator&>(first);
+		InputIterator from(first_itr);
+		_size = 0;
+		_capacity = 0;
+		_data = NULL;
+		for (;from != last; from++)
+			push_back(*from);
+	}
 	
+	template< class T, class Allocator >
+	template <class InputIterator>
+	void Vector<T, Allocator>::constructor_helper(const InputIterator& count, const InputIterator& value, int)
+	{
+		_size = 0;
+		_capacity = 0;
+		_data = NULL;
+		size_type size = count;
+		for (size_type i = 0; i < size; i++)
+			push_back(value);
+	}
+
+	template< class T, class Allocator >
+	template <class InputIterator>
+	void Vector<T, Allocator>::assign_helper(const InputIterator& first, const InputIterator& last, void *)
+	{
+		InputIterator & first_itr = const_cast<InputIterator&>(first);
+		InputIterator from(first_itr);
+		clear();
+		for (; from != last; from++)
+			push_back(*from);
+	}
+
+	template< class T, class Allocator >
+	template <class InputIterator>
+	void Vector<T, Allocator>::assign_helper(const InputIterator& count, const InputIterator& value, int)
+	{
+		clear();
+		size_type size = count;
+		for (size_type i = 0; i < size; i++)
+			push_back(value);
+	}
+
 	template< class T, class Allocator >
 	template <class InputIterator>
 	void Vector<T, Allocator>::insert_helper(iterator pos, const InputIterator& first, const InputIterator& last, void *)
@@ -165,6 +221,7 @@ namespace ft
 		_size = 0;
 		_capacity = 0;
 		_data = NULL;
+		_alloc = alloc;
 		for (std::size_t i = 0; i < count; i++)
 			push_back(value);
 	}
@@ -173,11 +230,7 @@ namespace ft
 	template< class InputIterator >
 	Vector<T, Allocator>::Vector(InputIterator first, InputIterator last, const Allocator &alloc) : _alloc(alloc)
 	{
-		_size = 0;
-		_capacity = 0;
-		_data = NULL;
-		for (;first != last; first++)
-			push_back(*first);
+		constructor_helper(first, last, typename ft::is_integral<InputIterator>::type());
 	}
 	
 	template< class T, class Allocator >
@@ -211,9 +264,7 @@ namespace ft
 	template<class InputIterator>
 	void Vector<T, Allocator>::assign(InputIterator first, InputIterator last)
 	{
-		clear();
-		for (; first != last; first++)
-			push_back(*first);
+		assign_helper(first, last, typename ft::is_integral<InputIterator>::type());
 	}
 
 	template< class T, class Allocator >
