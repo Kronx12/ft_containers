@@ -78,17 +78,17 @@ namespace ft
 			const_reference back() const;
 //--
 			// iterator
-			iterator begin();// TODO TEST
-			const_iterator begin() const;// TODO TEST
+			iterator begin();
+			const_iterator begin() const;
 
-			iterator end();// TODO TEST
-			const_iterator end() const;// TODO TEST
+			iterator end();
+			const_iterator end() const;
 
-			iterator rbegin();// TODO TEST
-			const_iterator rbegin() const;// TODO TEST
+			reverse_iterator rbegin()
+			const_reverse_iterator rbegin() const;// TODO TEST
 			
-			iterator rend();// TODO TEST
-			const_iterator rend() const;// TODO TEST
+			reverse_iterator rend();
+			const_reverse_iterator rend() const;// TODO TEST
 //--
 			// capacity
 			bool empty() const;// TODO TEST
@@ -316,14 +316,14 @@ namespace ft
 	typename Vector<T, Allocator>::const_iterator Vector<T, Allocator>::end() const { return (const_iterator(_data, _size, _size)); }
 
 	template< class T, class Allocator >
-	typename Vector<T, Allocator>::iterator Vector<T, Allocator>::rbegin() { return (reverse_iterator(_data, _size, _size - 1)); }
+	typename Vector<T, Allocator>::reverse_iterator Vector<T, Allocator>::rbegin() { return (reverse_iterator(_data, _size, _size - 1)); }
 	template< class T, class Allocator >
-	typename Vector<T, Allocator>::const_iterator Vector<T, Allocator>::rbegin() const { return (const_reverse_iterator(_data, _size, _size - 1)); }
+	typename Vector<T, Allocator>::const_reverse_iterator Vector<T, Allocator>::rbegin() const { return (const_reverse_iterator(_data, _size, _size - 1)); }
 			
 	template< class T, class Allocator >
-	typename Vector<T, Allocator>::iterator Vector<T, Allocator>::rend() { return (reverse_iterator(_data, _size, -1)); }
+	typename Vector<T, Allocator>::reverse_iterator Vector<T, Allocator>::rend() { return (reverse_iterator(_data, _size, -1)); }
 	template< class T, class Allocator >
-	typename Vector<T, Allocator>::const_iterator Vector<T, Allocator>::rend() const { return (const_reverse_iterator(_data, _size, -1)); }
+	typename Vector<T, Allocator>::const_reverse_iterator Vector<T, Allocator>::rend() const { return (const_reverse_iterator(_data, _size, -1)); }
 
 	template< class T, class Allocator >
 	bool Vector<T, Allocator>::empty() const { return (_size <= 0); }

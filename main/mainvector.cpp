@@ -145,7 +145,51 @@ void element_access_test(int size)
 	}
 }
 
-void iterator_test(int size) {(void)size;}
+void iterator_test(int size)
+{
+	title("Iterator Size", size);
+	std::vector<int> std_vec;	
+	ft::Vector<int> ft_vec;	
+
+	for (int i = 0; i < size; i++)
+	{
+		std_vec.push_back(i);
+		ft_vec.push_back(i);
+	}
+
+	std::stringstream std_ss;
+	std::stringstream ft_ss;
+	
+	title("Begin - End :");
+	for (std::vector<int>::iterator itr = std_vec.begin(); itr != std_vec.end(); itr++)
+		std_ss << *itr << " ";
+	for (ft::Vector<int>::iterator itr = ft_vec.begin(); itr != ft_vec.end(); itr++)
+		ft_ss << *itr << " ";
+	check(&std_ss, &ft_ss, 0);
+	
+	title("Const Begin - Const End :");
+	for (std::vector<int>::const_iterator itr = std_vec.begin(); itr != std_vec.end(); itr++)
+		std_ss << *itr << " ";
+	for (ft::Vector<int>::const_iterator itr = ft_vec.begin(); itr != ft_vec.end(); itr++)
+		ft_ss << *itr << " ";
+	check(&std_ss, &ft_ss, 0);
+	
+	title("Reverse Begin - Reverse End :");
+	for (std::vector<int>::reverse_iterator itr = std_vec.rbegin(); itr != std_vec.rend(); itr++)
+		std_ss << *itr << " ";
+	for (ft::Vector<int>::reverse_iterator itr = ft_vec.rbegin(); itr != ft_vec.rend(); itr++)
+		ft_ss << *itr << " ";
+	check(&std_ss, &ft_ss, 0);
+	
+	title("Const Reverse Begin - Const Reverse End :");
+	// TODO Erreur de conversion ?
+	// for (std::vector<int>::const_reverse_iterator itr = std_vec.rbegin(); itr != std_vec.rend(); itr++)
+	// 	std_ss << *itr << " ";
+	// for (ft::Vector<int>::const_reverse_iterator itr = ft_vec.rbegin(); itr != ft_vec.rend(); itr++)
+	// 	ft_ss << *itr << " ";
+	// check(&std_ss, &ft_ss, 0);
+}
+
 void capacity_test(int size) {(void)size;}
 void modifiers_test(int size) {(void)size;}
 
@@ -277,6 +321,15 @@ int main()
 	element_access_test(2);
 	element_access_test(1);
 	element_access_test(0);
+#endif
+
+#if TEST_VECTOR == 0 || TEST_VECTOR == 3
+    iterator_test(1000); // OK Sur linux (juste chiant a afficher)
+	iterator_test(10);
+	iterator_test(5);
+	iterator_test(2);
+	iterator_test(1);
+	iterator_test(0);
 #endif
 
 #if TEST_VECTOR == 0 || TEST_VECTOR == 5
