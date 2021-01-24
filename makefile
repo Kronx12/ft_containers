@@ -58,6 +58,9 @@ $(NAME)			:	$(OBJS_PATH)
 $(OBJS_DIR)/%.o	:	%.cpp $(INCS)
 	$(CALLFLIB) -c $< -o $@
 
+# Start all tester #
+all_test		:	list stack queue map
+
 # Containers test #
 list			:	all $(LIST_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
 	$(CALLFLIB) $(LIST_MAIN) $(TEST_MAIN) -I $(TEST_INCS) -o $(addprefix $(TEST_DIR)/,$(LIST))

@@ -466,7 +466,6 @@ void operator_test(int size)
 int main()
 {
 
-
 #if TEST_VECTOR == 0 || TEST_VECTOR == 1
     constructor_test(1000); // OK Sur linux (juste chiant a afficher)
 	constructor_test(10);
