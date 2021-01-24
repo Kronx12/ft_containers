@@ -63,7 +63,7 @@ void queue_test(int size)
 int main()
 {
     
-    // constructor_test(1000); // OK Sur linux (juste chiant a afficher)
+    queue_test(1000); // OK Sur linux (juste chiant a afficher)
 	queue_test(10);
 	queue_test(5);
 	queue_test(2);
