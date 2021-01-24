@@ -65,17 +65,17 @@ namespace ft
 			~Vector(); 
 
 			// element access
-			reference at(size_type pos); // TODO TEST
-			const_reference at(size_type pos) const; // TODO TEST
+			reference at(size_type pos);
+			const_reference at(size_type pos) const;
 			
-			reference operator[](size_type pos);// TODO TEST
-			const_reference operator[](size_type pos) const;// TODO TEST
+			reference operator[](size_type pos);
+			const_reference operator[](size_type pos) const;
 
-			reference front();// TODO TEST
-			const_reference front() const;// TODO TEST
+			reference front();
+			const_reference front() const;
 
-			reference back();// TODO TEST
-			const_reference back() const;// TODO TEST
+			reference back();
+			const_reference back() const;
 //--
 			// iterator
 			iterator begin();// TODO TEST

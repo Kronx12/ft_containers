@@ -100,7 +100,51 @@ void constructor_test(int size)
 	describe_vector(std_vec, ft_vec);
 }
 
-void element_access_test(int size) {(void)size;}
+void element_access_test(int size)
+{
+	title("Element Access Size", size);
+	std::vector<int> std_vec;	
+	ft::Vector<int> ft_vec;	
+
+	for (int i = 0; i < size; i++)
+	{
+		std_vec.push_back(i);
+		ft_vec.push_back(i);
+	}
+
+	std::stringstream std_ss;
+	std::stringstream ft_ss;
+	for (int i = 0; i < size; i++)
+	{
+		std_ss << "[" << i << "]: " << std_vec.at(i) << " ";
+		ft_ss << "[" << i << "]: " << ft_vec.at(i) << " ";
+	}
+
+	title("At :");
+	check(&std_ss, &ft_ss, 0);
+
+	for (int i = 0; i < size; i++)
+	{
+		std_ss << "[" << i << "]: " << std_vec[i] << " ";
+		ft_ss << "[" << i << "]: " << ft_vec[i] << " ";
+	}
+	title("Operator [] :");
+	check(&std_ss, &ft_ss, 0);
+
+	if (size > 0)
+	{
+		title("Front :");
+		std_ss << "front: " << std_vec.front();
+		ft_ss << "front: " << ft_vec.front();
+		check(&std_ss, &ft_ss, 0);
+
+		title("Back :");
+		std_ss << "back: " << std_vec.back();
+		ft_ss << "back: " << ft_vec.back();
+		check(&std_ss, &ft_ss, 0);
+	}
+}
+
 void iterator_test(int size) {(void)size;}
 void capacity_test(int size) {(void)size;}
 void modifiers_test(int size) {(void)size;}
@@ -218,12 +262,21 @@ int main()
 {
 
 #if TEST_VECTOR == 0 || TEST_VECTOR == 1
-    // constructor_test(1000); // OK Sur linux (juste chiant a afficher)
+    constructor_test(1000); // OK Sur linux (juste chiant a afficher)
 	constructor_test(10);
 	constructor_test(5);
 	constructor_test(2);
 	constructor_test(1);
 	constructor_test(0);
+#endif
+
+#if TEST_VECTOR == 0 || TEST_VECTOR == 2
+    element_access_test(1000); // OK Sur linux (juste chiant a afficher)
+	element_access_test(10);
+	element_access_test(5);
+	element_access_test(2);
+	element_access_test(1);
+	element_access_test(0);
 #endif
 
 #if TEST_VECTOR == 0 || TEST_VECTOR == 5
