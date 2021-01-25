@@ -40,7 +40,7 @@ VECTOR_MAIN		=	$(addprefix $(MAIN_DIR),/mainvector.cpp)
 
 # Compile #
 CC				=	clang++
-CFLAGS			=	-Wall -Wextra -Werror -g3
+CFLAGS			=	-Wall -Wextra -g3 #-Werror -g3
 CVERSION		=	-std=c++98
 LFLAGS  		=	-I $(INCS_DIR)
 CALLF			=	$(CC) $(CFLAGS) $(CVERSION)

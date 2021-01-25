@@ -182,12 +182,10 @@ void iterator_test(int size)
 	check(&std_ss, &ft_ss, 0);
 	
 	title("Const Reverse Begin - Const Reverse End :");
-	// TODO Erreur de conversion ?
-	// for (std::vector<int>::const_reverse_iterator itr = std_vec.rbegin(); itr != std_vec.rend(); itr++)
-	// 	std_ss << *itr << " ";
-	// for (ft::Vector<int>::const_reverse_iterator itr = ft_vec.rbegin(); itr != ft_vec.rend(); itr++)
-	// 	ft_ss << *itr << " ";
-	std_ss << "TODO";
+	for (std::vector<int>::const_reverse_iterator itr = std_vec.rbegin(); itr != std_vec.rend(); itr++)
+		std_ss << *itr << " ";
+	for (ft::Vector<int>::const_reverse_iterator itr = ft_vec.rbegin(); itr != ft_vec.rend(); itr++)
+		ft_ss << *itr << " ";
 	check(&std_ss, &ft_ss, 0);
 }
 
@@ -235,6 +233,18 @@ void capacity_test(int size)
 	std_ss << "capacity : " << std_vec.capacity(); 
 	ft_ss << "capacity : " << ft_vec.capacity(); 
 	check(&std_ss, &ft_ss, 0);
+
+	if (size > 10)
+	{
+		title("===== Test =====");
+		describe_vector(std_vec, ft_vec);
+		std::cout << "size : " << std_vec.size() << std::endl; 
+		std::cout << *(std_vec.begin() + 0) << std::endl;
+		std::cout << *(std_vec.begin() + 1) << std::endl;
+		std::cout << *(std_vec.begin() + 2) << std::endl;
+		std::cout << *(std_vec.begin() + 3) << std::endl;
+		std::cout << *(std_vec.begin() + 4) << std::endl;
+	}
 }
 
 void modifiers_test(int size) 

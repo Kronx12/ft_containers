@@ -36,20 +36,11 @@ namespace ft
 			using typename It::const_pointer;
 			using typename It::reference;
 			using typename It::const_reference;
-		
-		/*
-			TODO
-			ReverseIterator<ft::Vector<int, std::allocator<int>>::iterator>
-			to
-			ReverseIterator<ft::Vector<int, std::allocator<int>>::const_iterator>
-
-			TODO Make full random iterator vector
-		*/
-
 
 			ReverseIterator() : It() {}
 			ReverseIterator(pointer data, size_t size, size_t index) : It(data, size, index) {}
-			ReverseIterator(ReverseIterator const &rhs) : It(rhs) {}
+			template<class Ts>
+			ReverseIterator(ReverseIterator<Ts> const &rhs) : It(rhs) {}
 			ReverseIterator(It const &it) : It(it) {}
 			~ReverseIterator() {}
 			ReverseIterator &operator=( ReverseIterator const &rhs )
@@ -232,6 +223,10 @@ namespace ft
 			}
 	};
 
+	/*
+	TODO RandomAccessIterator functions
+	*/
+
 	template< class T >
 	class VectorIterator
 	{
@@ -288,6 +283,8 @@ namespace ft
 			bool operator!=(const ConstVectorIterator<T> & rhs) { return (!(_data == rhs._data && _index == rhs._index)); }
 			reference operator*() { return(_data[_index]); }
 			reference operator->() { return(_data[_index]); }
+
+			// VectorIterator<T> operator+(std::ptrdiff_t ptr) { return (); }
 
 			//Forward Specific Category
 			VectorIterator()
