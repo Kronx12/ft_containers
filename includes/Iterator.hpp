@@ -403,11 +403,16 @@ namespace ft
 		typedef const_reference iterator_category;
 
 		map_pointer current;
+		map_pointer begin;
+		map_pointer end;
 
-		MapIterator(map_type ma) : current(ma)
+		MapIterator(map_type ma) : begin(ma), end ()
 		{
 			while (this->ma->left)
-				current = ma->left;
+				begin = ma->left;
+			while (this->ma->right)
+				end = ma->right;
+			current = begin;
 		}
 
 		// MapIterator &operator++()
