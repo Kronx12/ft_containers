@@ -6,8 +6,12 @@ void map_test(int size)
 {
     title("Map", size);
 	
-	std::map<std::string, int> std_map;
-	ft::Map<std::string, int> ft_map;
+	std::map<char, std::string> std_map;
+	ft::Map<char, std::string> ft_map;
+	std_map['a'] = "str1" ;
+	std_map['b'] = "str1" ;
+	std_map['a'] = "str1" ;
+	// ft_map['a'] = "str1" ;
 
 	std::map<char, std::string> m;
 	m['a'] = "str1" ;
@@ -21,6 +25,7 @@ void map_test(int size)
 	m2['y'] = 24 ;
 	m2['t'] = 25 ;
 	m2['u'] = 23 ;
+	m2['u'] = 24 ;
 	m2['d'] = 13 ;
 	m2['c'] = 11 ;
 	m2['e'] = 12 ;

@@ -14,9 +14,16 @@ namespace ft
 			Mtree	*parent;
 			Mtree	*left;
 			Mtree	*right;
-			Mtree(const Key& k, const T& val) : key(k), value(val), left(NULL), right(NULL), parent(NULL) {};
-			Mtree(Mtree *parent, const Key& k, const T& val) : key(k), value(val), left(NULL), right(NULL), parent(parent) {};
-			Mtree() : key(Key()), value(T()), left(NULL), right(NULL), parent(NULL) {};
+
+			Mtree() {};
+			Mtree(const Key& k, const T& val) : key(k), value(val), parent(NULL), left(NULL), right(NULL) {};
+			Mtree(Mtree *parent, const Key& k, const T& val, const char *dir) : key(k), value(val), parent(parent), left(NULL), right(NULL)
+			{
+				if (std::strcmp(dir, "left"))
+					parent->left = *this;
+				else
+					parent->right = *this;
+			};
 	};
 
 	template < class Key, class T, class Compare = std::less<Key>, class Allocator = std::allocator<std::pair<const Key,T> > >
@@ -27,7 +34,6 @@ namespace ft
 			typedef T mapped_type;
 			typedef typename std::pair<const key_type, mapped_type> value_type;
 			typedef Compare key_compare;
-			//typedef typename value_comp value_compare;
 			typedef Allocator allocator_type;
 			typedef typename Allocator::reference reference;
 			typedef typename Allocator::const_reference const_reference;
@@ -45,9 +51,25 @@ namespace ft
 			size_type _size;
 			size_type _capacity;
 			allocator_type _alloc;
-			key_compare _comp;
 			Mtree<Key, T> *_tree;
+			Mtree<Key, T> *_end;
+			Mtree<Key, T> *_begin;
+			Mtree<Key, T> *_rend;
+			Mtree<Key, T> *_rbegin;
 
+		class Value_compare : public std::binary_function<value_type, value_type, bool>
+		{
+			public:
+				key_compare _comp;
+				
+				Value_compare(key_compare c) : _comp(c) {}
+			public:
+				typedef bool result_type;
+				typedef value_type first_argument_type;
+				typedef value_type second_argument_type;
+				bool operator()(const value_type& __x, const value_type& __y) const
+				{return _comp(__x.first, __y.first);}	
+		};
 
 			void realloc(size_type len);
 
@@ -55,11 +77,14 @@ namespace ft
 	// Member functions
 		explicit Map( const Compare& comp = key_compare(), const Allocator& alloc = allocator_type() );
 //--
-		template <class InputIterator>
-		Map(InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type());
-		Map(const Map& x);
+		// template <class InputIterator>
+		// Map(InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type());
+		// Map( const value_type& il, const key_compare& comp = key_compare());
+		// Map( const value_type& il, const key_compare& comp, const allocator_type& a);
+		// Map(const Map& x);
 		~Map(){};
 		Map& operator=( const Map& other );
+		Map& operator=( const value_type& il);
 
 	// Iterators
 		// iterator begin();
@@ -78,7 +103,7 @@ namespace ft
 		// size_type max_size() const;
 
 	// Element acces
-		// T& operator[]( const Key& key );
+		T& operator[]( const Key& key );
 
 	// Modifiers
 		// std::pair<iterator,bool> insert( const value_type& value );
@@ -128,7 +153,6 @@ namespace ft
 		// const std::map<Key,T,Compare,Alloc>& rhs );
 	};
 
-	//-------------------------- Private --------------------------
 	/*template< class Key, class T, class Compare, class Allocator >
 	void Map<Key, T, Compare, Allocator>::realloc(size_type len)
 	{
@@ -141,12 +165,13 @@ namespace ft
 		_capacity = len;
 	}*/
 
-
-	//-------------------------- CONSTRUCTOR --------------------------
 	template< class Key, class T, class Compare, class Allocator >
 	Map<Key, T, Compare, Allocator>::Map(const Map<Key, T, Compare, Allocator>::key_compare& comp, const Map<Key, T, Compare, Allocator>::allocator_type& alloc)
-	: _data(NULL), _size(0), _capacity(0), _alloc(alloc), _comp(comp){}
-			//Mtree<Key, T> *_tree;
+	: _data(NULL), _size(0), _capacity(0), _alloc(alloc), _tree(NULL)
+	{
+		(Value_compare(comp));
+	}
+
 	// template< class Key, class T, class Compare, class Allocator >
 	// template< class InputIterator >
 	// Map<Key, T, Compare, Allocator>::Map(InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type())
@@ -154,22 +179,71 @@ namespace ft
 	// 	;
 	// }
 
+	// need shallow
 	// template< class Key, class T, class Compare, class Allocator >
-	// Map<Key, T, Compare, Allocator>::Map(const Map& x)
+	// Map<Key, T, Compare, Allocator>::Map(const Map& x) : _data(x->_data), _size(x->_size), _capacity(x->_capacity), _alloc(x->_alloc), _tree(x->_tree)
 	// {
-	// 	;
+	// 	(Value_compare(x->Value_compare->_comp));
 	// }
 
-	/*template< class Key, class T, class Compare, class Allocator >
+	template< class Key, class T, class Compare, class Allocator >
 	Map<Key, T, Compare, Allocator> &Map<Key, T, Compare, Allocator>::operator=(Map const & rhs)
 	{
         if (this == &rhs) return(*this);
 		this->~Map();
         return *new(this) Map(rhs);
-	}*/
+	}
+
+	template< class Key, class T, class Compare, class Allocator >
+	Map<Key, T, Compare, Allocator> &Map<Key, T, Compare, Allocator>::operator=( const value_type& il)
+	{
+		if (this->_tree)
+		{
+			Mtree<Key, T> temp;
+
+			temp = *this->_tree;
+			while (temp)
+			{
+				if (*this->Value_compare->_comp()(temp->current->key, il.first) < 0)
+				{
+					if (!temp->current->left)
+						new Mtree< Key, T >(this->_tree, il.first, il.second, "left");
+					temp = temp->current->left;
+				}
+				else if (*this->Value_compare->_comp()(temp->current->key, il.first) > 0)
+				{
+					if (!temp->current->right)
+						new Mtree< Key, T >(this->_tree, il.first, il.second, "right");
+					temp = temp->current->right;
+				}
+				else
+				{
+					temp->value = il.second;
+					temp = NULL;
+				}
+			}
+		}
+		else
+			this->_tree = new Mtree< Key, T >(il.first, il.second);
+	}
 
 
-	//-------------------------- ... --------------------------
+	template< class Key, class T, class Compare, class Allocator >
+	T& Map<Key, T, Compare, Allocator>::operator[]( const Key& key )
+	{
+		Mtree<Key, T> temp;
+
+		temp = *this->_tree;
+		while (temp)
+		{
+			if (temp->current->key == key)
+				return (temp->current->value);
+			else if (*this->Value_compare->_comp()(temp->current->key, key) < 0)
+				temp = temp->current->left;
+			else if (*this->Value_compare->_comp()(temp->current->key, key) > 0)
+				temp = temp->current->right;
+		}
+	}
 }
 
 #endif

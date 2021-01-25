@@ -387,16 +387,44 @@ namespace ft
 			}
 	};
 
-	template < class T, class L >
+	template < class T, class M >
 	class MapIterator
 	{
+		typedef M map_type;
+		typedef map_type* map_pointer;
+		typedef T value_type;
+		typedef value_type* pointer;
+		typedef const value_type* const_pointer;
+		typedef value_type& reference;
+		typedef const value_type& const_reference;
+		typedef const_reference iterator_category;
 
+		map_pointer current;
+		map_pointer begin;
+		map_pointer end;
+
+		MapIterator(map_type ma) : begin(ma), end ()
+		{
+			while (this->ma->left)
+				begin = ma->left;
+			while (this->ma->right)
+				end = ma->right;
+			current = begin;
+		}
+
+		// MapIterator &operator++()
+		// {
+		// 	if (this->ma->right){
+		// 		current = ma->right;
+		// 		while (this->ma->left)
+		// 			current = ma->left;
+		// 	}
+		// }
 	};
 
-	template < class T, class L >
+	template < class T, class M >
 	class ConstMapIterator
 	{
-
 	};
 }
 
