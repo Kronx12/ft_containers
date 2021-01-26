@@ -11,7 +11,7 @@ void map_test(int size)
 	std_map['a'] = "str1" ;
 	std_map['b'] = "str1" ;
 	std_map['a'] = "str1" ;
-	// ft_map['a'] = "str1" ;
+	ft_map['a'] = "str1" ;
 
 	std::map<char, std::string> m;
 	m['a'] = "str1" ;

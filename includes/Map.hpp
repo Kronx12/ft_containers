@@ -58,12 +58,12 @@ namespace ft
 			Mtree<Key, T> *_rend;
 			Mtree<Key, T> *_rbegin;
 
-		class Value_compare : public std::binary_function<value_type, value_type, bool>
+		class value_compare : public std::binary_function<value_type, value_type, bool>
 		{
+			friend class Map;
 			public:
 				key_compare _comp;
-				
-				Value_compare(key_compare c) : _comp(c) {}
+				value_compare(key_compare c) : _comp(c) {}
 			public:
 				typedef bool result_type;
 				typedef value_type first_argument_type;
@@ -72,6 +72,11 @@ namespace ft
 				{return _comp(__x.first, __y.first);}	
 		};
 
+			//---------------------------------------------SPECIAL PLACE---------------------------------------------
+			key_compare _cmp;
+			value_compare _vcmp;
+
+			//-----------------------------------------END OF SPECIAL PLACE-------------------------------------------
 			void realloc(size_type len);
 
 		public:
@@ -119,8 +124,8 @@ namespace ft
 		// void swap( map& other );
 
 	// Observers
-		// key_compare key_comp() const;
-		// std::map::value_compare value_comp() const;
+		key_compare key_comp() const;
+		value_compare value_comp() const;
 
 		// Operations
 		// iterator find( const Key& key );
@@ -168,10 +173,8 @@ namespace ft
 
 	template< class Key, class T, class Compare, class Allocator >
 	Map<Key, T, Compare, Allocator>::Map(const Map<Key, T, Compare, Allocator>::key_compare& comp, const Map<Key, T, Compare, Allocator>::allocator_type& alloc)
-	: _data(NULL), _size(0), _capacity(0), _alloc(alloc), _tree(NULL)
-	{
-		(Value_compare(comp));
-	}
+	: _data(NULL), _size(0), _capacity(0), _alloc(alloc), _tree(NULL), _cmp(comp), _vcmp(_cmp)
+	{}
 
 	// template< class Key, class T, class Compare, class Allocator >
 	// template< class InputIterator >
@@ -188,6 +191,19 @@ namespace ft
 	// }
 
 	template< class Key, class T, class Compare, class Allocator >
+	typename Map<Key, T, Compare, Allocator>::key_compare Map<Key, T, Compare, Allocator>::key_comp() const
+	{
+		return (key_compare(_cmp));
+	}
+
+	template< class Key, class T, class Compare, class Allocator >
+	typename Map<Key, T, Compare, Allocator>::value_compare Map<Key, T, Compare, Allocator>::value_comp() const
+	{
+		return (value_compare(key_comp()));
+	}
+
+
+	template< class Key, class T, class Compare, class Allocator >
 	Map<Key, T, Compare, Allocator> &Map<Key, T, Compare, Allocator>::operator=(Map const & rhs)
 	{
         if (this == &rhs) return(*this);
@@ -200,18 +216,18 @@ namespace ft
 	{
 		if (this->_tree)
 		{
-			Mtree<Key, T> temp;
+			Mtree<Key, T> *temp;
 
-			temp = *this->_tree;
+			temp = this->_tree;
 			while (temp)
 			{
-				if (*this->Value_compare->_comp()(temp->current->key, il.first) < 0)
+				if (this->Value_compare->_comp()(temp->current->key, il.first) < 0)
 				{
 					if (!temp->current->left)
 						new Mtree< Key, T >(this->_tree, il.first, il.second, "left");
 					temp = temp->current->left;
 				}
-				else if (*this->Value_compare->_comp()(temp->current->key, il.first) > 0)
+				else if (this->Value_compare->_comp()(temp->current->key, il.first) > 0)
 				{
 					if (!temp->current->right)
 						new Mtree< Key, T >(this->_tree, il.first, il.second, "right");
@@ -232,18 +248,19 @@ namespace ft
 	template< class Key, class T, class Compare, class Allocator >
 	T& Map<Key, T, Compare, Allocator>::operator[]( const Key& key )
 	{
-		Mtree<Key, T> temp;
+		Mtree<Key, T> *temp;
 
-		temp = *this->_tree;
+		temp = this->_tree;
 		while (temp)
 		{
-			if (temp->current->key == key)
-				return (temp->current->value);
-			else if (*this->Value_compare->_comp()(temp->current->key, key) < 0)
-				temp = temp->current->left;
-			else if (*this->Value_compare->_comp()(temp->current->key, key) > 0)
-				temp = temp->current->right;
+			if (temp->key == key)
+				return (temp->value);
+			else if (key_comp()(temp->key, key) < 0)
+				temp = temp->left;
+			else if (key_comp()(temp->key, key) > 0)
+				temp = temp->right;
 		}
+		return (temp->value);
 	}
 }
 
