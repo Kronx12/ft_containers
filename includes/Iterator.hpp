@@ -4,6 +4,7 @@
 # include <memory>
 # include <iostream>
 # include <string>
+# include <string.h>
 # include <stack>
 # include <deque>
 
@@ -452,51 +453,53 @@ namespace ft
 	template < class T, class M >
 	class MapIterator
 	{
-		typedef M map_type;
-		typedef map_type* map_pointer;
-		typedef T value_type;
-		typedef value_type* pointer;
-		typedef const value_type* const_pointer;
-		typedef value_type& reference;
-		typedef const value_type& const_reference;
-		typedef const_reference iterator_category;
+		public:
+			typedef M map_type;
+			typedef map_type* map_pointer;
+			typedef T value_type;
+			typedef value_type* pointer;
+			typedef const value_type* const_pointer;
+			typedef value_type& reference;
+			typedef const value_type& const_reference;
+			typedef const_reference iterator_category;
 
-		map_pointer current;
-		map_pointer begin;
-		map_pointer end;
-		map_pointer rbegin;
-		map_pointer rend;
+			map_pointer current;
+			map_pointer begin;
+			map_pointer end;
+			map_pointer rbegin;
+			map_pointer rend;
 
-		MapIterator(map_pointer ma) : begin(ma), rbegin(ma)
-		{
-			while (this->begin->left)
-				begin = begin->left;
-			while (this->rbegin->right)
-				rbegin = rbegin->right;
-			end = rbegin->right;
-			rend = begin->left;
-			current = begin;
-		}
-
-		MapIterator &operator++()
-		{
-			if (this->current->right) // go droite si tu peux
+			MapIterator() {}
+			MapIterator(map_pointer ma) : begin(ma), rbegin(ma)
 			{
-				if (!this->current->right == this->rbegin)
+				while (this->begin->left)
+					begin = begin->left;
+				while (this->rbegin->right)
+					rbegin = rbegin->right;
+				end = rbegin->right;
+				rend = begin->left;
+				current = begin;
+			}
+
+			MapIterator &operator++()
+			{
+				if (this->current->right) // go droite si tu peux
 				{
-					current = current->right;
-					while (this->current->left) // go au max en bas a gauche
-						current = current->left;
+					if (!this->current->right == this->rbegin)
+					{
+						current = current->right;
+						while (this->current->left) // go au max en bas a gauche
+							current = current->left;
+					}
+				}
+				else // remonte tout les passages de droites jusqu'a gauche ou le centre sauf si cest la fin
+				{
+					while (current->parent && current == current->parent->right && current != this->rbegin) // remonte all droite
+						current = current->parent;
+					if (current->parent && current == current->parent->left && current != this->rbegin) // remonte un gauche
+						current = current->parent;
 				}
 			}
-			else // remonte tout les passages de droites jusqu'a gauche ou le centre sauf si cest la fin
-			{
-				while (current->parent && current == current->parent->right && current != this->rbegin) // remonte all droite
-					current = current->parent;
-				if (current->parent && current == current->parent->left && current != this->rbegin) // remonte un gauche
-					current = current->parent;
-			}
-		}
 	};
 
 	template < class T, class M >
