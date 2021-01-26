@@ -1,7 +1,6 @@
 #ifndef VECTOR_HPP
 # define VECTOR_HPP
 
-# include <memory>
 # include <Iterator.hpp>
 
 namespace ft

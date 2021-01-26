@@ -1,6 +1,17 @@
 #ifndef ITERATOR_HPP
 # define ITERATOR_HPP
 
+# include <memory>
+# include <iostream>
+# include <string>
+# include <stack>
+# include <deque>
+
+# ifdef __linux__
+#  include <limits>
+#  include <typeinfo>
+# endif
+
 namespace ft
 {
 	template <class T>	struct is_integral						{ typedef void *	type; };

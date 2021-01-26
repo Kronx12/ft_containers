@@ -2,7 +2,6 @@
 # define MAP_HPP
 
 # include "Iterator.hpp"
-# include <string.h>
 
 namespace ft
 {
@@ -46,7 +45,7 @@ namespace ft
 			typedef ReverseIterator<const_iterator> const_reverse_iterator;
 			typedef typename std::ptrdiff_t difference_type;
 			typedef size_t size_type;
-	
+
 		private:
 			pointer _data;
 			size_type _size;
@@ -60,7 +59,7 @@ namespace ft
 
 		class Value_compare : public std::binary_function<value_type, value_type, bool>
 		{
-			public:
+			protected:
 				key_compare _comp;
 				
 				Value_compare(key_compare c) : _comp(c) {}
@@ -76,83 +75,78 @@ namespace ft
 
 		public:
 	// Member functions
-		explicit Map( const Compare& comp = key_compare(), const Allocator& alloc = allocator_type() );
-//--
-		// template <class InputIterator>
-		// Map(InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type());
-		// Map( const value_type& il, const key_compare& comp = key_compare());
-		// Map( const value_type& il, const key_compare& comp, const allocator_type& a);
-		// Map(const Map& x);
-		~Map(){};
-		Map& operator=( const Map& other );
-		Map& operator=( const value_type& il);
+		// Constructors
+			Map();
+			explicit Map(const Compare& comp, const Allocator& alloc = allocator_type());
+			template <class InputIterator>
+			Map(InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type());
+			Map(const Map& x);
+			
+			Map& operator=( const Map& other );
+			Map& operator=( const value_type& il);
 
-	// Iterators
-		// iterator begin();
-		// const_iterator begin() const;
-		// iterator end();
-		// const_iterator end() const;
+			~Map() {};
 
-		// reverse_iterator rbegin();
-		// const_reverse_iterator rbegin() const;
-		// reverse_iterator rend();
-		// const_reverse_iterator rend() const;
+		// Iterators
+			iterator begin();
+			const_iterator begin() const;
+			iterator end();
+			const_iterator end() const;
 
-	// Capacity
-		// bool empty() const;
-		// size_type size() const;
-		// size_type max_size() const;
+			reverse_iterator rbegin();
+			const_reverse_iterator rbegin() const;
+			reverse_iterator rend();
+			const_reverse_iterator rend() const;
 
-	// Element acces
-		T& operator[]( const Key& key );
+		// Capacity
+			bool empty() const;
+			size_type size() const;
+			size_type max_size() const;
 
-	// Modifiers
-		// std::pair<iterator,bool> insert( const value_type& value );
-		// template< class InputIt >
-		// void insert( InputIt first, InputIt last );
-	
-		// void erase( iterator pos );
-		// void erase( iterator first, iterator last );
-		// size_type erase( const key_type& key );
+		// Element acces
+			T& operator[](const Key &key);
 
-		// void clear();
-		// void swap( map& other );
+		// Modifiers
+			// std::pair< iterator, bool > insert(const value_type &value);
+			template< class InputIt >
+			void insert(InputIt first, InputIt last);
+		
+			void erase(iterator pos);
+			void erase(iterator first, iterator last);
+			size_type erase( const key_type &key);
 
-	// Observers
-		// key_compare key_comp() const;
-		// std::map::value_compare value_comp() const;
+			void clear();
+			void swap(Map &other);
+
+		// Observers
+			key_compare key_comp() const;
+			Map::value_compare value_comp() const;
 
 		// Operations
-		// iterator find( const Key& key );
-		// const_iterator find( const Key& key ) const;
-		// size_type count( const Key& key ) const;
-		// iterator lower_bound( const Key& key );
-		// const_iterator lower_bound( const Key& key ) const;
-		// iterator upper_bound( const Key& key );
-		// const_iterator upper_bound( const Key& key ) const;
-		// std::pair<iterator,iterator> equal_range( const Key& key );
-		// std::pair<const_iterator,const_iterator> equal_range( const Key& key ) const;	
+			iterator find(const Key &key);
+			const_iterator find(const Key &key) const;
+			size_type count(const Key &key) const;
+			iterator lower_bound(const Key &key);
+			const_iterator lower_bound(const Key &key) const;
+			iterator upper_bound(const Key &key);
+			const_iterator upper_bound(const Key &key) const;
+			std::pair<iterator,iterator> equal_range(const Key &key);
+			std::pair<const_iterator,const_iterator> equal_range(const Key &key) const;	
 
-	// Non-member functions
-		// template< class Key, class T, class Compare, class Alloc >
-		// bool operator==( const std::map<Key,T,Compare,Alloc>& lhs,
-		// const std::map<Key,T,Compare,Alloc>& rhs );
-		// template< class Key, class T, class Compare, class Alloc >
-		// bool operator!=( const std::map<Key,T,Compare,Alloc>& lhs,
-		// const std::map<Key,T,Compare,Alloc>& rhs );
-		// template< class Key, class T, class Compare, class Alloc >
-		// bool operator<( const std::map<Key,T,Compare,Alloc>& lhs,
-		// const std::map<Key,T,Compare,Alloc>& rhs );
-		// template< class Key, class T, class Compare, class Alloc >
-		// bool operator<=( const std::map<Key,T,Compare,Alloc>& lhs,
-		// const std::map<Key,T,Compare,Alloc>& rhs );
-		// template< class Key, class T, class Compare, class Alloc >
-		// bool operator>( const std::map<Key,T,Compare,Alloc>& lhs,
-		// const std::map<Key,T,Compare,Alloc>& rhs );
-		// template< class Key, class T, class Compare, class Alloc >
-		// bool operator>=( const std::map<Key,T,Compare,Alloc>& lhs,
-		// const std::map<Key,T,Compare,Alloc>& rhs );
+		// Non-member functions
+			// bool operator==(const std::map<Key,T,Compare,Alloc> &rhs);
+			// bool operator!=(const std::map<Key,T,Compare,Alloc> &rhs);
+			// bool operator<(const std::map<Key,T,Compare,Alloc> &rhs);
+			// bool operator<=(const std::map<Key,T,Compare,Alloc> &rhs);
+			// bool operator>(const std::map<Key,T,Compare,Alloc> &rhs);
+			// bool operator>=(const std::map<Key,T,Compare,Alloc> &rhs);
 	};
+
+	template< class Key, class T, class Compare, class Allocator >
+	bool Map<Key, T, Compare, Allocator>::empty() const
+	{
+		return (_size == 0);
+	}
 
 	/*template< class Key, class T, class Compare, class Allocator >
 	void Map<Key, T, Compare, Allocator>::realloc(size_type len)
@@ -165,6 +159,9 @@ namespace ft
 		_data = tmp;
 		_capacity = len;
 	}*/
+
+	template< class Key, class T, class Compare, class Allocator >
+	Map<Key, T, Compare, Allocator>::Map() : _data(NULL), _size(0), _capacity(0), _alloc(Allocator()), _tree(NULL) {}
 
 	template< class Key, class T, class Compare, class Allocator >
 	Map<Key, T, Compare, Allocator>::Map(const Map<Key, T, Compare, Allocator>::key_compare& comp, const Map<Key, T, Compare, Allocator>::allocator_type& alloc)
