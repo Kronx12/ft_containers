@@ -476,12 +476,17 @@ namespace ft
 
 		MapIterator &operator++()
 		{
-			if (this->current->right){ // go droite si tu peux
-				current = current->right;
-				while (this->current->left) // go au max en bas a gauche
-					current = current->left;
+			if (this->current->right) // go droite si tu peux
+			{
+				if (!this->current->right == this->end)
+				{
+					current = current->right;
+					while (this->current->left) // go au max en bas a gauche
+						current = current->left;
+				}
 			}
-			else { // remonte tout les passages de droites jusqu'a gauche ou le centre sauf si cest la fin
+			else // remonte tout les passages de droites jusqu'a gauche ou le centre sauf si cest la fin
+			{
 				while (current->parent && current == current->parent->right && current != this->end) // remonte all droite
 					current = current->parent;
 				if (current->parent && current == current->parent->left && current != this->end) // remonte un gauche
