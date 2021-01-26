@@ -71,5 +71,5 @@ void end_test()
 	if (g_valid == g_test)
 		std::cout << "\n\033[1;32m=====[ " << g_valid << "/" << g_test << " ]=====\033[0m" << std::endl;
 	else
-		std::cout << "\n\033[1;33m=====[ " << g_valid << "/" << g_test << " ]=====\033[0m" << std::endl;
+		std::cout << "\n\033[1;31m=====[ " << g_valid << "/" << g_test << " ]=====\033[0m" << std::endl;
 }

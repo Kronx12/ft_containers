@@ -223,10 +223,6 @@ namespace ft
 			}
 	};
 
-	/*
-	TODO RandomAccessIterator functions
-	*/
-
 	template< class T >
 	class VectorIterator
 	{
@@ -250,13 +246,13 @@ namespace ft
 			VectorIterator(ConstVectorIterator<T> const &rhs, pointer data) : _data(data), _size(rhs._size), _index(rhs._index) {}
 			~VectorIterator() {}
 
-			VectorIterator &operator=( VectorIterator const & rhs )
+			VectorIterator &operator=(const VectorIterator &rhs)
 			{
 				if (this == &rhs) return(*this);
         		this->~VectorIterator();
         		return *new(this) VectorIterator(rhs);
 			}
-			VectorIterator &operator=( ConstVectorIterator<T> const & rhs )
+			VectorIterator &operator=(const ConstVectorIterator<T> &rhs)
 			{
 				if (this == &rhs) return(*this);
         		this->~VectorIterator();
@@ -269,23 +265,21 @@ namespace ft
 				_index++;
 				return (*this);
 			}
+			
 			VectorIterator operator++(int)
 			{
 				VectorIterator tmp(*this);
-				_index++;
+				++(*this);
 				return (tmp);
 			}
 
 			//Input Category
-			bool operator==(const VectorIterator & rhs) { return (_data == rhs._data && _index == rhs._index); }
-			bool operator!=(const VectorIterator & rhs) { return (!(_data == rhs._data && _index == rhs._index)); }
-			bool operator==(const ConstVectorIterator<T> & rhs) { return (_data == rhs._data && _index == rhs._index); }
-			bool operator!=(const ConstVectorIterator<T> & rhs) { return (!(_data == rhs._data && _index == rhs._index)); }
+			bool operator==(const VectorIterator &rhs) { return (_data == rhs._data && _index == rhs._index); }
+			bool operator!=(const VectorIterator &rhs) { return (_data != rhs._data || _index != rhs._index); }
+			bool operator==(const ConstVectorIterator<T> &rhs) { return (_data == rhs._data && _index == rhs._index); }
+			bool operator!=(const ConstVectorIterator<T> &rhs) { return (_data != rhs._data || _index != rhs._index); }
 			reference operator*() { return(_data[_index]); }
 			reference operator->() { return(_data[_index]); }
-
-			VectorIterator operator+(std::ptrdiff_t n) { return (VectorIterator(_data, _size, _index + n)); }
-			VectorIterator operator-(std::ptrdiff_t n) { return (VectorIterator(_data, _size, _index - n)); }
 
 			//Forward Specific Category
 			VectorIterator()
@@ -301,12 +295,40 @@ namespace ft
 				_index--;
 				return (*this);
 			}
+
 			VectorIterator operator--(int)
 			{
 				VectorIterator tmp(*this);
-				_index--;
+				--(*this);
 				return (tmp);
-			}			
+			}	
+
+			// Random Access Category
+			bool operator<(const VectorIterator &rhs) { return (_data == rhs._data && _index < rhs._index); }
+			bool operator<=(const VectorIterator &rhs) { return (_data == rhs._data && _index <= rhs._index); }
+			bool operator>(const VectorIterator &rhs) { return (_data == rhs._data && _index > rhs._index); }
+			bool operator>=(const VectorIterator &rhs) { return (_data == rhs._data && _index >= rhs._index); }
+			bool operator<(const ConstVectorIterator<T> &rhs) { return (_data == rhs._data && _index < rhs._index); }
+			bool operator<=(const ConstVectorIterator<T> &rhs) { return (_data == rhs._data && _index <= rhs._index); }
+			bool operator>(const ConstVectorIterator<T> &rhs) { return (_data == rhs._data && _index > rhs._index); }
+			bool operator>=(const ConstVectorIterator<T> &rhs) { return (_data == rhs._data && _index >= rhs._index); }
+
+			VectorIterator operator+(std::ptrdiff_t n) { return (VectorIterator(_data, _size, _index + n)); }
+			VectorIterator operator-(std::ptrdiff_t n) { return (VectorIterator(_data, _size, _index - n)); }
+
+			VectorIterator &operator+=(const std::ptrdiff_t &rhs) {
+    			this->_index += rhs;
+	    		return *this;
+			}
+
+			VectorIterator &operator-=(const std::ptrdiff_t &rhs) {
+    			this->_index -= rhs;
+	    		return *this;
+			}
+
+			T& operator[](const std::ptrdiff_t& n) {
+	    		return (_data[_index + n]);
+			}
 	};
 
 	template< class T >
@@ -332,13 +354,13 @@ namespace ft
 			ConstVectorIterator(VectorIterator<T> const &rhs, pointer data) : _data(data), _size(rhs._size), _index(rhs._index) {}
 			~ConstVectorIterator() {}
 
-			ConstVectorIterator &operator=( ConstVectorIterator const & rhs )
+			ConstVectorIterator &operator=(const ConstVectorIterator &rhs)
 			{
 				if (this == &rhs) return(*this);
         		this->~ConstVectorIterator();
         		return *new(this) ConstVectorIterator(rhs);
 			}
-			ConstVectorIterator &operator=( VectorIterator<T> const & rhs )
+			ConstVectorIterator &operator=(const VectorIterator<T> &rhs)
 			{
 				if (this == &rhs) return(*this);
         		this->~ConstVectorIterator();
@@ -354,15 +376,16 @@ namespace ft
 			ConstVectorIterator operator++(int)
 			{
 				ConstVectorIterator tmp(*this);
-				_index++;
+				++(*this);
 				return (tmp);
 			}
 
 			//Input Category
-			bool operator==(const ConstVectorIterator & rhs) { return (_data == rhs._data && _index == rhs._index); }
-			bool operator!=(const ConstVectorIterator & rhs) { return (!(_data == rhs._data && _index == rhs._index)); }
-			bool operator==(const VectorIterator<T> & rhs) { return (_data == rhs._data && _index == rhs._index); }
-			bool operator!=(const VectorIterator<T> & rhs) { return (!(_data == rhs._data && _index == rhs._index)); }
+			bool operator==(const ConstVectorIterator &rhs) { return (_data == rhs._data && _index == rhs._index); }
+			bool operator!=(const ConstVectorIterator &rhs) { return (_data != rhs._data || _index != rhs._index); }
+			bool operator==(const VectorIterator<T> &rhs) { return (_data == rhs._data && _index == rhs._index); }
+			bool operator!=(const VectorIterator<T> &rhs) { return (_data != rhs._data || _index != rhs._index); }
+
 			reference operator*() const { return(_data[_index]); }
 			reference operator->() const { return(_data[_index]); }
 
@@ -383,8 +406,35 @@ namespace ft
 			ConstVectorIterator operator--(int)
 			{
 				ConstVectorIterator tmp(*this);
-				_index--;
+				--(*this);
 				return (tmp);
+			}
+
+			//Random Access Category
+			bool operator<(const ConstVectorIterator &rhs) { return (_data == rhs._data && _index < rhs._index); }
+			bool operator<=(const ConstVectorIterator &rhs) { return (_data == rhs._data && _index <= rhs._index); }
+			bool operator>(const ConstVectorIterator &rhs) { return (_data == rhs._data && _index > rhs._index); }
+			bool operator>=(const ConstVectorIterator &rhs) { return (_data == rhs._data && _index >= rhs._index); }
+			bool operator<(const VectorIterator<T> &rhs) { return (_data == rhs._data && _index < rhs._index); }
+			bool operator<=(const VectorIterator<T> &rhs) { return (_data == rhs._data && _index <= rhs._index); }
+			bool operator>(const VectorIterator<T> &rhs) { return (_data == rhs._data && _index > rhs._index); }
+			bool operator>=(const VectorIterator<T> &rhs) { return (_data == rhs._data && _index >= rhs._index); }
+
+			ConstVectorIterator operator+(std::ptrdiff_t n) { return (ConstVectorIterator(_data, _size, _index + n)); }
+			ConstVectorIterator operator-(std::ptrdiff_t n) { return (ConstVectorIterator(_data, _size, _index - n)); }
+			
+			ConstVectorIterator &operator+=(const std::ptrdiff_t &rhs) {
+    			this->_index += rhs;
+	    		return *this;
+			}
+
+			ConstVectorIterator &operator-=(const std::ptrdiff_t &rhs) {
+    			this->_index -= rhs;
+	    		return *this;
+			}
+
+			T &operator[](const std::ptrdiff_t& n) {
+	    		return (_data[_index + n]);
 			}
 	};
 
