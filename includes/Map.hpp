@@ -2,6 +2,7 @@
 # define MAP_HPP
 
 # include "Iterator.hpp"
+# include <string.h>
 
 namespace ft
 {
@@ -19,7 +20,7 @@ namespace ft
 			Mtree(const Key& k, const T& val) : key(k), value(val), parent(NULL), left(NULL), right(NULL) {};
 			Mtree(Mtree *parent, const Key& k, const T& val, const char *dir) : key(k), value(val), parent(parent), left(NULL), right(NULL)
 			{
-				if (std::strcmp(dir, "left"))
+				if (strcmp(dir, "left"))
 					parent->left = *this;
 				else
 					parent->right = *this;

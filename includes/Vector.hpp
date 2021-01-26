@@ -86,10 +86,10 @@ namespace ft
 			const_iterator end() const;
 			
 			reverse_iterator rbegin();
-			const_reverse_iterator rbegin() const;// TODO TEST
+			const_reverse_iterator rbegin() const;
 			
 			reverse_iterator rend();
-			const_reverse_iterator rend() const;// TODO TEST
+			const_reverse_iterator rend() const;
 //--
 			// capacity
 			bool empty() const;
@@ -416,15 +416,14 @@ namespace ft
 		iterator copy(pos);
 		if (pos != end())
 		{
-			while (pos != end())
+			while (++pos != end())
 			{
-				pos++;
 				*copy = *pos;
 				copy++;
 			}
 			_size--;
 		}
-		return (iterator(ret, _data));
+		return (ret);
 	}
 
 	template< class T, class Allocator >

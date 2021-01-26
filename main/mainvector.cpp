@@ -182,12 +182,59 @@ void iterator_test(int size)
 	check(&std_ss, &ft_ss, 0);
 	
 	title("Const Reverse Begin - Const Reverse End :");
-	// TODO Erreur de conversion ?
-	// for (std::vector<int>::const_reverse_iterator itr = std_vec.rbegin(); itr != std_vec.rend(); itr++)
-	// 	std_ss << *itr << " ";
-	// for (ft::Vector<int>::const_reverse_iterator itr = ft_vec.rbegin(); itr != ft_vec.rend(); itr++)
-	// 	ft_ss << *itr << " ";
-	std_ss << "TODO";
+	for (std::vector<int>::const_reverse_iterator itr = std_vec.rbegin(); itr != std_vec.rend(); itr++)
+		std_ss << *itr << " ";
+	for (ft::Vector<int>::const_reverse_iterator itr = ft_vec.rbegin(); itr != ft_vec.rend(); itr++)
+		ft_ss << *itr << " ";
+	check(&std_ss, &ft_ss, 0);
+
+	std::vector<int>::iterator itr_std = std_vec.begin();
+	ft::Vector<int>::iterator itr_ft = ft_vec.begin();
+	if (size > 2)
+	{
+		title("Iterator operator+ :");
+		std_ss << *(itr_std + 1);
+		ft_ss << *(itr_ft + 1);
+		check(&std_ss, &ft_ss, 0);
+		
+		title("Iterator operator+= :");
+		itr_std += 1;
+		itr_ft += 1;
+		std_ss << *itr_std;
+		ft_ss << *itr_ft;
+		check(&std_ss, &ft_ss, 0);
+		
+		title("Iterator operator- :");
+		std_ss << *(itr_std - 1);
+		ft_ss << *(itr_ft - 1);
+		check(&std_ss, &ft_ss, 0);
+		
+		title("Iterator operator-= :");
+		itr_std -= 1;
+		itr_ft -= 1;
+		std_ss << *itr_std;
+		ft_ss << *itr_ft;
+		check(&std_ss, &ft_ss, 0);
+	}
+
+	title("Iterator operator< :");
+	std_ss << (std_vec.begin() < std_vec.end());
+	ft_ss << (ft_vec.begin() < ft_vec.end());
+	check(&std_ss, &ft_ss, 0);
+
+	title("Iterator operator<= :");
+	std_ss << (std_vec.begin() <= std_vec.end());
+	ft_ss << (ft_vec.begin() <= ft_vec.end());
+	check(&std_ss, &ft_ss, 0);
+
+	title("Iterator operator> :");
+	std_ss << (std_vec.begin() > std_vec.end());
+	ft_ss << (ft_vec.begin() > ft_vec.end());
+	check(&std_ss, &ft_ss, 0);
+
+	title("Iterator operator>= :");
+	std_ss << (std_vec.begin() >= std_vec.end());
+	ft_ss << (ft_vec.begin() >= ft_vec.end());
 	check(&std_ss, &ft_ss, 0);
 }
 
@@ -463,38 +510,55 @@ void operator_test(int size)
 	check(&std_ss, &ft_ss, 0);
 }
 
+/*
+TODO Voir avec JJ pk les erreurs sont duplicate dans le makefile ?
+*/
+
 int main()
 {
 
 #if TEST_VECTOR == 0 || TEST_VECTOR == 1
+# ifndef SIZE
     constructor_test(1000); // OK Sur linux (juste chiant a afficher)
 	constructor_test(10);
 	constructor_test(5);
 	constructor_test(2);
 	constructor_test(1);
 	constructor_test(0);
+# else
+	constructor_test(SIZE);
+# endif
 #endif
 
 #if TEST_VECTOR == 0 || TEST_VECTOR == 2
+# ifndef SIZE
     element_access_test(1000); // OK Sur linux (juste chiant a afficher)
 	element_access_test(10);
 	element_access_test(5);
 	element_access_test(2);
 	element_access_test(1);
 	element_access_test(0);
+# else
+	element_access_test(SIZE);
+# endif
 #endif
 
 #if TEST_VECTOR == 0 || TEST_VECTOR == 3
+# ifndef SIZE
     iterator_test(1000); // OK Sur linux (juste chiant a afficher)
 	iterator_test(10);
 	iterator_test(5);
 	iterator_test(2);
 	iterator_test(1);
 	iterator_test(0);
+# else
+	iterator_test(SIZE);
+# endif
 #endif
 
 #if TEST_VECTOR == 0 || TEST_VECTOR == 4
 	// Autant de test pour demontrer que les tailles allouees sont les memes
+# ifndef SIZE
     capacity_test(1000); // OK Sur linux (juste chiant a afficher)
 	capacity_test(257);
 	capacity_test(255);
@@ -505,24 +569,35 @@ int main()
 	capacity_test(2);
 	capacity_test(1);
 	capacity_test(0);
+# else
+	capacity_test(SIZE);
+# endif
 #endif
 
 #if TEST_VECTOR == 0 || TEST_VECTOR == 5
+# ifndef SIZE
     modifiers_test(1000); // OK Sur linux (juste chiant a afficher)
 	modifiers_test(10);
 	modifiers_test(5);
 	modifiers_test(2);
 	modifiers_test(1);
 	modifiers_test(0);
+# else
+	modifiers_test(SIZE);
+# endif
 #endif
 
 #if TEST_VECTOR == 0 || TEST_VECTOR == 6
+# ifndef SIZE
     operator_test(1000); // OK Sur linux (juste chiant a afficher)
 	operator_test(10);
 	operator_test(5);
 	operator_test(2);
 	operator_test(1);
 	operator_test(0);
+# else
+	operator_test(SIZE);
+# endif
 #endif
 
     end_test();

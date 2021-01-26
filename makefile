@@ -9,7 +9,7 @@ STACK			=	stack_test
 VECTOR			=	vector_test
 
 # Test #
-TEST			=	$(LIST) $(STACK) $(QUEUE) $(MAP)
+TEST			=	$(LIST) $(STACK) $(QUEUE) $(VECTOR) $(MAP)
 
 # Path #
 TEST_DIR		=	test
@@ -40,7 +40,7 @@ VECTOR_MAIN		=	$(addprefix $(MAIN_DIR),/mainvector.cpp)
 
 # Compile #
 CC				=	clang++
-CFLAGS			=	-Wall -Wextra -Werror -g3
+CFLAGS			=	-Wall -Wextra -g3 -Werror -g3 -fsanitize=address
 CVERSION		=	-std=c++98
 LFLAGS  		=	-I $(INCS_DIR)
 CALLF			=	$(CC) $(CFLAGS) $(CVERSION)
@@ -59,7 +59,7 @@ $(OBJS_DIR)/%.o	:	%.cpp $(INCS)
 	$(CALLFLIB) -c $< -o $@
 
 # Start all tester #
-all_test		:	list stack queue map
+all_test		:	list stack queue vector map
 
 # Containers test #
 list			:	all $(LIST_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
