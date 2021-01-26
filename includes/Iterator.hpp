@@ -1,6 +1,17 @@
 #ifndef ITERATOR_HPP
 # define ITERATOR_HPP
 
+# include <memory>
+# include <iostream>
+# include <string>
+# include <stack>
+# include <deque>
+
+# ifdef __linux__
+#  include <limits>
+#  include <typeinfo>
+# endif
+
 namespace ft
 {
 	template <class T>	struct is_integral						{ typedef void *	type; };
@@ -454,29 +465,35 @@ namespace ft
 		map_pointer begin;
 		map_pointer end;
 
-		MapIterator(map_type ma) : begin(ma), end ()
+		MapIterator(map_pointer ma) : begin(ma), end(ma)
 		{
-			while (this->ma->left)
-				begin = ma->left;
-			while (this->ma->right)
-				end = ma->right;
+			while (this->begin->left)
+				begin = begin->left;
+			while (this->end->right)
+				end = end->right;
 			current = begin;
 		}
 
-		// MapIterator &operator++()
-		// {
-		// 	if (this->ma->right){
-		// 		current = ma->right;
-		// 		while (this->ma->left)
-		// 			current = ma->left;
-		// 	}
-		// }
+		MapIterator &operator++()
+		{
+			if (this->current->right){ // go droite si tu peux
+				current = current->right;
+				while (this->current->left) // go au max en bas a gauche
+					current = current->left;
+			}
+			else { // remonte tout les passages de droites jusqu'a gauche ou le centre sauf si cest la fin
+				while (current->parent && current == current->parent->right && current != this->end) // remonte all droite
+					current = current->parent;
+				if (current->parent && current == current->parent->left && current != this->end) // remonte un gauche
+					current = current->parent;
+			}
+		}
 	};
 
 	template < class T, class M >
 	class ConstMapIterator
 	{
 	};
-}
+};
 
 #endif

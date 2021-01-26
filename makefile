@@ -42,48 +42,39 @@ VECTOR_MAIN		=	$(addprefix $(MAIN_DIR),/mainvector.cpp)
 CC				=	clang++
 CFLAGS			=	-Wall -Wextra -g3 -Werror -g3 -fsanitize=address
 CVERSION		=	-std=c++98
-LFLAGS  		=	-I $(INCS_DIR)
+LFLAGS  		=	-I $(TEST_INCS) -I $(INCS_DIR)
 CALLF			=	$(CC) $(CFLAGS) $(CVERSION)
 CALLFLIB		=	$(CC) $(CFLAGS) $(CVERSION) $(LFLAGS) ${INPUT}
-$(info ${INPUT})
 
 # Defauilt Make #
 all				:	directories #ART
-
-# Stuff #
-$(NAME)			:	$(OBJS_PATH)
-	# ar rc $(NAME) $(OBJS_PATH)
-	# ranlib $(NAME)
-
-$(OBJS_DIR)/%.o	:	%.cpp $(INCS)
-	$(CALLFLIB) -c $< -o $@
 
 # Start all tester #
 all_test		:	list stack queue vector map
 
 # Containers test #
 list			:	all $(LIST_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
-	$(CALLFLIB) $(LIST_MAIN) $(TEST_MAIN) -I $(TEST_INCS) -o $(addprefix $(TEST_DIR)/,$(LIST))
+	$(CALLFLIB) $(LIST_MAIN) $(TEST_MAIN) -o $(addprefix $(TEST_DIR)/,$(LIST))
 	./$(addprefix $(TEST_DIR)/,$(LIST))
 
 # Containers test #
 stack			:	all $(STACK_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
-	$(CALLFLIB) $(STACK_MAIN) $(TEST_MAIN) -I $(TEST_INCS) -o $(addprefix $(TEST_DIR)/,$(STACK))
+	$(CALLFLIB) $(STACK_MAIN) $(TEST_MAIN) -o $(addprefix $(TEST_DIR)/,$(STACK))
 	./$(addprefix $(TEST_DIR)/,$(STACK))
 
 # Containers test #
 queue			:	all $(QUEUE_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
-	$(CALLFLIB) $(QUEUE_MAIN) $(TEST_MAIN) -I $(TEST_INCS) -o $(addprefix $(TEST_DIR)/,$(QUEUE))
+	$(CALLFLIB) $(QUEUE_MAIN) $(TEST_MAIN) -o $(addprefix $(TEST_DIR)/,$(QUEUE))
 	./$(addprefix $(TEST_DIR)/,$(QUEUE))
 
 # Containers test #
 map				:	all $(MAP_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
-	$(CALLFLIB) $(MAP_MAIN) $(TEST_MAIN) -I $(TEST_INCS) -o $(addprefix $(TEST_DIR)/,$(MAP))
+	$(CALLFLIB) $(MAP_MAIN) $(TEST_MAIN) -o $(addprefix $(TEST_DIR)/,$(MAP))
 	./$(addprefix $(TEST_DIR)/,$(MAP))
 
 # Containers test #
-vector				:	all $(VECTOR_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
-	$(CALLFLIB) $(VECTOR_MAIN) $(TEST_MAIN) -I $(TEST_INCS) -o $(addprefix $(TEST_DIR)/,$(VECTOR))
+vector			:	all $(VECTOR_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
+	$(CALLFLIB) $(VECTOR_MAIN) $(TEST_MAIN) -o $(addprefix $(TEST_DIR)/,$(VECTOR))
 	./$(addprefix $(TEST_DIR)/,$(VECTOR))
 
 # Make the Directories #

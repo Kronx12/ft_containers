@@ -2,6 +2,19 @@
 
 bool test_max_int(const int lhs) { return (lhs > 12 ? true : false); }
 
+void constructor_test(int size)
+{
+	title("Constructor size", size);
+
+
+	title("Defaut constructor");
+	std::map<std::string, int> std_map;
+	ft::Map<std::string, int> ft_map;
+
+	// describe_map(std_map, ft_map);
+
+}
+
 void map_test(int size)
 {
     title("Map", size);
@@ -56,7 +69,18 @@ void map_test(int size)
 
 int main()
 {
-    
+#if TEST_MAP == 0 || TEST_MAP == 1
+# ifndef SIZE
+    constructor_test(1000);
+	constructor_test(10);
+	constructor_test(5);
+	constructor_test(2);
+	constructor_test(1);
+	constructor_test(0);
+# else
+	constructor_test(SIZE);
+# endif
+#endif
     // constructor_test(1000); // OK Sur linux (juste chiant a afficher)
 	map_test(10);
 	map_test(5);

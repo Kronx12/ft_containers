@@ -1,8 +1,4 @@
 #include "Tester.hpp"
-#include "List.hpp"
-#include <list>
-#include <sstream>
-#include <cstdlib>
 
 // Use for show test result
 #ifndef SHOW

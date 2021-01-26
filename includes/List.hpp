@@ -1,16 +1,7 @@
 #ifndef LIST_HPP
 # define LIST_HPP
 
-# include <iostream>
-# include <memory>
-# include <string>
-# include <stack>
 # include "Iterator.hpp"
-
-# ifdef __linux__
-#  include <limits>
-#  include <typeinfo>
-# endif
 
 namespace ft
 {

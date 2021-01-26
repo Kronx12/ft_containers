@@ -1,8 +1,6 @@
 #ifndef QUEUE_HPP
 # define QUEUE_HPP
 
-# include <deque>
-
 namespace ft
 {
 	template< class T, class Container = std::deque<T> >
