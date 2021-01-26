@@ -103,7 +103,7 @@ namespace ft
 		// const_reverse_iterator rend() const;
 
 	// Capacity
-		// bool empty() const;
+		bool empty() const;
 		// size_type size() const;
 		// size_type max_size() const;
 
@@ -164,8 +164,8 @@ namespace ft
 		_capacity = len;
 	}*/
 
-	template< class Key, class T, class Compare, class Allocator >
-	Map<Key, T, Compare, Allocator>::Map() : _data(NULL), _size(0), _capacity(0), _alloc(Allocator()), _tree(NULL) {}
+	/*template< class Key, class T, class Compare, class Allocator >
+	Map<Key, T, Compare, Allocator>::Map() : _data(NULL), _size(0), _capacity(0), _alloc(Allocator()), _tree(NULL) {}*/
 
 	template< class Key, class T, class Compare, class Allocator >
 	Map<Key, T, Compare, Allocator>::Map(const Map<Key, T, Compare, Allocator>::key_compare& comp, const Map<Key, T, Compare, Allocator>::allocator_type& alloc)
