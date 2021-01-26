@@ -284,7 +284,8 @@ namespace ft
 			reference operator*() { return(_data[_index]); }
 			reference operator->() { return(_data[_index]); }
 
-			// VectorIterator<T> operator+(std::ptrdiff_t ptr) { return (); }
+			VectorIterator operator+(std::ptrdiff_t n) { return (VectorIterator(_data, _size, _index + n)); }
+			VectorIterator operator-(std::ptrdiff_t n) { return (VectorIterator(_data, _size, _index - n)); }
 
 			//Forward Specific Category
 			VectorIterator()
