@@ -23,7 +23,7 @@ namespace ft
 	template <>         struct is_integral<__uint128_t>			{ typedef int		type; };
 
 	template < class T, class L >
-	class ConstIterator;
+	class ConstListIterator;
 	template< class T >
 	class ConstVectorIterator;
 
@@ -77,7 +77,7 @@ namespace ft
 	};
 
 	template < class T, class L >
-	class Iterator
+	class ListIterator
 	{
 		public:
 			typedef L link_type;
@@ -93,65 +93,65 @@ namespace ft
 
 		public:
 			//BASICS
-			Iterator(link_pointer li) : current(li) {}
-			Iterator(Iterator const &rhs) : current(rhs.current) {}
-			Iterator(ConstIterator<T, L> const &rhs) : current(rhs.current) {}
-			~Iterator() {}
-			Iterator &operator=(Iterator const &rhs)
+			ListIterator(link_pointer li) : current(li) {}
+			ListIterator(ListIterator const &rhs) : current(rhs.current) {}
+			ListIterator(ConstListIterator<T, L> const &rhs) : current(rhs.current) {}
+			~ListIterator() {}
+			ListIterator &operator=(ListIterator const &rhs)
 			{
 				if (this == &rhs) return(*this);
-        		this->~Iterator();
-        		return *new(this) Iterator(rhs);
+        		this->~ListIterator();
+        		return *new(this) ListIterator(rhs);
 			}
-			Iterator &operator=(ConstIterator<T, L> const &rhs)
+			ListIterator &operator=(ConstListIterator<T, L> const &rhs)
 			{
 				if (this == &rhs) return(*this);
-        		this->~Iterator();
-        		return *new(this) Iterator(rhs);
+        		this->~ListIterator();
+        		return *new(this) ListIterator(rhs);
 			}
 
 			//BASICS INCREMENTATION
-			Iterator &operator++()
+			ListIterator &operator++()
 			{
 				this->current = this->current->next;
 				return(*this);
 			}
-			Iterator operator++(int)
+			ListIterator operator++(int)
 			{
-				Iterator tmp(*this);
+				ListIterator tmp(*this);
 				this->current = this->current->next;
 				return(tmp);
 			}
 
 			//Input Category
-			bool operator==(const Iterator & rhs) { return (this->current == rhs.current); }
-			bool operator!=(const Iterator & rhs) { return (current != rhs.current); }
-			bool operator==(const ConstIterator<T, L> & rhs) { return (this->current == rhs.current); }
-			bool operator!=(const ConstIterator<T, L> & rhs) { return (current != rhs.current); }
+			bool operator==(const ListIterator & rhs) { return (this->current == rhs.current); }
+			bool operator!=(const ListIterator & rhs) { return (current != rhs.current); }
+			bool operator==(const ConstListIterator<T, L> & rhs) { return (this->current == rhs.current); }
+			bool operator!=(const ConstListIterator<T, L> & rhs) { return (current != rhs.current); }
 			reference operator*() { return(this->current->value); }
 			reference operator->() { return(this->current->value); }
 
 			//Output Category ?????????????????????????? WHAT DO?
 
 			//Forward Specific Category
-			Iterator() : current(NULL) {}
+			ListIterator() : current(NULL) {}
 
 			//Bidirectional Category
-			Iterator &operator--()
+			ListIterator &operator--()
 			{
 				this->current = this->current->previous;
 				return(*this);
 			}
-			Iterator operator--(int)
+			ListIterator operator--(int)
 			{
-				Iterator tmp(*this);
+				ListIterator tmp(*this);
 				this->current = this->current->previous;
 				return(tmp);
 			}
 	};
 
 	template < class T, class L >
-	class ConstIterator
+	class ConstListIterator
 	{
 		public:
 			typedef L link_type;
@@ -167,57 +167,57 @@ namespace ft
 
 		public:
 			//BASICS
-			ConstIterator(link_pointer li) : current(li) {}
-			ConstIterator(ConstIterator const &rhs) : current(rhs.current) {}
-			ConstIterator(Iterator<T, L> const &rhs) : current(rhs.current) {}
-			~ConstIterator() {}
-			ConstIterator &operator=(ConstIterator const &rhs)
+			ConstListIterator(link_pointer li) : current(li) {}
+			ConstListIterator(ConstListIterator const &rhs) : current(rhs.current) {}
+			ConstListIterator(ListIterator<T, L> const &rhs) : current(rhs.current) {}
+			~ConstListIterator() {}
+			ConstListIterator &operator=(ConstListIterator const &rhs)
 			{
 				if (this == &rhs) return(*this);
-        		this->~ConstIterator();
-        		return *new(this) ConstIterator(rhs);
+        		this->~ConstListIterator();
+        		return *new(this) ConstListIterator(rhs);
 			}
 
-			ConstIterator &operator=(Iterator<T, L> const &rhs)
+			ConstListIterator &operator=(ListIterator<T, L> const &rhs)
 			{
 				if (this == &rhs) return(*this);
-        		this->~ConstIterator();
-        		return *new(this) ConstIterator(rhs);
+        		this->~ConstListIterator();
+        		return *new(this) ConstListIterator(rhs);
 			}
 
 			//BASICS INCREMENTATION
-			ConstIterator &operator++()
+			ConstListIterator &operator++()
 			{
 				this->current = this->current->next;
 				return(*this);
 			}
-			ConstIterator operator++(int)
+			ConstListIterator operator++(int)
 			{
-				ConstIterator tmp(*this);
+				ConstListIterator tmp(*this);
 				this->current = this->current->next;
 				return(tmp);
 			}
 
 			//Input Category
-			bool operator==(const ConstIterator & rhs) { return (this->current == rhs.current); }
-			bool operator!=(const ConstIterator & rhs) { return (current != rhs.current); }
-			bool operator==(const Iterator<T, L> & rhs) { return (this->current == rhs.current); }
-			bool operator!=(const Iterator<T, L> & rhs) { return (current != rhs.current); }
+			bool operator==(const ConstListIterator & rhs) { return (this->current == rhs.current); }
+			bool operator!=(const ConstListIterator & rhs) { return (current != rhs.current); }
+			bool operator==(const ListIterator<T, L> & rhs) { return (this->current == rhs.current); }
+			bool operator!=(const ListIterator<T, L> & rhs) { return (current != rhs.current); }
 			reference operator*() const { return(this->current->value); }
 			reference operator->() const { return(this->current->value); }
 
 			//Forward Specific Category
-			ConstIterator() { current = NULL; }
+			ConstListIterator() { current = NULL; }
 
 			//Bidirectional Category
-			ConstIterator &operator--()
+			ConstListIterator &operator--()
 			{
 				this->current = this->current->previous;
 				return(*this);
 			}
-			ConstIterator operator--(int)
+			ConstListIterator operator--(int)
 			{
-				ConstIterator tmp(*this);
+				ConstListIterator tmp(*this);
 				this->current = this->current->previous;
 				return(tmp);
 			}

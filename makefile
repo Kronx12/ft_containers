@@ -9,7 +9,7 @@ STACK			=	stack_test
 VECTOR			=	vector_test
 
 # Test #
-TEST			=	$(LIST) $(STACK) $(QUEUE) $(MAP)
+TEST			=	$(LIST) $(STACK) $(QUEUE) $(VECTOR) $(MAP)
 
 # Path #
 TEST_DIR		=	test
@@ -59,7 +59,7 @@ $(OBJS_DIR)/%.o	:	%.cpp $(INCS)
 	$(CALLFLIB) -c $< -o $@
 
 # Start all tester #
-all_test		:	list stack queue map
+all_test		:	list stack queue vector map
 
 # Containers test #
 list			:	all $(LIST_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
