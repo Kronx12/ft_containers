@@ -464,13 +464,17 @@ namespace ft
 		map_pointer current;
 		map_pointer begin;
 		map_pointer end;
+		map_pointer rbegin;
+		map_pointer rend;
 
-		MapIterator(map_pointer ma) : begin(ma), end(ma)
+		MapIterator(map_pointer ma) : begin(ma), rbegin(ma)
 		{
 			while (this->begin->left)
 				begin = begin->left;
-			while (this->end->right)
-				end = end->right;
+			while (this->rbegin->right)
+				rbegin = rbegin->right;
+			end = rbegin->right;
+			rend = begin->left;
 			current = begin;
 		}
 
@@ -478,7 +482,7 @@ namespace ft
 		{
 			if (this->current->right) // go droite si tu peux
 			{
-				if (!this->current->right == this->end)
+				if (!this->current->right == this->rbegin)
 				{
 					current = current->right;
 					while (this->current->left) // go au max en bas a gauche
@@ -487,9 +491,9 @@ namespace ft
 			}
 			else // remonte tout les passages de droites jusqu'a gauche ou le centre sauf si cest la fin
 			{
-				while (current->parent && current == current->parent->right && current != this->end) // remonte all droite
+				while (current->parent && current == current->parent->right && current != this->rbegin) // remonte all droite
 					current = current->parent;
-				if (current->parent && current == current->parent->left && current != this->end) // remonte un gauche
+				if (current->parent && current == current->parent->left && current != this->rbegin) // remonte un gauche
 					current = current->parent;
 			}
 		}
