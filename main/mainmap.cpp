@@ -128,9 +128,39 @@ int main()
 	title("FT MAP:\n");
 	m.debug_tree();
 
+
+// Size
 	std::cout << "std_size : " << mstd.size() << std::endl;
 	std::cout << "ft_size : " << m.size() << std::endl;
+	
+// Operator []
+	// std::cout << m[8] << std::endl;
+	// std::cout << mstd[8] << std::endl;
+	// TODO
 
+// Range
+	// std::pair<std::map<int,int>::iterator,std::map<int,int>::iterator> std_ret;
+	// std_ret = mstd.equal_range(8);
+
+	// std::cout << "lower bound points to: ";
+	// std::cout << std_ret.first->first << " => " << std_ret.first->second << '\n';
+
+	// std::cout << "upper bound points to: ";
+	// std::cout << std_ret.second->first << " => " << std_ret.second->second << '\n';
+
+
+	// std::pair<ft::Map<int,int>::iterator,ft::Map<int,int>::iterator> ft_ret;
+	// ft_ret = m.equal_range(8);
+
+	// std::cout << "lower bound points to: ";
+	// std::cout << ft_ret.first->first << " => " << ft_ret.first->second << '\n';
+
+	// std::cout << "upper bound points to: ";
+	// std::cout << ft_ret.second->first << " => " << ft_ret.second->second << '\n';
+	// TODO
+
+
+// Erase
 	title("FT MAP:\n");
 	m.erase(1);
 	m.debug_tree();
@@ -139,7 +169,6 @@ int main()
 	mstd.erase(1);
 	for (std::map<int, int>::iterator itr = mstd.begin(); itr != mstd.end(); itr++)
 		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
-	
 
     end_test();
 

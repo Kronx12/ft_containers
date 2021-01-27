@@ -463,6 +463,7 @@ namespace ft
 			typedef const value_type& const_reference;
 			typedef const_reference iterator_category;
 
+			std::pair<T, M> pair;
 			map_pointer current;
 			map_pointer begin;
 			map_pointer end;

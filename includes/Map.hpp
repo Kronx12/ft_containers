@@ -354,17 +354,19 @@ namespace ft
 	{
 		// Mtree<Key, T> *temp;
 
-		// temp = this->_data;
+		// temp = _data;
 		// while (temp)
 		// {
-		// 	if (temp->key == key)
-		// 		return (temp->value);
-		// 	else if (key_comp()(temp->value, key) < 0)
+		// 	if (temp->value->first == key)
+		// 		return (temp->value->second);
+		// 	else if (key_comp()(temp->value->first, key))
 		// 		temp = temp->left;
-		// 	else if (key_comp()(temp->value, key) > 0)
+		// 	else
 		// 		temp = temp->right;
 		// }
-		// return (temp->value);
+		// insert(std::pair<Key, T>(key, T()));
+		// operator[](key);
+		// return (temp->value->second);
 		(void)key;
 		// TODO
 	}
@@ -545,15 +547,16 @@ namespace ft
 	template< class Key, class T, class Compare, class Allocator >
 	typename Map<Key, T, Compare, Allocator>::const_iterator Map<Key, T, Compare, Allocator>::find(const Key &key) const
 	{
-		(void)key;
-		// TODO
+		for (iterator itr = begin(); itr != end(); itr++)
+			if (itr->first == key)
+				return (itr);
+		return (end());
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
 	typename Map<Key, T, Compare, Allocator>::size_type Map<Key, T, Compare, Allocator>::count(const Key &key) const
 	{
-		(void)key;
-		// TODO
+		return (find(key) != end());
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
