@@ -56,39 +56,65 @@ CALLFLIB		=	$(CC) $(CFLAGS) $(CVERSION) $(LFLAGS)
 # Defauilt Make #
 all				:	directories #ART
 
+# ifdef INPUT
+# 	@\rm -rf test/*
+# endif
+
 # Start all tester #
 all_test		:	list stack queue vector map
 
+# Restart exec #
+listrm			:
+ifdef INPUT
+	@\rm -rf test/$(LIST)
+endif
+
+vectorrm			:
+ifdef INPUT
+	@\rm -rf test/$(VECTOR)
+endif
+
+maprm			:
+ifdef INPUT
+	@\rm -rf test/$(MAP)
+endif
+
+stackrm			:
+ifdef INPUT
+	@\rm -rf test/$(STACK)
+endif
+
+queuerm			:
+ifdef INPUT
+	@\rm -rf test/$(QUEUE)
+endif
+
 # Containers test #
-list			:	all $(LIST_PATH)
+list			:	all listrm $(LIST_PATH)
 	./$(addprefix $(TEST_DIR)/,$(LIST))
 
 $(LIST_PATH)	: $(LIST_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
 	$(CALLFLIB) ${INPUT} $(LIST_MAIN) $(TEST_MAIN) -o $(LIST_PATH)
 
-# Containers test #
-stack			:	all $(STACK_PATH)
+stack			:	all stackrm $(STACK_PATH)
 	./$(addprefix $(TEST_DIR)/,$(STACK))
 
 $(STACK_PATH)	:	$(STACK_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
 	$(CALLFLIB) ${INPUT} $(STACK_MAIN) $(TEST_MAIN) -o $(addprefix $(TEST_DIR)/,$(STACK))
 
-# Containers test #
-queue			:	all $(QUEUE_PATH)
+queue			:	all queuerm $(QUEUE_PATH)
 	./$(addprefix $(TEST_DIR)/,$(QUEUE))
 
 $(QUEUE_PATH)	:	$(QUEUE_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
 	$(CALLFLIB) ${INPUT} $(QUEUE_MAIN) $(TEST_MAIN) -o $(addprefix $(TEST_DIR)/,$(QUEUE))
 
-# Containers test #
-map				:	all $(MAP_PATH)
+map				:	all maprm $(MAP_PATH)
 	./$(addprefix $(TEST_DIR)/,$(MAP))
 
 $(MAP_PATH)		:	$(MAP_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
 	$(CALLFLIB) ${INPUT} $(MAP_MAIN) $(TEST_MAIN) -o $(addprefix $(TEST_DIR)/,$(MAP))
 
-# Containers test #
-vector			:	all $(VECTOR_PATH)
+vector			:	all vectorrm $(VECTOR_PATH)
 	./$(addprefix $(TEST_DIR)/,$(VECTOR))
 
 $(VECTOR_PATH)	:	$(VECTOR_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
@@ -133,4 +159,4 @@ ART:
 		done ; echo ;                              \
 	done
 
-.PHONY			:	all fclean clean re directories ART list
+.PHONY			:	all fclean clean re directories ART list listrm vectorrm maprm stackrm queuerm
