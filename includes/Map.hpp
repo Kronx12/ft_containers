@@ -15,14 +15,6 @@ namespace ft
 			Mtree						*right;
 
 			Mtree() : value(NULL), parent(NULL), left(NULL), right(NULL) {};
-			Mtree(const std::pair< const Key, T > *val) : value(val), parent(NULL), left(NULL), right(NULL) {};
-			Mtree(Mtree *parent, const std::pair< const Key, T > *val, const char *dir) : value(val), parent(parent), left(NULL), right(NULL)
-			{
-				if (strcmp(dir, "left"))
-					parent->left = *this;
-				else
-					parent->right = *this;
-			};
 	};
 
 	template < class Key, class T, class Compare = std::less<Key>, class Allocator = std::allocator<std::pair<const Key,T> > >
@@ -160,7 +152,7 @@ namespace ft
 	// -------------------------------- Member functions --------------------------------
 	template< class Key, class T, class Compare, class Allocator >
 	Map<Key, T, Compare, Allocator>::Map(const Compare &comp, const Allocator &alloc)
-	: _data(NULL), _size(0), _alloc(alloc), _comp(comp)
+	: _data(NULL), _size(0), _alloc(alloc), _comp(comp), _end(new node_type()), _rend(new node_type())
 	{
 		// TODO
 	}
@@ -168,7 +160,7 @@ namespace ft
 	template< class Key, class T, class Compare, class Allocator >
 	template <class InputIterator>
 	Map<Key, T, Compare, Allocator>::Map(InputIterator first, InputIterator last, const key_compare &comp, const allocator_type &alloc)
-	: _data(NULL), _size(0), _alloc(alloc), _comp(comp)
+	: _data(NULL), _size(0), _alloc(alloc), _comp(comp), _end(new node_type()), _rend(new node_type())
 	{
 		for (; first != last; first++)
 			insert(*first);
