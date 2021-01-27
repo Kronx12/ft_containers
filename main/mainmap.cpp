@@ -18,6 +18,7 @@ void constructor_test(int size)
 void test()
 {
 	std::map<int, int> mstd;
+	ft::Map<int, int> m;
 
 	mstd.insert(std::pair<int, int>(15, 15));
 	mstd.insert(std::pair<int, int>(2, 2));
@@ -34,8 +35,30 @@ void test()
 	mstd.insert(std::pair<int, int>(20, 20));
 	mstd.insert(std::pair<int, int>(16, 16));
 
-	std::cout << mstd.upper_bound(5)->first << std::endl;
-	std::cout << mstd.upper_bound(17)->first << std::endl;
+	m.insert(std::pair<int, int>(15, 15));
+	m.insert(std::pair<int, int>(2, 2));
+	m.insert(std::pair<int, int>(1, 1));
+	m.insert(std::pair<int, int>(5, 5));
+	m.insert(std::pair<int, int>(4, 4));
+	m.insert(std::pair<int, int>(3, 3));
+	m.insert(std::pair<int, int>(10, 10));
+	m.insert(std::pair<int, int>(11, 11));
+	m.insert(std::pair<int, int>(12, 12));
+	m.insert(std::pair<int, int>(6, 6));
+	m.insert(std::pair<int, int>(8, 8));
+	m.insert(std::pair<int, int>(17, 17));
+	m.insert(std::pair<int, int>(20, 20));
+	m.insert(std::pair<int, int>(16, 16));
+
+	std::cout << "Upper bound : (std) " << mstd.upper_bound(5)->first << std::endl;
+	std::cout << "Upper bound : (std) " << mstd.upper_bound(17)->first << std::endl;
+	// std::cout << "Upper bound : (ft)  " << m.upper_bound(5)->first << std::endl;
+	// std::cout << "Upper bound : (ft)  " << m.upper_bound(17)->first << std::endl;
+
+	std::cout << "Lower bound : (std) " << mstd.lower_bound(5)->first << std::endl;
+	std::cout << "Lower bound : (std) " << mstd.lower_bound(17)->first << std::endl;
+	// std::cout << "Lower bound : (ft)  " << m.lower_bound(5)->first << std::endl;
+	// std::cout << "Lower bound : (ft)  " << m.lower_bound(17)->first << std::endl;
 }
 
 // void map_test(int size)
