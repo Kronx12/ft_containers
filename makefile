@@ -51,7 +51,7 @@ CFLAGS			=	-Wall -Wextra -g3 -Werror -g3 -fsanitize=address
 CVERSION		=	-std=c++98
 LFLAGS  		=	-I $(TEST_INCS) -I $(INCS_DIR)
 CALLF			=	$(CC) $(CFLAGS) $(CVERSION)
-CALLFLIB		=	$(CC) $(CFLAGS) $(CVERSION) $(LFLAGS) ${INPUT}
+CALLFLIB		=	$(CC) $(CFLAGS) $(CVERSION) $(LFLAGS)
 
 # Defauilt Make #
 all				:	directories #ART
@@ -64,35 +64,35 @@ list			:	all $(LIST_PATH)
 	./$(addprefix $(TEST_DIR)/,$(LIST))
 
 $(LIST_PATH)	: $(LIST_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
-	$(CC) $(CFLAGS) $(CVERSION) $(LFLAGS) ${INPUT} $(LIST_MAIN) $(TEST_MAIN) -o $(LIST_PATH)
+	$(CALLFLIB) ${INPUT} $(LIST_MAIN) $(TEST_MAIN) -o $(LIST_PATH)
 
 # Containers test #
 stack			:	all $(STACK_PATH)
 	./$(addprefix $(TEST_DIR)/,$(STACK))
 
 $(STACK_PATH)	:	$(STACK_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
-	$(CALLFLIB) $(STACK_MAIN) $(TEST_MAIN) -o $(addprefix $(TEST_DIR)/,$(STACK))
+	$(CALLFLIB) ${INPUT} $(STACK_MAIN) $(TEST_MAIN) -o $(addprefix $(TEST_DIR)/,$(STACK))
 
 # Containers test #
 queue			:	all $(QUEUE_PATH)
 	./$(addprefix $(TEST_DIR)/,$(QUEUE))
 
 $(QUEUE_PATH)	:	$(QUEUE_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
-	$(CALLFLIB) $(QUEUE_MAIN) $(TEST_MAIN) -o $(addprefix $(TEST_DIR)/,$(QUEUE))
+	$(CALLFLIB) ${INPUT} $(QUEUE_MAIN) $(TEST_MAIN) -o $(addprefix $(TEST_DIR)/,$(QUEUE))
 
 # Containers test #
 map				:	all $(MAP_PATH)
 	./$(addprefix $(TEST_DIR)/,$(MAP))
 
 $(MAP_PATH)		:	$(MAP_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
-	$(CALLFLIB) $(MAP_MAIN) $(TEST_MAIN) -o $(addprefix $(TEST_DIR)/,$(MAP))
+	$(CALLFLIB) ${INPUT} $(MAP_MAIN) $(TEST_MAIN) -o $(addprefix $(TEST_DIR)/,$(MAP))
 
 # Containers test #
 vector			:	all $(VECTOR_PATH)
 	./$(addprefix $(TEST_DIR)/,$(VECTOR))
 
 $(VECTOR_PATH)	:	$(VECTOR_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
-	$(CALLFLIB) $(VECTOR_MAIN) $(TEST_MAIN) -o $(addprefix $(TEST_DIR)/,$(VECTOR))
+	$(CALLFLIB) ${INPUT} $(VECTOR_MAIN) $(TEST_MAIN) -o $(addprefix $(TEST_DIR)/,$(VECTOR))
 
 # Make the Directories #
 directories		:
