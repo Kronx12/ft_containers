@@ -500,6 +500,24 @@ namespace ft
 						current = current->parent;
 				}
 			}
+
+			MapIterator &operator--()
+			{
+				if (this->current->left) // go au au max a droite de la gauche en bas
+				{
+					current = current->left;
+					while (this->current->right) // en prenant tout les chemins de droite
+						current = current->right;
+				}
+				else if (current->left != this->begin && curent->parent) // remonte 
+				{
+					// remonte tant que pas branche de droite
+					while (current->parent && current == current->parent->left) // remonte tout les gauches
+						current = current->parent;
+					if (current != this->begin) // remonte une fois si cest pas le last
+						current = current->parent;
+				}
+			}
 	};
 
 	template < class T, class M >
