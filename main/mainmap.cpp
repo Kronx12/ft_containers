@@ -89,19 +89,6 @@ int main()
 	// map_test(0);
 
 	ft::Map<int, int> m;
-
-	m.insert(std::pair<int, int>(1, 54));
-	m.insert(std::pair<int, int>(2, 152));
-	m.insert(std::pair<int, int>(3, 10));
-	m.insert(std::pair<int, int>(4, 34));
-	m.insert(std::pair<int, int>(-1, 34));
-	m.insert(std::pair<int, int>(-2, 34));
-	m.insert(std::pair<int, int>(9, 34));
-	m.insert(std::pair<int, int>(100, 34));
-	m.insert(std::pair<int, int>(12, 34));
-
-	m.debug_tree();
-
 	std::map<int, int> mstd;
 
 	mstd.insert(std::pair<int, int>(1, 54));
@@ -113,7 +100,46 @@ int main()
 	mstd.insert(std::pair<int, int>(9, 34));
 	mstd.insert(std::pair<int, int>(100, 34));
 	mstd.insert(std::pair<int, int>(12, 34));
+	mstd.insert(std::pair<int, int>(5, 34));
+	mstd.insert(std::pair<int, int>(6, 34));
+	mstd.insert(std::pair<int, int>(7, 34));
+	mstd.insert(std::pair<int, int>(8, 34));
+	mstd.insert(std::pair<int, int>(8, 35));
 
+	m.insert(std::pair<int, int>(1, 54));
+	m.insert(std::pair<int, int>(2, 152));
+	m.insert(std::pair<int, int>(3, 10));
+	m.insert(std::pair<int, int>(4, 34));
+	m.insert(std::pair<int, int>(-1, 34));
+	m.insert(std::pair<int, int>(-2, 34));
+	m.insert(std::pair<int, int>(9, 34));
+	m.insert(std::pair<int, int>(100, 34));
+	m.insert(std::pair<int, int>(12, 34));
+	m.insert(std::pair<int, int>(5, 34));
+	m.insert(std::pair<int, int>(6, 34));
+	m.insert(std::pair<int, int>(7, 34));
+	m.insert(std::pair<int, int>(8, 34));
+	m.insert(std::pair<int, int>(8, 35));
+
+	title("STD MAP:\n");
+	for (std::map<int, int>::iterator itr = mstd.begin(); itr != mstd.end(); itr++)
+		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
+
+	title("FT MAP:\n");
+	m.debug_tree();
+
+	std::cout << "std_size : " << mstd.size() << std::endl;
+	std::cout << "ft_size : " << m.size() << std::endl;
+
+	title("FT MAP:\n");
+	m.erase(1);
+	m.debug_tree();
+
+	title("STD MAP:\n");
+	mstd.erase(1);
+	for (std::map<int, int>::iterator itr = mstd.begin(); itr != mstd.end(); itr++)
+		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
+	
 
     end_test();
 
