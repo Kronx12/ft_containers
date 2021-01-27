@@ -178,8 +178,9 @@ int main()
 	title("FT MAP:\n");
 	m.debug_tree();
 
-
 // Size
+
+	title("FT MAP (SIZE):\n");
 	std::cout << "std_size : " << mstd.size() << std::endl;
 	std::cout << "ft_size : " << m.size() << std::endl;
 	
@@ -209,15 +210,18 @@ int main()
 	// std::cout << ft_ret.second->first << " => " << ft_ret.second->second << '\n';
 	// // TODO
 
-// Erase
-	title("FT MAP:\n");
-	m.erase(1);
-	m.debug_tree();
+	title("FT MAP (TREE):\n");
+	m.put_tree();
 
-	title("STD MAP:\n");
-	mstd.erase(1);
-	for (std::map<int, int>::iterator itr = mstd.begin(); itr != mstd.end(); itr++)
-		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
+// Erase
+	// title("FT MAP:\n");
+	// m.erase(1);
+	// m.debug_tree();
+
+	// title("STD MAP:\n");
+	// mstd.erase(1);
+	// for (std::map<int, int>::iterator itr = mstd.begin(); itr != mstd.end(); itr++)
+	// 	std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
 
     end_test();
 	test();
