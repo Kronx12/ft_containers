@@ -36,6 +36,7 @@ void constructor_test(int size)
 // 	std::map<char, int> m2;
 // 	m2['b'] = 26 ;
 // 	m2['y'] = 24 ;
+// 	m2['y'] = 22 ;
 // 	m2['t'] = 25 ;
 // 	m2['u'] = 23 ;
 // 	m2['u'] = 24 ;
@@ -122,8 +123,10 @@ int main()
 	m.insert(std::pair<int, int>(8, 35));
 
 	title("STD MAP:\n");
-	for (std::map<int, int>::iterator itr = mstd.begin(); itr != mstd.end(); itr++)
+	std::map<int, int>::iterator itr;
+	for (itr = mstd.begin(); itr != mstd.end(); itr++)
 		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
+	// itr++;
 
 	title("FT MAP:\n");
 	m.debug_tree();
@@ -157,8 +160,7 @@ int main()
 
 	// std::cout << "upper bound points to: ";
 	// std::cout << ft_ret.second->first << " => " << ft_ret.second->second << '\n';
-	// TODO
-
+	// // TODO
 
 // Erase
 	title("FT MAP:\n");
