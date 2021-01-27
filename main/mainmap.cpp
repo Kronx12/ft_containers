@@ -139,35 +139,37 @@ int main()
 	ft::Map<int, int> m;
 	std::map<int, int> mstd;
 
-	mstd.insert(std::pair<int, int>(1, 54));
-	mstd.insert(std::pair<int, int>(2, 152));
-	mstd.insert(std::pair<int, int>(3, 10));
-	mstd.insert(std::pair<int, int>(4, 34));
-	mstd.insert(std::pair<int, int>(-1, 34));
-	mstd.insert(std::pair<int, int>(-2, 34));
-	mstd.insert(std::pair<int, int>(9, 34));
-	mstd.insert(std::pair<int, int>(100, 34));
-	mstd.insert(std::pair<int, int>(12, 34));
-	mstd.insert(std::pair<int, int>(5, 34));
-	mstd.insert(std::pair<int, int>(6, 34));
-	mstd.insert(std::pair<int, int>(7, 34));
-	mstd.insert(std::pair<int, int>(8, 34));
-	mstd.insert(std::pair<int, int>(8, 35));
-
-	m.insert(std::pair<int, int>(1, 54));
-	m.insert(std::pair<int, int>(2, 152));
-	m.insert(std::pair<int, int>(3, 10));
-	m.insert(std::pair<int, int>(4, 34));
-	m.insert(std::pair<int, int>(-1, 34));
-	m.insert(std::pair<int, int>(-2, 34));
-	m.insert(std::pair<int, int>(9, 34));
-	m.insert(std::pair<int, int>(100, 34));
-	m.insert(std::pair<int, int>(12, 34));
-	m.insert(std::pair<int, int>(5, 34));
-	m.insert(std::pair<int, int>(6, 34));
-	m.insert(std::pair<int, int>(7, 34));
-	m.insert(std::pair<int, int>(8, 34));
-	m.insert(std::pair<int, int>(8, 35));
+	mstd.insert(std::pair<int, int>(10, 1));
+	mstd.insert(std::pair<int, int>(5, 2));
+	mstd.insert(std::pair<int, int>(3, 3));
+	mstd.insert(std::pair<int, int>(2, 4));
+	mstd.insert(std::pair<int, int>(4, 5));
+	mstd.insert(std::pair<int, int>(7, 6));
+	mstd.insert(std::pair<int, int>(6, 7));
+	mstd.insert(std::pair<int, int>(8, 8));
+	mstd.insert(std::pair<int, int>(15, 9));
+	mstd.insert(std::pair<int, int>(13, 10));
+	mstd.insert(std::pair<int, int>(12, 11));
+	mstd.insert(std::pair<int, int>(14, 12));
+	mstd.insert(std::pair<int, int>(17, 13));
+	mstd.insert(std::pair<int, int>(16, 14));
+	mstd.insert(std::pair<int, int>(18, 15));
+	
+	m.insert(std::pair<int, int>(10, 1));
+	m.insert(std::pair<int, int>(5, 2));
+	m.insert(std::pair<int, int>(3, 3));
+	m.insert(std::pair<int, int>(2, 4));
+	m.insert(std::pair<int, int>(4, 5));
+	m.insert(std::pair<int, int>(7, 6));
+	m.insert(std::pair<int, int>(6, 7));
+	m.insert(std::pair<int, int>(8, 8));
+	m.insert(std::pair<int, int>(15, 9));
+	m.insert(std::pair<int, int>(13, 10));
+	m.insert(std::pair<int, int>(12, 11));
+	m.insert(std::pair<int, int>(14, 12));
+	m.insert(std::pair<int, int>(17, 13));
+	m.insert(std::pair<int, int>(16, 14));
+	m.insert(std::pair<int, int>(18, 15));
 
 	title("STD MAP:\n");
 	std::map<int, int>::iterator itr;
@@ -189,41 +191,75 @@ int main()
 	// std::cout << mstd[8] << std::endl;
 	// TODO
 
-// Range
-	// std::pair<std::map<int,int>::iterator,std::map<int,int>::iterator> std_ret;
-	// std_ret = mstd.equal_range(8);
+	title("STD MAP erase big daddy:[10]\n");
+	mstd.erase(10);
+	for (std::map<int, int>::iterator itr = mstd.begin(); itr != mstd.end(); itr++)
+		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
 
-	// std::cout << "lower bound points to: ";
-	// std::cout << std_ret.first->first << " => " << std_ret.first->second << '\n';
+	title("FT MAP erase big daddy:[10]\n");
+	m.erase(10);
+	m.debug_tree();
 
-	// std::cout << "upper bound points to: ";
-	// std::cout << std_ret.second->first << " => " << std_ret.second->second << '\n';
+	title("STD MAP erase leftmost loner:[2]\n");
+	mstd.erase(2);
+	for (std::map<int, int>::iterator itr = mstd.begin(); itr != mstd.end(); itr++)
+		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
 
+	title("FT MAP erase leftmost loner:[2]\n");
+	m.erase(2);
+	m.debug_tree();
 
-	// std::pair<ft::Map<int,int>::iterator,ft::Map<int,int>::iterator> ft_ret;
-	// ft_ret = m.equal_range(8);
+	title("STD MAP erase leftmost parent(rightchild):[3]\n");
+	mstd.erase(3);
+	for (std::map<int, int>::iterator itr = mstd.begin(); itr != mstd.end(); itr++)
+		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
 
-	// std::cout << "lower bound points to: ";
-	// std::cout << ft_ret.first->first << " => " << ft_ret.first->second << '\n';
+	title("FT MAP erase leftmost parent(rightchild):[3]\n");
+	m.erase(3);
+	m.debug_tree();
 
-	// std::cout << "upper bound points to: ";
-	// std::cout << ft_ret.second->first << " => " << ft_ret.second->second << '\n';
-	// // TODO
+	title("STD MAP erase rightmost loner:[18]\n");
+	mstd.erase(18);
+	for (std::map<int, int>::iterator itr = mstd.begin(); itr != mstd.end(); itr++)
+		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
 
-	title("FT MAP (TREE):\n");
-	m.put_tree();
+	title("FT MAP erase rightmost loner:[18]\n");
+	m.erase(18);
+	m.debug_tree();
 
-// Erase
-	// title("FT MAP:\n");
-	// m.erase(1);
-	// m.debug_tree();
+	title("STD MAP erase rightmost parent(leftchild):[17]\n");
+	mstd.erase(17);
+	for (std::map<int, int>::iterator itr = mstd.begin(); itr != mstd.end(); itr++)
+		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
 
-	// title("STD MAP:\n");
-	// mstd.erase(1);
-	// for (std::map<int, int>::iterator itr = mstd.begin(); itr != mstd.end(); itr++)
-	// 	std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
+	title("FT MAP erase rightmost parent(leftchild):[17]\n");
+	m.erase(17);
+	m.debug_tree();
+
+	title("STD MAP erase non existing:[18]\n");
+	mstd.erase(18);
+	for (std::map<int, int>::iterator itr = mstd.begin(); itr != mstd.end(); itr++)
+		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
+
+	title("FT MAP erase non existing:[18]\n");
+	m.erase(18);
+	m.debug_tree();
+
+	title("STD MAP erase spam:\n");
+	mstd.erase(6);
+	mstd.erase(13);
+	mstd.erase(15);
+	mstd.erase(8);
+	for (std::map<int, int>::iterator itr = mstd.begin(); itr != mstd.end(); itr++)
+		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
+
+	title("FT MAP erase spam:\n");
+	m.erase(6);
+	m.erase(13);
+	m.erase(15);
+	m.erase(8);
+	m.debug_tree();
+
 
     end_test();
-	test();
-
 }

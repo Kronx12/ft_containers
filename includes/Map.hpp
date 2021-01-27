@@ -78,11 +78,11 @@ namespace ft
 			// TODO Remove
 			void debug_leaf(node_type *ptr);
 			void debug_tree();
-			static void grapher(void *item, int current_level, int is_first_elem);
+			static void grapher(void *item, int current_level, bool side);
 			void put_tree();
-			void call(Mtree<Key, T> *root, int current_level, int *levels, void (*applyf)(void *item, int current_level, int is_first_elem));
+			void call(Mtree<Key, T> *root, int current_level, bool side, void (*applyf)(void *item, int current_level, bool side));
 			int btree_level_count(Mtree<Key, T> *root);
-			void btree_apply_by_level(Mtree<Key, T> *root, void (*applyf)(void *item, int current_level, int is_first_elem));
+			void btree_apply_by_level(Mtree<Key, T> *root, void (*applyf)(void *item, int current_level, bool side));
 
 			// -------------------------------- Member functions --------------------------------
 			explicit Map(const Compare &comp = key_compare(), const Allocator &alloc = allocator_type());
@@ -317,10 +317,10 @@ namespace ft
 	template< class Key, class T, class Compare, class Allocator >
 	void Map<Key, T, Compare, Allocator>::debug_leaf(node_type *ptr)
 	{
-		if (ptr->left != NULL)
+		if (ptr->left != NULL&& ptr->left != _rend)
 			debug_leaf(ptr->left);
 		std::cout << "{ " << ptr->value->first << " : " << ptr->value->second << " }\n";
-		if (ptr->right != NULL)
+		if (ptr->right != NULL && ptr->right != _end)
 			debug_leaf(ptr->right);
 	}
 
@@ -392,40 +392,97 @@ namespace ft
 	template< class Key, class T, class Compare, class Allocator >
 	void Map<Key, T, Compare, Allocator>::p_erase_node(node_type *ptr, const key_type &key)
 	{
+		if (ptr == NULL)
+			return ;
 		if (ptr->value->first == key)
 		{
-			if (ptr->parent != NULL)
+			if (ptr->left == NULL && ptr->right == NULL)
 			{
-				if (ptr->parent->left == ptr)
-				{
-					if (ptr->right)
-						ptr->parent->left = ptr->right;
-					else
-						ptr->parent->left = ptr->left;
-				}
-				else if (ptr->parent->right == ptr)
-				{
-					if (ptr->right)
-						ptr->parent->right = ptr->right;
-					else
-						ptr->parent->right = ptr->left;
-				}
+				if (ptr->parent && ptr->parent->left == ptr)
+					ptr->parent->left = NULL;
+				else if (ptr->parent)
+					ptr->parent->right = NULL;
+				_alloc.destroy(ptr->value);
+				_alloc.deallocate(ptr->value, 1);
+				delete ptr;
+				_size--;
 			}
 			else
 			{
-				if (ptr->right != NULL)
-					_data = ptr->right;
-				else if (ptr->left != NULL)
-					_data = ptr->left;
+				node_type *tmp_parent = ptr->parent;
+				bool right;
+				node_type *tmp_left = ptr->left;
+				node_type *tmp_right = ptr->right;
+				node_type *tmp = tmp_right;
+
+				if (ptr->parent)
+					right = (ptr == ptr->parent->right);
+				_alloc.destroy(ptr->value);
+				_alloc.deallocate(ptr->value, 1);
+				delete ptr;
+				_size--;
+				if (tmp_right && tmp_right != _end)
+				{
+					tmp = tmp_right;
+					while (tmp->left)
+						tmp = tmp->left;
+					if (!(tmp == tmp_right))
+					{
+						if (tmp == tmp->parent->right)
+							tmp->parent->right = tmp->right;
+						else
+							tmp->parent->left = tmp->right;
+						tmp->right = tmp_right;
+					}
+					else
+						tmp->right = tmp_right->right;
+					tmp->left = tmp_left;
+					if (tmp_parent)
+					{
+						if (right)
+							tmp_parent->right = tmp;
+						else
+							tmp_parent->left = tmp;
+					}
+					else
+						_data = tmp;
+					tmp->parent = tmp_parent;
+				}
+				else if (tmp_left != _rend)
+				{
+					tmp = tmp_left;
+					tmp->parent = tmp_parent;
+					if (!tmp_parent)
+						_data = tmp;
+					else
+					{
+						if (right)
+							tmp_parent->right = tmp;
+						else
+							tmp_parent->left = tmp;
+					}
+					if (tmp_right == _end)
+					{
+						node_type *tmp2 = tmp;
+						while (tmp2->right)
+							tmp2 = tmp2->right;
+						tmp2->right = _end;
+						_end->parent = tmp2;
+					}
+				}
 				else
-					_data = NULL;
+				{
+					_data = _end;
+					_end->left = _rend;
+					_rend->parent = _end;
+				}
+				if (tmp_left)
+					tmp_left->parent = tmp;
+				if (tmp_right)
+					tmp_right->parent = tmp;
 			}
-			_alloc.destroy(ptr->value);
-			_alloc.deallocate(ptr->value, 1);
-			delete ptr;
-			_size--;
 		}
-		else if (_comp(key, ptr->value->first))
+		else if (key_comp()(key, ptr->value->first))
 			p_erase_node(ptr->left, key);
 		else
 			p_erase_node(ptr->right, key);
@@ -599,12 +656,24 @@ namespace ft
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
-	void Map<Key, T, Compare, Allocator>::grapher(void *item, int current_level, int is_first_elem)
+	void Map<Key, T, Compare, Allocator>::grapher(void *item, int current_level, bool side)
 	{
-		Mtree<Key, T> *tmp = static_cast<Mtree<Key, T> *>(item);
-		std::cout << current_level << " | " << is_first_elem << "\n";
-		// std::cout << tmp->value->first << " | " << tmp->value->second << "\n";
-		(void)tmp;
+		std::pair<Key, T> *pair_kv = static_cast<std::pair<Key, T> *>(item);
+		if (current_level == 0)
+		{
+			std::cout << " " << pair_kv->first << "\n";
+			return;
+		}
+
+		for (int i = 0; i < current_level - 1; i++)
+			std::cout << " │  ";
+		if (!side)
+			std::cout << " └──";
+		else
+			std::cout << " ┌──";
+		// for (int i = 0; i < current_level - 1; i++)
+		// 	std::cout << "───";
+		std::cout << " " << pair_kv->first << "\n";
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
@@ -614,20 +683,13 @@ namespace ft
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
-	void Map<Key, T, Compare, Allocator>::call(Mtree<Key, T> *root, int current_level, int *levels, void (*applyf)(void *item, int current_level, int is_first_elem))
+	void Map<Key, T, Compare, Allocator>::call(Mtree<Key, T> *root, int current_level, bool side, void (*applyf)(void *item, int current_level, bool side))
 	{
-		int	is_first_elem;
-
-		is_first_elem = 1;
-		if (levels[current_level] == 1)
-			is_first_elem = 0;
-		else
-			levels[current_level] = 1;
-		applyf(root->value, current_level, is_first_elem);
-		if (root->left)
-			call(root->left, current_level + 1, levels, applyf);
 		if (root->right)
-			call(root->right, current_level + 1, levels, applyf);
+			call(root->right, current_level + 1, 1, applyf);
+		applyf(root->value, current_level, side);
+		if (root->left)
+			call(root->left, current_level + 1, 0, applyf);
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
@@ -646,21 +708,11 @@ namespace ft
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
-	void Map<Key, T, Compare, Allocator>::btree_apply_by_level(Mtree<Key, T> *root, void (*applyf)(void *item, int current_level, int is_first_elem))
+	void Map<Key, T, Compare, Allocator>::btree_apply_by_level(Mtree<Key, T> *root, void (*applyf)(void *item, int current_level, bool side))
 	{
-		int	count;
-		int	*levels;
-		int	i;
-
 		if (!root)
 			return ;
-		count = btree_level_count(root);
-		if (!(levels = (int*)malloc(sizeof(int) * count)))
-			return ;
-		i = 0;
-		while (i < count)
-			levels[i++] = 0;
-		call(root, 0, levels, applyf);
+		call(root, 0, 0, applyf);
 	}
 };
 
