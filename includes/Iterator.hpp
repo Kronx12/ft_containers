@@ -512,7 +512,7 @@ namespace ft
 			{
 				if (this->current->right) // go droite si tu peux
 				{
-					if (!this->current->right == this->rbegin)
+					if (this->current->right != this->rbegin)
 					{
 						current = current->right;
 						while (this->current->left) // go au max en bas a gauche
