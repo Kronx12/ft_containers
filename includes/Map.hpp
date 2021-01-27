@@ -78,10 +78,10 @@ namespace ft
 			node_type *_rbegin;			
 
 			// Recursive inserter
-			void erase_node_private(node_type *ptr, const key_type &key);
-			iterator insert_node_private(const value_type &value, node_type *ptr);
+			void p_erase_node(node_type *ptr, const key_type &key);
+			iterator p_insert_node(const value_type &value, node_type *ptr);
 			// Recursive delete
-			void deallocate_tree(node_type *node);
+			void p_deallocate_tree(node_type *node);
 
 		public:
 
@@ -198,12 +198,12 @@ namespace ft
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
-	void Map<Key, T, Compare, Allocator>::deallocate_tree(node_type *node)
+	void Map<Key, T, Compare, Allocator>::p_deallocate_tree(node_type *node)
 	{
 		if (node == NULL)
 			return;
-		deallocate_tree(node->left);
-		deallocate_tree(node->right);
+		p_deallocate_tree(node->left);
+		p_deallocate_tree(node->right);
 		_alloc.destroy(node->value);
 		_alloc.deallocate(node->value, 1);
 		delete node;
@@ -212,7 +212,7 @@ namespace ft
 	template< class Key, class T, class Compare, class Allocator >
 	Map<Key, T, Compare, Allocator>::~Map()
 	{
-		deallocate_tree(_data);
+		p_deallocate_tree(_data);
 		// TODO
 	}
 			
@@ -350,21 +350,21 @@ namespace ft
 
 	// -------------------------------- Element acces --------------------------------
 	template< class Key, class T, class Compare, class Allocator >
-	T &Map<Key, T, Compare, Allocator>::operator[]( const Key &key )
+	typename Map<Key, T, Compare, Allocator>::mapped_type &Map<Key, T, Compare, Allocator>::operator[]( const Key &key )
 	{
-		// Mtree<Key, T> *temp;
+		 Mtree<Key, T> *temp;
 
-		// temp = this->_data;
-		// while (temp)
-		// {
-		// 	if (temp->key == key)
-		// 		return (temp->value);
-		// 	else if (key_comp()(temp->value, key) < 0)
-		// 		temp = temp->left;
-		// 	else if (key_comp()(temp->value, key) > 0)
-		// 		temp = temp->right;
-		// }
-		// return (temp->value);
+		 temp = this->_data;
+		 while (temp)
+		 {
+		 	if (temp->value->first == key)
+		 		return (temp->value->second);
+		 	else if (key_comp()(temp->value->first, key))
+		 		temp = temp->left;
+		 	else
+		 		temp = temp->right;
+		 }
+		 return (temp->value->second);
 		(void)key;
 		// TODO
 	}
@@ -373,10 +373,10 @@ namespace ft
 	template< class Key, class T, class Compare, class Allocator >
 	void Map<Key, T, Compare, Allocator>::debug_leaf(node_type *ptr)
 	{
-		if (ptr->left != NULL)
+		if (ptr->left != NULL&& ptr->left != _rend)
 			debug_leaf(ptr->left);
 		std::cout << "{ " << ptr->value->first << " : " << ptr->value->second << " }\n";
-		if (ptr->right != NULL)
+		if (ptr->right != NULL && ptr->right != _end)
 			debug_leaf(ptr->right);
 	}
 
@@ -387,7 +387,7 @@ namespace ft
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
-	typename Map<Key, T, Compare, Allocator>::iterator Map<Key, T, Compare, Allocator>::insert_node_private(const value_type &value, node_type *ptr)
+	typename Map<Key, T, Compare, Allocator>::iterator Map<Key, T, Compare, Allocator>::p_insert_node(const value_type &value, node_type *ptr)
 	{
 		value_compare tmp_cmp = value_comp();
 		if (_data == NULL)
@@ -403,7 +403,7 @@ namespace ft
 		else if (tmp_cmp(value, *ptr->value))
 		{
 			if (ptr->left != NULL)
-				insert_node_private(value, ptr->left);
+				p_insert_node(value, ptr->left);
 			else
 			{
 				ptr->left = new node_type();
@@ -417,7 +417,7 @@ namespace ft
 		else
 		{
 			if (ptr->right != NULL)
-				insert_node_private(value, ptr->right);
+				p_insert_node(value, ptr->right);
 			else
 			{
 				ptr->right = new node_type();
@@ -434,7 +434,7 @@ namespace ft
 	template< class Key, class T, class Compare, class Allocator >
 	std::pair<typename Map<Key, T, Compare, Allocator>::iterator, bool> Map<Key, T, Compare, Allocator>::insert(const value_type &value)
 	{
-		return (std::pair<iterator, bool>(insert_node_private(value, _data), true));
+		return (std::pair<iterator, bool>(p_insert_node(value, _data), true));
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
@@ -446,45 +446,102 @@ namespace ft
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
-	void Map<Key, T, Compare, Allocator>::erase_node_private(node_type *ptr, const key_type &key)
+	void Map<Key, T, Compare, Allocator>::p_erase_node(node_type *ptr, const key_type &key)
 	{
+		if (ptr == NULL)
+			return ;
 		if (ptr->value->first == key)
 		{
-			if (ptr->parent != NULL)
+			if (ptr->left == NULL && ptr->right == NULL)
 			{
-				if (ptr->parent->left == ptr)
-				{
-					if (ptr->right)
-						ptr->parent->left = ptr->right;
-					else
-						ptr->parent->left = ptr->left;
-				}
-				else if (ptr->parent->right == ptr)
-				{
-					if (ptr->right)
-						ptr->parent->right = ptr->right;
-					else
-						ptr->parent->right = ptr->left;
-				}
+				if (ptr->parent && ptr->parent->left == ptr)
+					ptr->parent->left = NULL;
+				else if (ptr->parent)
+					ptr->parent->right = NULL;
+				_alloc.destroy(ptr->value);
+				_alloc.deallocate(ptr->value, 1);
+				delete ptr;
+				_size--;
 			}
 			else
 			{
-				if (ptr->right != NULL)
-					_data = ptr->right;
-				else if (ptr->left != NULL)
-					_data = ptr->left;
+				node_type *tmp_parent = ptr->parent;
+				bool right;
+				node_type *tmp_left = ptr->left;
+				node_type *tmp_right = ptr->right;
+				node_type *tmp = tmp_right;
+
+				if (ptr->parent)
+					right = (ptr == ptr->parent->right);
+				_alloc.destroy(ptr->value);
+				_alloc.deallocate(ptr->value, 1);
+				delete ptr;
+				_size--;
+				if (tmp_right && tmp_right != _end)
+				{
+					tmp = tmp_right;
+					while (tmp->left)
+						tmp = tmp->left;
+					if (!(tmp == tmp_right))
+					{
+						if (tmp == tmp->parent->right)
+							tmp->parent->right = tmp->right;
+						else
+							tmp->parent->left = tmp->right;
+						tmp->right = tmp_right;
+					}
+					else
+						tmp->right = tmp_right->right;
+					tmp->left = tmp_left;
+					if (tmp_parent)
+					{
+						if (right)
+							tmp_parent->right = tmp;
+						else
+							tmp_parent->left = tmp;
+					}
+					else
+						_data = tmp;
+					tmp->parent = tmp_parent;
+				}
+				else if (tmp_left != _rend)
+				{
+					tmp = tmp_left;
+					tmp->parent = tmp_parent;
+					if (!tmp_parent)
+						_data = tmp;
+					else
+					{
+						if (right)
+							tmp_parent->right = tmp;
+						else
+							tmp_parent->left = tmp;
+					}
+					if (tmp_right == _end)
+					{
+						node_type *tmp2 = tmp;
+						while (tmp2->right)
+							tmp2 = tmp2->right;
+						tmp2->right = _end;
+						_end->parent = tmp2;
+					}
+				}
 				else
-					_data = NULL;
+				{
+					_data = _end;
+					_end->left = _rend;
+					_rend->parent = _end;
+				}
+				if (tmp_left)
+					tmp_left->parent = tmp;
+				if (tmp_right)
+					tmp_right->parent = tmp;
 			}
-			_alloc.destroy(ptr->value);
-			_alloc.deallocate(ptr->value, 1);
-			delete ptr;
-			_size--;
 		}
-		else if (_comp(key, ptr->value->first))
-			erase_node_private(ptr->left, key);
+		else if (key_comp()(key, ptr->value->first))
+			p_erase_node(ptr->left, key);
 		else
-			erase_node_private(ptr->right, key);
+			p_erase_node(ptr->right, key);
 	}
 	
 	template< class Key, class T, class Compare, class Allocator >
@@ -504,7 +561,7 @@ namespace ft
 	typename Map<Key, T, Compare, Allocator>::size_type Map<Key, T, Compare, Allocator>::erase(const key_type &key)
 	{
 		size_type tmp_size = _size;
-		erase_node_private(_data, key);
+		p_erase_node(_data, key);
 		return (tmp_size - _size);
 	}
 	
