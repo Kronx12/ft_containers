@@ -7,6 +7,9 @@
 # include <string.h>
 # include <stack>
 # include <deque>
+# include <string>
+# include <iostream>
+# include <iomanip>
 
 # ifdef __linux__
 #  include <limits>
