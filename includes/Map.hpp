@@ -86,6 +86,11 @@ namespace ft
 			// TODO Remove
 			void debug_leaf(node_type *ptr);
 			void debug_tree();
+			static void grapher(void *item, int current_level, int is_first_elem);
+			void put_tree();
+			void call(Mtree<Key, T> *root, int current_level, int *levels, void (*applyf)(void *item, int current_level, int is_first_elem));
+			int btree_level_count(Mtree<Key, T> *root);
+			void btree_apply_by_level(Mtree<Key, T> *root, void (*applyf)(void *item, int current_level, int is_first_elem));
 
 			// -------------------------------- Member functions --------------------------------
 			explicit Map(const Compare &comp = key_compare(), const Allocator &alloc = allocator_type());
@@ -97,7 +102,6 @@ namespace ft
 			~Map();
 			
 			Map &operator=( const Map &other );
-			Map &operator=( const value_type &il);
 
 			// -------------------------------- Iterators --------------------------------
 			iterator begin();
@@ -193,7 +197,6 @@ namespace ft
 	Map<Key, T, Compare, Allocator>::~Map()
 	{
 		p_deallocate_tree(_data);
-		// TODO
 	}
 			
 	template< class Key, class T, class Compare, class Allocator >
@@ -202,39 +205,6 @@ namespace ft
 		if (this == &other) return(*this);
 		this->~Map();
 		return *new(this) Map(other);
-	}
-	
-	template< class Key, class T, class Compare, class Allocator >
-	Map<Key, T, Compare, Allocator> &Map<Key, T, Compare, Allocator>::operator=(const value_type &il)
-	{
-		if (this->_tree)
-		{
-			Mtree<Key, T> *temp;
-
-			temp = this->_tree;
-			while (temp)
-			{
-				if (this->Value_compare->_comp()(temp->current->key, il.first) < 0)
-				{
-					if (!temp->current->left)
-						new Mtree< Key, T >(this->_tree, il.first, il.second, "left");
-					temp = temp->current->left;
-				}
-				else if (this->Value_compare->_comp()(temp->current->key, il.first) > 0)
-				{
-					if (!temp->current->right)
-						new Mtree< Key, T >(this->_tree, il.first, il.second, "right");
-					temp = temp->current->right;
-				}
-				else
-				{
-					temp->value = il.second;
-					temp = NULL;
-				}
-			}
-		}
-		else
-			this->_tree = new Mtree< Key, T >(il.first, il.second);
 	}
 
 	/*template< class Key, class T, class Compare, class Allocator >
@@ -567,8 +537,10 @@ namespace ft
 	template< class Key, class T, class Compare, class Allocator >
 	typename Map<Key, T, Compare, Allocator>::const_iterator Map<Key, T, Compare, Allocator>::upper_bound(const Key &key) const
 	{
-		(void)key;
-		// TODO
+		iterator tmp = find(key);
+		if (tmp == _data)
+			return (const_iterator(tmp));
+		return (const_iterator(tmp == end() ? tmp : tmp->parent));
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
@@ -582,8 +554,7 @@ namespace ft
 	std::pair<	typename Map<Key, T, Compare, Allocator>::const_iterator,
 				typename Map<Key, T, Compare, Allocator>::const_iterator> Map<Key, T, Compare, Allocator>::equal_range(const Key &key) const
 	{
-		(void)key;
-		// TODO
+		return (std::pair<iterator, iterator>(find(key), ++find(key)));
 	}
 
 	// -------------------------------- Non-member functions --------------------------------
@@ -628,6 +599,71 @@ namespace ft
 		(void)rhs;
 		// TODO
 	}
-}
+
+	template< class Key, class T, class Compare, class Allocator >
+	void Map<Key, T, Compare, Allocator>::grapher(void *item, int current_level, int is_first_elem)
+	{
+		Mtree<Key, T> *tmp = static_cast<Mtree<Key, T> *>(item);
+		std::cout << current_level << " | " << is_first_elem << "\n";
+		// std::cout << tmp->value->first << " | " << tmp->value->second << "\n";
+		(void)tmp;
+	}
+
+	template< class Key, class T, class Compare, class Allocator >
+	void Map<Key, T, Compare, Allocator>::put_tree()
+	{
+		btree_apply_by_level(_data, Map::grapher);
+	}
+
+	template< class Key, class T, class Compare, class Allocator >
+	void Map<Key, T, Compare, Allocator>::call(Mtree<Key, T> *root, int current_level, int *levels, void (*applyf)(void *item, int current_level, int is_first_elem))
+	{
+		int	is_first_elem;
+
+		is_first_elem = 1;
+		if (levels[current_level] == 1)
+			is_first_elem = 0;
+		else
+			levels[current_level] = 1;
+		applyf(root->value, current_level, is_first_elem);
+		if (root->left)
+			call(root->left, current_level + 1, levels, applyf);
+		if (root->right)
+			call(root->right, current_level + 1, levels, applyf);
+	}
+
+	template< class Key, class T, class Compare, class Allocator >
+	int	Map<Key, T, Compare, Allocator>::btree_level_count(Mtree<Key, T> *root)
+	{
+		int	count;
+
+		count = 0;
+		if (!root)
+			return (0);
+		if (root->left)
+			count = std::max(count, btree_level_count(root->left));
+		if (root->right)
+			count = std::max(count, btree_level_count(root->right));
+		return (count + 1);
+	}
+
+	template< class Key, class T, class Compare, class Allocator >
+	void Map<Key, T, Compare, Allocator>::btree_apply_by_level(Mtree<Key, T> *root, void (*applyf)(void *item, int current_level, int is_first_elem))
+	{
+		int	count;
+		int	*levels;
+		int	i;
+
+		if (!root)
+			return ;
+		count = btree_level_count(root);
+		if (!(levels = (int*)malloc(sizeof(int) * count)))
+			return ;
+		i = 0;
+		while (i < count)
+			levels[i++] = 0;
+		call(root, 0, levels, applyf);
+	}
+};
 
 #endif
