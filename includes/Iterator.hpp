@@ -7,6 +7,9 @@
 # include <string.h>
 # include <stack>
 # include <deque>
+# include <string>
+# include <iostream>
+# include <iomanip>
 
 # ifdef __linux__
 #  include <limits>
@@ -463,42 +466,98 @@ namespace ft
 			typedef const value_type& const_reference;
 			typedef const_reference iterator_category;
 
-			map_pointer current;
-			map_pointer begin;
-			map_pointer end;
-			map_pointer rbegin;
-			map_pointer rend;
+			map_pointer _current;
 
-			MapIterator() {}
-			MapIterator(map_pointer ma) : begin(ma), rbegin(ma)
+			//BASICS
+			~MapIterator() {}
+			MapIterator() : _current(NULL) {}
+			MapIterator(MapIterator const &rhs) : _current(rhs._current) {}
+			// MapIterator(ConstMapIterator const &rhs) : current(rhs.current), begin(rhs.begin), end(rhs.end), rbegin(rhs.rbegin), rend(rhs.rend) {}
+			
+			MapIterator(map_pointer current) : _current(current) {}
+			
+			// MapIterator(map_pointer ma)
+			// {
+			// 	end = rbegin->right;
+			// 	rend = begin->left;
+			// 	current = begin;
+			// }
+
+			MapIterator &operator=(MapIterator const &rhs)
 			{
-				while (this->begin->left)
-					begin = begin->left;
-				while (this->rbegin->right)
-					rbegin = rbegin->right;
-				end = rbegin->right;
-				rend = begin->left;
-				current = begin;
+				if (this == &rhs) return(*this);
+        		this->~MapIterator();
+        		return *new(this) MapIterator(rhs);
 			}
 
+			// MapIterator &operator=(ConstMapIterator<T, M> const &rhs)
+			// {
+			// 	if (this == &rhs) return(*this);
+        	// 	this->~MapIterator();
+        	// 	return *new(this) MapIterator(rhs);
+			// }
+
+			//Input Category
+			bool operator==(const MapIterator & rhs) { return (_current == rhs._current); }
+			bool operator!=(const MapIterator & rhs) { return (_current != rhs._current); }
+			// bool operator==(const ConstMapIterator<T, M> & rhs) { return (this->current == rhs.current); }
+			// bool operator!=(const ConstMapIterator<T, M> & rhs) { return (current != rhs.current); }
+			T *operator*() { return(this->_current->value); }
+			T *operator->() { return(this->_current->value); }
+
+			//Bidirectional Category
 			MapIterator &operator++()
 			{
-				if (this->current->right) // go droite si tu peux
-				{
-					if (!this->current->right == this->rbegin)
-					{
-						current = current->right;
-						while (this->current->left) // go au max en bas a gauche
-							current = current->left;
-					}
-				}
-				else // remonte tout les passages de droites jusqu'a gauche ou le centre sauf si cest la fin
-				{
-					while (current->parent && current == current->parent->right && current != this->rbegin) // remonte all droite
-						current = current->parent;
-					if (current->parent && current == current->parent->left && current != this->rbegin) // remonte un gauche
-						current = current->parent;
-				}
+				// if (this->_current->right) // go droite si tu peux
+				// {
+				// 	if (this->_current->right != this->rbegin)
+				// 	{
+				// 		_current = _current->right;
+				// 		while (this->_current->left) // go au max en bas a gauche
+				// 			_current = _current->left;
+				// 	}
+				// }
+				// else // remonte tout les passages de droites jusqu'a gauche ou le centre sauf si cest la fin
+				// {
+				// 	while (_current->parent && _current == _current->parent->right && _current != this->rbegin) // remonte all droite
+				// 		_current = _current->parent;
+				// 	if (_current->parent && _current == _current->parent->left && _current != this->rbegin) // remonte un gauche
+				// 		_current = _current->parent;
+				// }
+				return (*this);
+			}
+
+			MapIterator operator++(int)
+			{
+				MapIterator tmp(*this);
+				++(*this);
+				return (tmp);
+			}
+
+			MapIterator &operator--()
+			{
+				// if (this->_current->left) // go au au max a droite de la gauche en bas
+				// {
+				// 	_current = _current->left;
+				// 	while (this->_current->right) // en prenant tout les chemins de droite
+				// 		_current = _current->right;
+				// }
+				// else if (_current->left != this->begin && _current->parent) // remonte 
+				// {
+				// 	// remonte tant que pas branche de droite
+				// 	while (_current->parent && _current == _current->parent->left) // remonte tout les gauches
+				// 		_current = _current->parent;
+				// 	if (_current != this->begin) // remonte une fois si cest pas le last
+				// 		_current = _current->parent;
+				// }
+				return (*this);
+			}
+
+			MapIterator operator--(int)
+			{
+				MapIterator tmp(*this);
+				--(*this);
+				return (*this);
 			}
 	};
 

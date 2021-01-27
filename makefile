@@ -8,6 +8,13 @@ QUEUE			=	queue_test
 STACK			=	stack_test
 VECTOR			=	vector_test
 
+# Exec Path #
+LIST_PATH		=	$(addprefix $(TEST_DIR)/,$(LIST))
+MAP_PATH		=	$(addprefix $(TEST_DIR)/,$(MAP))
+QUEUE_PATH		=	$(addprefix $(TEST_DIR)/,$(QUEUE))
+STACK_PATH		=	$(addprefix $(TEST_DIR)/,$(STACK))
+VECTOR_PATH		=	$(addprefix $(TEST_DIR)/,$(VECTOR))
+
 # Test #
 TEST			=	$(LIST) $(STACK) $(QUEUE) $(VECTOR) $(MAP)
 
@@ -44,7 +51,7 @@ CFLAGS			=	-Wall -Wextra -g3 -Werror -g3 -fsanitize=address
 CVERSION		=	-std=c++98
 LFLAGS  		=	-I $(TEST_INCS) -I $(INCS_DIR)
 CALLF			=	$(CC) $(CFLAGS) $(CVERSION)
-CALLFLIB		=	$(CC) $(CFLAGS) $(CVERSION) $(LFLAGS) ${INPUT}
+CALLFLIB		=	$(CC) $(CFLAGS) $(CVERSION) $(LFLAGS)
 
 # Defauilt Make #
 all				:	directories #ART
@@ -53,29 +60,39 @@ all				:	directories #ART
 all_test		:	list stack queue vector map
 
 # Containers test #
-list			:	all $(LIST_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
-	$(CALLFLIB) $(LIST_MAIN) $(TEST_MAIN) -o $(addprefix $(TEST_DIR)/,$(LIST))
+list			:	all $(LIST_PATH)
 	./$(addprefix $(TEST_DIR)/,$(LIST))
 
+$(LIST_PATH)	: $(LIST_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
+	$(CALLFLIB) ${INPUT} $(LIST_MAIN) $(TEST_MAIN) -o $(LIST_PATH)
+
 # Containers test #
-stack			:	all $(STACK_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
-	$(CALLFLIB) $(STACK_MAIN) $(TEST_MAIN) -o $(addprefix $(TEST_DIR)/,$(STACK))
+stack			:	all $(STACK_PATH)
 	./$(addprefix $(TEST_DIR)/,$(STACK))
 
+$(STACK_PATH)	:	$(STACK_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
+	$(CALLFLIB) ${INPUT} $(STACK_MAIN) $(TEST_MAIN) -o $(addprefix $(TEST_DIR)/,$(STACK))
+
 # Containers test #
-queue			:	all $(QUEUE_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
-	$(CALLFLIB) $(QUEUE_MAIN) $(TEST_MAIN) -o $(addprefix $(TEST_DIR)/,$(QUEUE))
+queue			:	all $(QUEUE_PATH)
 	./$(addprefix $(TEST_DIR)/,$(QUEUE))
 
-# Containers test #
-map				:	all $(MAP_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
-	$(CALLFLIB) $(MAP_MAIN) $(TEST_MAIN) -o $(addprefix $(TEST_DIR)/,$(MAP))
-	./$(addprefix $(TEST_DIR)/,$(MAP))
+$(QUEUE_PATH)	:	$(QUEUE_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
+	$(CALLFLIB) ${INPUT} $(QUEUE_MAIN) $(TEST_MAIN) -o $(addprefix $(TEST_DIR)/,$(QUEUE))
 
 # Containers test #
-vector			:	all $(VECTOR_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
-	$(CALLFLIB) $(VECTOR_MAIN) $(TEST_MAIN) -o $(addprefix $(TEST_DIR)/,$(VECTOR))
+map				:	all $(MAP_PATH)
+	./$(addprefix $(TEST_DIR)/,$(MAP))
+
+$(MAP_PATH)		:	$(MAP_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
+	$(CALLFLIB) ${INPUT} $(MAP_MAIN) $(TEST_MAIN) -o $(addprefix $(TEST_DIR)/,$(MAP))
+
+# Containers test #
+vector			:	all $(VECTOR_PATH)
 	./$(addprefix $(TEST_DIR)/,$(VECTOR))
+
+$(VECTOR_PATH)	:	$(VECTOR_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
+	$(CALLFLIB) ${INPUT} $(VECTOR_MAIN) $(TEST_MAIN) -o $(addprefix $(TEST_DIR)/,$(VECTOR))
 
 # Make the Directories #
 directories		:

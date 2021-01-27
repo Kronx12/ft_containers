@@ -15,6 +15,52 @@ void constructor_test(int size)
 
 }
 
+void test()
+{
+	std::map<int, int> mstd;
+	ft::Map<int, int> m;
+
+	mstd.insert(std::pair<int, int>(15, 15));
+	mstd.insert(std::pair<int, int>(2, 2));
+	mstd.insert(std::pair<int, int>(1, 1));
+	mstd.insert(std::pair<int, int>(5, 5));
+	mstd.insert(std::pair<int, int>(4, 4));
+	mstd.insert(std::pair<int, int>(3, 3));
+	mstd.insert(std::pair<int, int>(10, 10));
+	mstd.insert(std::pair<int, int>(11, 11));
+	mstd.insert(std::pair<int, int>(12, 12));
+	mstd.insert(std::pair<int, int>(6, 6));
+	mstd.insert(std::pair<int, int>(8, 8));
+	mstd.insert(std::pair<int, int>(17, 17));
+	mstd.insert(std::pair<int, int>(20, 20));
+	mstd.insert(std::pair<int, int>(16, 16));
+
+	m.insert(std::pair<int, int>(15, 15));
+	m.insert(std::pair<int, int>(2, 2));
+	m.insert(std::pair<int, int>(1, 1));
+	m.insert(std::pair<int, int>(5, 5));
+	m.insert(std::pair<int, int>(4, 4));
+	m.insert(std::pair<int, int>(3, 3));
+	m.insert(std::pair<int, int>(10, 10));
+	m.insert(std::pair<int, int>(11, 11));
+	m.insert(std::pair<int, int>(12, 12));
+	m.insert(std::pair<int, int>(6, 6));
+	m.insert(std::pair<int, int>(8, 8));
+	m.insert(std::pair<int, int>(17, 17));
+	m.insert(std::pair<int, int>(20, 20));
+	m.insert(std::pair<int, int>(16, 16));
+
+	std::cout << "Upper bound : (std) " << mstd.upper_bound(5)->first << std::endl;
+	std::cout << "Upper bound : (std) " << mstd.upper_bound(17)->first << std::endl;
+	// std::cout << "Upper bound : (ft)  " << m.upper_bound(5)->first << std::endl;
+	// std::cout << "Upper bound : (ft)  " << m.upper_bound(17)->first << std::endl;
+
+	std::cout << "Lower bound : (std) " << mstd.lower_bound(5)->first << std::endl;
+	std::cout << "Lower bound : (std) " << mstd.lower_bound(17)->first << std::endl;
+	// std::cout << "Lower bound : (ft)  " << m.lower_bound(5)->first << std::endl;
+	// std::cout << "Lower bound : (ft)  " << m.lower_bound(17)->first << std::endl;
+}
+
 // void map_test(int size)
 // {
 //     title("Map", size);
@@ -36,6 +82,7 @@ void constructor_test(int size)
 // 	std::map<char, int> m2;
 // 	m2['b'] = 26 ;
 // 	m2['y'] = 24 ;
+// 	m2['y'] = 22 ;
 // 	m2['t'] = 25 ;
 // 	m2['u'] = 23 ;
 // 	m2['u'] = 24 ;
@@ -69,6 +116,7 @@ void constructor_test(int size)
 
 int main()
 {
+
 #if TEST_MAP == 0 || TEST_MAP == 1
 # ifndef SIZE
     constructor_test(1000);
@@ -124,14 +172,24 @@ int main()
 	m.insert(std::pair<int, int>(18, 15));
 
 	title("STD MAP:\n");
-	for (std::map<int, int>::iterator itr = mstd.begin(); itr != mstd.end(); itr++)
+	std::map<int, int>::iterator itr;
+	for (itr = mstd.begin(); itr != mstd.end(); itr++)
 		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
+	// itr++;
 
 	title("FT MAP:\n");
 	m.debug_tree();
 
+// Size
+
+	title("FT MAP (SIZE):\n");
 	std::cout << "std_size : " << mstd.size() << std::endl;
 	std::cout << "ft_size : " << m.size() << std::endl;
+	
+// Operator []
+	// std::cout << m[8] << std::endl;
+	// std::cout << mstd[8] << std::endl;
+	// TODO
 
 	title("STD MAP erase big daddy:[10]\n");
 	mstd.erase(10);

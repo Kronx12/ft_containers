@@ -15,14 +15,6 @@ namespace ft
 			Mtree						*right;
 
 			Mtree() : value(NULL), parent(NULL), left(NULL), right(NULL) {};
-			Mtree(const std::pair< const Key, T > *val) : value(val), parent(NULL), left(NULL), right(NULL) {};
-			Mtree(Mtree *parent, const std::pair< const Key, T > *val, const char *dir) : value(val), parent(parent), left(NULL), right(NULL)
-			{
-				if (strcmp(dir, "left"))
-					parent->left = *this;
-				else
-					parent->right = *this;
-			};
 	};
 
 	template < class Key, class T, class Compare = std::less<Key>, class Allocator = std::allocator<std::pair<const Key,T> > >
@@ -40,8 +32,8 @@ namespace ft
 			typedef typename Allocator::const_reference const_reference;
 			typedef typename Allocator::pointer pointer;
 			typedef typename Allocator::const_pointer const_pointer;
-			typedef MapIterator<key_type, Mtree<Key, T> > iterator;
-			typedef ConstMapIterator<key_type, Mtree<Key, T> > const_iterator;
+			typedef MapIterator<value_type, Mtree<Key, T> > iterator;
+			typedef ConstMapIterator<value_type, Mtree<Key, T> > const_iterator;
 			typedef ReverseIterator<iterator> reverse_iterator;
 			typedef ReverseIterator<const_iterator> const_reverse_iterator;
 			typedef typename std::ptrdiff_t difference_type;
@@ -73,9 +65,7 @@ namespace ft
 			allocator_type _alloc;
 			key_compare _comp;
 			node_type *_end;
-			node_type *_begin;
 			node_type *_rend;
-			node_type *_rbegin;			
 
 			// Recursive inserter
 			void p_erase_node(node_type *ptr, const key_type &key);
@@ -88,20 +78,22 @@ namespace ft
 			// TODO Remove
 			void debug_leaf(node_type *ptr);
 			void debug_tree();
+			static void grapher(void *item, int current_level, bool side);
+			void put_tree();
+			void call(Mtree<Key, T> *root, int current_level, bool side, void (*applyf)(void *item, int current_level, bool side));
+			int btree_level_count(Mtree<Key, T> *root);
+			void btree_apply_by_level(Mtree<Key, T> *root, void (*applyf)(void *item, int current_level, bool side));
 
 			// -------------------------------- Member functions --------------------------------
-			explicit Map( const Compare &comp = key_compare(), const Allocator &alloc = allocator_type() );
+			explicit Map(const Compare &comp = key_compare(), const Allocator &alloc = allocator_type());
 
 			template <class InputIterator>
 			Map(InputIterator first, InputIterator last, const key_compare &comp = key_compare(), const allocator_type &alloc = allocator_type());
-			Map( const value_type &il, const key_compare &comp = key_compare());
-			Map( const value_type &il, const key_compare &comp, const allocator_type &a);
 			Map(const Map &x);
 			
 			~Map();
 			
 			Map &operator=( const Map &other );
-			Map &operator=( const value_type &il);
 
 			// -------------------------------- Iterators --------------------------------
 			iterator begin();
@@ -160,7 +152,7 @@ namespace ft
 	// -------------------------------- Member functions --------------------------------
 	template< class Key, class T, class Compare, class Allocator >
 	Map<Key, T, Compare, Allocator>::Map(const Compare &comp, const Allocator &alloc)
-	: _data(NULL), _size(0), _alloc(alloc), _comp(comp)
+	: _data(NULL), _size(0), _alloc(alloc), _comp(comp), _end(new node_type()), _rend(new node_type())
 	{
 		// TODO
 	}
@@ -168,26 +160,10 @@ namespace ft
 	template< class Key, class T, class Compare, class Allocator >
 	template <class InputIterator>
 	Map<Key, T, Compare, Allocator>::Map(InputIterator first, InputIterator last, const key_compare &comp, const allocator_type &alloc)
-	: _data(NULL), _size(0), _alloc(alloc), _comp(comp)
+	: _data(NULL), _size(0), _alloc(alloc), _comp(comp), _end(new node_type()), _rend(new node_type())
 	{
 		for (; first != last; first++)
 			insert(*first);
-	}
-
-	template< class Key, class T, class Compare, class Allocator >
-	Map<Key, T, Compare, Allocator>::Map(const value_type &il, const key_compare &comp)
-	: _data(NULL), _size(0), _alloc(Allocator()), _comp(comp)
-	{
-		(void)il;
-		// TODO
-	}
-	
-	template< class Key, class T, class Compare, class Allocator >
-	Map<Key, T, Compare, Allocator>::Map(const value_type &il, const key_compare &comp, const allocator_type &alloc)
-	: _data(NULL), _size(0), _alloc(alloc), _comp(comp)
-	{
-		(void)il;
-		// TODO
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
@@ -213,7 +189,6 @@ namespace ft
 	Map<Key, T, Compare, Allocator>::~Map()
 	{
 		p_deallocate_tree(_data);
-		// TODO
 	}
 			
 	template< class Key, class T, class Compare, class Allocator >
@@ -222,39 +197,6 @@ namespace ft
 		if (this == &other) return(*this);
 		this->~Map();
 		return *new(this) Map(other);
-	}
-	
-	template< class Key, class T, class Compare, class Allocator >
-	Map<Key, T, Compare, Allocator> &Map<Key, T, Compare, Allocator>::operator=(const value_type &il)
-	{
-		if (this->_tree)
-		{
-			Mtree<Key, T> *temp;
-
-			temp = this->_tree;
-			while (temp)
-			{
-				if (this->Value_compare->_comp()(temp->current->key, il.first) < 0)
-				{
-					if (!temp->current->left)
-						new Mtree< Key, T >(this->_tree, il.first, il.second, "left");
-					temp = temp->current->left;
-				}
-				else if (this->Value_compare->_comp()(temp->current->key, il.first) > 0)
-				{
-					if (!temp->current->right)
-						new Mtree< Key, T >(this->_tree, il.first, il.second, "right");
-					temp = temp->current->right;
-				}
-				else
-				{
-					temp->value = il.second;
-					temp = NULL;
-				}
-			}
-		}
-		else
-			this->_tree = new Mtree< Key, T >(il.first, il.second);
 	}
 
 	/*template< class Key, class T, class Compare, class Allocator >
@@ -290,49 +232,49 @@ namespace ft
 	template< class Key, class T, class Compare, class Allocator >
 	typename Map<Key, T, Compare, Allocator>::iterator Map<Key, T, Compare, Allocator>::begin()
 	{
-		// TODO
+		return (iterator(_rend->parent));
 	}
 	
 	template< class Key, class T, class Compare, class Allocator >
 	typename Map<Key, T, Compare, Allocator>::const_iterator Map<Key, T, Compare, Allocator>::begin() const
 	{
-		// TODO
+		return (iterator(_rend->parent));
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
 	typename Map<Key, T, Compare, Allocator>::iterator Map<Key, T, Compare, Allocator>::end()
 	{
-		// TODO
+		return (iterator(_end));
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
 	typename Map<Key, T, Compare, Allocator>::const_iterator Map<Key, T, Compare, Allocator>::end() const
 	{
-		// TODO
+		return (iterator(_end));
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
 	typename Map<Key, T, Compare, Allocator>::reverse_iterator Map<Key, T, Compare, Allocator>::rbegin()
 	{
-		// TODO
+		return (iterator(_end->parent));
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
 	typename Map<Key, T, Compare, Allocator>::const_reverse_iterator Map<Key, T, Compare, Allocator>::rbegin() const
 	{
-		// TODO
+		return (iterator(_end->parent));
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
 	typename Map<Key, T, Compare, Allocator>::reverse_iterator Map<Key, T, Compare, Allocator>::rend()
 	{
-		// TODO
+		return (iterator(_rend));
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
 	typename Map<Key, T, Compare, Allocator>::const_reverse_iterator Map<Key, T, Compare, Allocator>::rend() const
 	{
-		// TODO
+		return (iterator(_rend));
 	}
 
 	// -------------------------------- Capacity --------------------------------
@@ -350,21 +292,23 @@ namespace ft
 
 	// -------------------------------- Element acces --------------------------------
 	template< class Key, class T, class Compare, class Allocator >
-	typename Map<Key, T, Compare, Allocator>::mapped_type &Map<Key, T, Compare, Allocator>::operator[]( const Key &key )
+	T &Map<Key, T, Compare, Allocator>::operator[]( const Key &key )
 	{
-		 Mtree<Key, T> *temp;
+		// Mtree<Key, T> *temp;
 
-		 temp = this->_data;
-		 while (temp)
-		 {
-		 	if (temp->value->first == key)
-		 		return (temp->value->second);
-		 	else if (key_comp()(temp->value->first, key))
-		 		temp = temp->left;
-		 	else
-		 		temp = temp->right;
-		 }
-		 return (temp->value->second);
+		// temp = _data;
+		// while (temp)
+		// {
+		// 	if (temp->value->first == key)
+		// 		return (temp->value->second);
+		// 	else if (key_comp()(temp->value->first, key))
+		// 		temp = temp->left;
+		// 	else
+		// 		temp = temp->right;
+		// }
+		// insert(std::pair<Key, T>(key, T()));
+		// operator[](key);
+		// return (temp->value->second);
 		(void)key;
 		// TODO
 	}
@@ -595,66 +539,77 @@ namespace ft
 	template< class Key, class T, class Compare, class Allocator >
 	typename Map<Key, T, Compare, Allocator>::iterator Map<Key, T, Compare, Allocator>::find(const Key &key)
 	{
-		(void)key;
-		// TODO
+		std::cout << begin()->first << "\n";
+		std::cout << rbegin()->first << "\n";
+		for (iterator itr = begin(); itr != end(); itr++)
+			if (itr->first == key)
+				return (itr);
+		return (end());
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
 	typename Map<Key, T, Compare, Allocator>::const_iterator Map<Key, T, Compare, Allocator>::find(const Key &key) const
 	{
-		(void)key;
-		// TODO
+		for (iterator itr = begin(); itr != end(); itr++)
+			if (itr->first == key)
+				return (itr);
+		return (end());
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
 	typename Map<Key, T, Compare, Allocator>::size_type Map<Key, T, Compare, Allocator>::count(const Key &key) const
 	{
-		(void)key;
-		// TODO
+		return (find(key) != end());
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
 	typename Map<Key, T, Compare, Allocator>::iterator Map<Key, T, Compare, Allocator>::lower_bound(const Key &key)
 	{
-		(void)key;
-		// TODO
+		// verif
+		iterator temp = find(key);
+		temp--;
+		return (temp);
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
 	typename Map<Key, T, Compare, Allocator>::const_iterator Map<Key, T, Compare, Allocator>::lower_bound(const Key &key) const
 	{
-		(void)key;
-		// TODO
+		// verif
+		iterator temp = find(key);
+		temp--;
+		return (temp);
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
 	typename Map<Key, T, Compare, Allocator>::iterator Map<Key, T, Compare, Allocator>::upper_bound(const Key &key)
 	{
-		(void)key;
-		// TODO
+		// verif
+		iterator temp = find(key);
+		temp++;
+		return (temp);
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
 	typename Map<Key, T, Compare, Allocator>::const_iterator Map<Key, T, Compare, Allocator>::upper_bound(const Key &key) const
 	{
-		(void)key;
-		// TODO
+		// verif
+		iterator temp = find(key);
+		temp++;
+		return (temp);
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
 	std::pair<	typename Map<Key, T, Compare, Allocator>::iterator,
 				typename Map<Key, T, Compare, Allocator>::iterator> Map<Key, T, Compare, Allocator>::equal_range(const Key &key)
 	{
-		(void)key;
-		// TODO
+		return (std::pair<iterator, iterator>(find(key), ++find(key)));
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
 	std::pair<	typename Map<Key, T, Compare, Allocator>::const_iterator,
 				typename Map<Key, T, Compare, Allocator>::const_iterator> Map<Key, T, Compare, Allocator>::equal_range(const Key &key) const
 	{
-		(void)key;
-		// TODO
+		return (std::pair<iterator, iterator>(find(key), ++find(key)));
 	}
 
 	// -------------------------------- Non-member functions --------------------------------
@@ -699,6 +654,66 @@ namespace ft
 		(void)rhs;
 		// TODO
 	}
-}
+
+	template< class Key, class T, class Compare, class Allocator >
+	void Map<Key, T, Compare, Allocator>::grapher(void *item, int current_level, bool side)
+	{
+		std::pair<Key, T> *pair_kv = static_cast<std::pair<Key, T> *>(item);
+		if (current_level == 0)
+		{
+			std::cout << " " << pair_kv->first << "\n";
+			return;
+		}
+
+		for (int i = 0; i < current_level - 1; i++)
+			std::cout << " │  ";
+		if (!side)
+			std::cout << " └──";
+		else
+			std::cout << " ┌──";
+		// for (int i = 0; i < current_level - 1; i++)
+		// 	std::cout << "───";
+		std::cout << " " << pair_kv->first << "\n";
+	}
+
+	template< class Key, class T, class Compare, class Allocator >
+	void Map<Key, T, Compare, Allocator>::put_tree()
+	{
+		btree_apply_by_level(_data, Map::grapher);
+	}
+
+	template< class Key, class T, class Compare, class Allocator >
+	void Map<Key, T, Compare, Allocator>::call(Mtree<Key, T> *root, int current_level, bool side, void (*applyf)(void *item, int current_level, bool side))
+	{
+		if (root->right)
+			call(root->right, current_level + 1, 1, applyf);
+		applyf(root->value, current_level, side);
+		if (root->left)
+			call(root->left, current_level + 1, 0, applyf);
+	}
+
+	template< class Key, class T, class Compare, class Allocator >
+	int	Map<Key, T, Compare, Allocator>::btree_level_count(Mtree<Key, T> *root)
+	{
+		int	count;
+
+		count = 0;
+		if (!root)
+			return (0);
+		if (root->left)
+			count = std::max(count, btree_level_count(root->left));
+		if (root->right)
+			count = std::max(count, btree_level_count(root->right));
+		return (count + 1);
+	}
+
+	template< class Key, class T, class Compare, class Allocator >
+	void Map<Key, T, Compare, Allocator>::btree_apply_by_level(Mtree<Key, T> *root, void (*applyf)(void *item, int current_level, bool side))
+	{
+		if (!root)
+			return ;
+		call(root, 0, 0, applyf);
+	}
+};
 
 #endif
