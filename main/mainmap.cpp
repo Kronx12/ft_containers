@@ -18,7 +18,15 @@ void constructor_test(int size)
 void test()
 {
 	std::map<int, int> mstd;
+	std::map<std::string, std::string> t;
 	ft::Map<int, int> m;
+
+	std::cout << "TEST" << std::endl; 
+	// t.insert(std::pair<std::string, std::string>(NULL, NULL));
+	t.insert(std::pair<std::string, std::string>("la", "la"));
+	t.insert(std::pair<std::string, std::string>("le", "le"));
+	for (std::map<std::string, std::string>::iterator itr = t.begin(); itr != t.end(); itr++)
+		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
 
 	mstd.insert(std::pair<int, int>(15, 15));
 	mstd.insert(std::pair<int, int>(2, 2));
@@ -50,15 +58,57 @@ void test()
 	m.insert(std::pair<int, int>(20, 20));
 	m.insert(std::pair<int, int>(16, 16));
 
-	std::cout << "Upper bound : (std) " << mstd.upper_bound(5)->first << std::endl;
-	std::cout << "Upper bound : (std) " << mstd.upper_bound(17)->first << std::endl;
-	// std::cout << "Upper bound : (ft)  " << m.upper_bound(5)->first << std::endl;
-	// std::cout << "Upper bound : (ft)  " << m.upper_bound(17)->first << std::endl;
+	std::cout << "std" << std::endl;
+	for (std::map<int, int>::iterator itr = mstd.begin(); itr != mstd.end(); itr++)
+		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
 
-	std::cout << "Lower bound : (std) " << mstd.lower_bound(5)->first << std::endl;
-	std::cout << "Lower bound : (std) " << mstd.lower_bound(17)->first << std::endl;
-	// std::cout << "Lower bound : (ft)  " << m.lower_bound(5)->first << std::endl;
-	// std::cout << "Lower bound : (ft)  " << m.lower_bound(17)->first << std::endl;
+	std::cout << "ft" << std::endl;
+	ft::Map<int, int>::iterator itr = m.begin();
+	ft::Map<int, int>::iterator itr2 = m.rbegin();
+	std::cout << "ope++" << std::endl;
+	for (unsigned long i = 0; i < m.size(); i++)
+	{
+		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
+		itr++;
+	}
+	std::cout << "ope--" << std::endl;
+	for (unsigned long i = 0; i < m.size(); i++)
+	{
+		std::cout << "[ " << itr2->first << " : " << itr2->second << "]\n";
+		itr2--;
+	}
+
+
+	std::cout << "Upper bound : (std) 7  " << mstd.upper_bound(7)->first << std::endl;
+	std::cout << "Upper bound : (ft)  7  " << m.upper_bound(7)->first << std::endl;
+	std::cout << "Upper bound : (std) 17 " << mstd.upper_bound(17)->first << std::endl;
+	std::cout << "Upper bound : (ft)  17 " << m.upper_bound(17)->first << std::endl;
+
+	std::cout << "Lower bound : (std) 0  " << mstd.lower_bound(0)->first << std::endl;
+	std::cout << "Lower bound : (ft)  0  " << m.lower_bound(0)->first << std::endl;
+	std::cout << "Lower bound : (std) 7  " << mstd.lower_bound(7)->first << std::endl;
+	std::cout << "Lower bound : (ft)  7  " << m.lower_bound(7)->first << std::endl;
+	std::cout << "Lower bound : (std) 17 " << mstd.lower_bound(17)->first << std::endl;
+	std::cout << "Lower bound : (ft)  17 " << m.lower_bound(17)->first << std::endl;
+
+	std::cout << std::endl << "operator [] " << std::endl;
+	std::cout << "std[17] " << mstd[17] << std::endl;
+	std::cout << " ft[17] " << m[17] << std::endl;
+	std::cout << "std[18] " << mstd[18] << std::endl;
+	std::cout << " ft[18] " << m[18] << std::endl;
+	mstd[18] = 11;
+	m[18] = 11;
+	std::cout << "std[18] " << mstd[18] << std::endl;
+	std::cout << " ft[18] " << m[18] << std::endl;
+
+	std::cout << std::endl << "find" << std::endl;
+
+	std::cout << "std find 12 " << mstd.find(12)->first << std::endl;
+	std::cout << " ft find 12 " << m.find(12)->first << std::endl;
+	// std::cout << "std find 13 " << mstd.find(13)->first << std::endl;
+	// std::cout << " ft find 13 " << m.find(13)->first << std::endl;
+
+
 }
 
 // void map_test(int size)
@@ -178,12 +228,12 @@ int main()
 	// itr++;
 
 	title("FT MAP:\n");
-	m.put_tree();
+	// m.put_tree();
 
 // Size
 
-	title("FT MAP (SIZE):\n");
-	std::cout << "std_size : " << mstd.size() << std::endl;
+	// title("FT MAP (SIZE):\n");
+	// std::cout << "std_size : " << mstd.size() << std::endl;
 	// std::cout << "ft_size : " << m.size() << std::endl;
 	
 // Operator []
@@ -191,74 +241,75 @@ int main()
 	// std::cout << mstd[8] << std::endl;
 	// TODO
 
-	title("STD MAP erase big daddy:[10]\n");
-	mstd.erase(10);
-	for (std::map<int, int>::iterator itr = mstd.begin(); itr != mstd.end(); itr++)
-		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
+	// title("STD MAP erase big daddy:[10]\n");
+	// mstd.erase(10);
+	// for (std::map<int, int>::iterator itr = mstd.begin(); itr != mstd.end(); itr++)
+	// 	std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
 
-	title("FT MAP erase big daddy:[10]\n");
-	m.put_tree();
-	m.erase(10);
-	m.put_tree();
+	// title("FT MAP erase big daddy:[10]\n");
+	// m.put_tree();
+	// m.erase(10);
+	// m.put_tree();
 
-	title("STD MAP erase leftmost loner:[2]\n");
-	mstd.erase(2);
-	for (std::map<int, int>::iterator itr = mstd.begin(); itr != mstd.end(); itr++)
-		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
+	// title("STD MAP erase leftmost loner:[2]\n");
+	// mstd.erase(2);
+	// for (std::map<int, int>::iterator itr = mstd.begin(); itr != mstd.end(); itr++)
+	// 	std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
 
-	title("FT MAP erase leftmost loner:[2]\n");
-	m.erase(2);
-	m.put_tree();
+	// title("FT MAP erase leftmost loner:[2]\n");
+	// m.erase(2);
+	// m.put_tree();
 
-	title("STD MAP erase leftmost parent(rightchild):[3]\n");
-	mstd.erase(3);
-	for (std::map<int, int>::iterator itr = mstd.begin(); itr != mstd.end(); itr++)
-		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
+	// title("STD MAP erase leftmost parent(rightchild):[3]\n");
+	// mstd.erase(3);
+	// for (std::map<int, int>::iterator itr = mstd.begin(); itr != mstd.end(); itr++)
+	// 	std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
 
-	title("FT MAP erase leftmost parent(rightchild):[3]\n");
-	m.erase(3);
-	m.put_tree();
+	// title("FT MAP erase leftmost parent(rightchild):[3]\n");
+	// m.erase(3);
+	// m.put_tree();
 
-	title("STD MAP erase rightmost loner:[18]\n");
-	mstd.erase(18);
-	for (std::map<int, int>::iterator itr = mstd.begin(); itr != mstd.end(); itr++)
-		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
+	// title("STD MAP erase rightmost loner:[18]\n");
+	// mstd.erase(18);
+	// for (std::map<int, int>::iterator itr = mstd.begin(); itr != mstd.end(); itr++)
+	// 	std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
 
-	title("FT MAP erase rightmost loner:[18]\n");
-	m.erase(18);
-	m.put_tree();
+	// title("FT MAP erase rightmost loner:[18]\n");
+	// m.erase(18);
+	// m.put_tree();
 
-	title("STD MAP erase rightmost parent(leftchild):[17]\n");
-	mstd.erase(17);
-	for (std::map<int, int>::iterator itr = mstd.begin(); itr != mstd.end(); itr++)
-		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
+	// title("STD MAP erase rightmost parent(leftchild):[17]\n");
+	// mstd.erase(17);
+	// for (std::map<int, int>::iterator itr = mstd.begin(); itr != mstd.end(); itr++)
+	// 	std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
 
-	title("FT MAP erase rightmost parent(leftchild):[17]\n");
-	m.erase(17);
-	m.put_tree();
+	// title("FT MAP erase rightmost parent(leftchild):[17]\n");
+	// m.erase(17);
+	// m.put_tree();
 
-	title("STD MAP erase non existing:[18]\n");
-	mstd.erase(18);
-	for (std::map<int, int>::iterator itr = mstd.begin(); itr != mstd.end(); itr++)
-		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
+	// title("STD MAP erase non existing:[18]\n");
+	// mstd.erase(18);
+	// for (std::map<int, int>::iterator itr = mstd.begin(); itr != mstd.end(); itr++)
+	// 	std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
 
-	title("FT MAP erase non existing:[18]\n");
-	m.erase(18);
-	m.put_tree();
+	// title("FT MAP erase non existing:[18]\n");
+	// m.erase(18);
+	// m.put_tree();
 
-	title("STD MAP erase spam:\n");
-	mstd.erase(6);
-	mstd.erase(13);
-	mstd.erase(15);
-	mstd.erase(8);
-	for (std::map<int, int>::iterator itr = mstd.begin(); itr != mstd.end(); itr++)
-		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
+	// title("STD MAP erase spam:\n");
+	// mstd.erase(6);
+	// mstd.erase(13);
+	// mstd.erase(15);
+	// mstd.erase(8);
+	// for (std::map<int, int>::iterator itr = mstd.begin(); itr != mstd.end(); itr++)
+	// 	std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
 
-	title("FT MAP erase spam:\n");
-	m.erase(6);
-	m.erase(13);
-	m.erase(15);
-	m.erase(8);
-	m.put_tree();
-    end_test();
+	// title("FT MAP erase spam:\n");
+	// m.erase(6);
+	// m.erase(13);
+	// m.erase(15);
+	// m.erase(8);
+	// m.put_tree();
+    // end_test();
+	test();
 }
