@@ -152,10 +152,7 @@ namespace ft
 	// -------------------------------- Member functions --------------------------------
 	template< class Key, class T, class Compare, class Allocator >
 	Map<Key, T, Compare, Allocator>::Map(const Compare &comp, const Allocator &alloc)
-	: _data(NULL), _size(0), _alloc(alloc), _comp(comp), _end(new node_type()), _rend(new node_type())
-	{
-		// TODO
-	}
+	: _data(NULL), _size(0), _alloc(alloc), _comp(comp), _end(new node_type()), _rend(new node_type()) {}
 
 	template< class Key, class T, class Compare, class Allocator >
 	template <class InputIterator>
@@ -167,10 +164,9 @@ namespace ft
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
-	Map<Key, T, Compare, Allocator>::Map(const Map &x)
+	Map<Key, T, Compare, Allocator>::Map(const Map &x) : _comp(x._comp), _alloc(other._alloc), _end(new node_type()), _rend(new node_type())
 	{
-		(void)x;
-		// TODO
+		insert(x.begin(), x.end());
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
@@ -199,46 +195,17 @@ namespace ft
 		return *new(this) Map(other);
 	}
 
-	/*template< class Key, class T, class Compare, class Allocator >
-	void Map<Key, T, Compare, Allocator>::realloc(size_type len)
-	{
-		pointer tmp = _alloc.allocate(len);
-
-		for (size_type i = 0; i < (len < _size) ? len : _size; i++)
-			tmp[i] = _data[i];
-		_alloc.deallocate(_data);
-		_data = tmp;
-		_capacity = len;
-	}*/
-
-	/*template< class Key, class T, class Compare, class Allocator >
-	Map<Key, T, Compare, Allocator>::Map() : _data(NULL), _size(0), _capacity(0), _alloc(Allocator()), _tree(NULL) {}*/
-
-	// template< class Key, class T, class Compare, class Allocator >
-	// template< class InputIterator >
-	// Map<Key, T, Compare, Allocator>::Map(InputIterator first, InputIterator last, const key_compare &comp = key_compare(), const allocator_type &alloc = allocator_type())
-	// {
-	// 	;
-	// }
-
-	// need shallow
-	// template< class Key, class T, class Compare, class Allocator >
-	// Map<Key, T, Compare, Allocator>::Map(const Map &x) : _data(x->_data), _size(x->_size), _capacity(x->_capacity), _alloc(x->_alloc), _tree(x->_tree)
-	// {
-	// 	(Value_compare(x->Value_compare->_comp));
-	// }	
-
 	// -------------------------------- Iterators --------------------------------
 	template< class Key, class T, class Compare, class Allocator >
 	typename Map<Key, T, Compare, Allocator>::iterator Map<Key, T, Compare, Allocator>::begin()
 	{
-		return (iterator(_rend->parent));
+		return (size() == 0 ? iterator(_end) : iterator(_rend->parent));
 	}
 	
 	template< class Key, class T, class Compare, class Allocator >
 	typename Map<Key, T, Compare, Allocator>::const_iterator Map<Key, T, Compare, Allocator>::begin() const
 	{
-		return (iterator(_rend->parent));
+		return (size() == 0 ? iterator(_end) : iterator(_rend->parent));
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
@@ -256,13 +223,13 @@ namespace ft
 	template< class Key, class T, class Compare, class Allocator >
 	typename Map<Key, T, Compare, Allocator>::reverse_iterator Map<Key, T, Compare, Allocator>::rbegin()
 	{
-		return (iterator(_end->parent));
+		return (size() == 0 ? iterator(_rend) : iterator(_end->parent));
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
 	typename Map<Key, T, Compare, Allocator>::const_reverse_iterator Map<Key, T, Compare, Allocator>::rbegin() const
 	{
-		return (iterator(_end->parent));
+		return (size() == 0 ? iterator(_rend) : iterator(_end->parent));
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
@@ -543,11 +510,30 @@ namespace ft
 	template< class Key, class T, class Compare, class Allocator >
 	void Map<Key, T, Compare, Allocator>::swap(Map &other)
 	{
-		// Map temp = other;
-		// other = *this;
-		// *this = temp;
-		(void)other;
+		Map temp = other;
+		other = *this;
+		*this = temp;
 		// TODO
+		// node_type *t_data = other._data;
+		// size_type t_size = other._size;
+		// allocator_type t_alloc = other._alloc;
+		// key_compare t_comp = other._comp;
+		// node_type *t_end = other._end;
+		// node_type *t_rend = other._rend;
+
+		// other._data = _data;
+		// other._size = _size;
+		// other._alloc = _alloc;
+		// other._comp = _comp;
+		// other._end = _end;
+		// other._rend = _rend;
+
+		// _data = t_data;
+		// _size = t_size;
+		// _alloc = t_alloc;
+		// _comp = t_comp;
+		// _end = t_end;
+		// _rend = t_rend;
 	}
 
 	// -------------------------------- Observers --------------------------------
@@ -711,25 +697,26 @@ namespace ft
 	template< class Key, class T, class Compare, class Allocator >
 	void Map<Key, T, Compare, Allocator>::grapher(void *item, int current_level, bool side, int *dirswap)
 	{
+		int color = current_level % 2 ? 31 : 30;
 		std::pair<Key, T> *pair_kv = static_cast<std::pair<Key, T> *>(item);
 		if (current_level == 0)
 		{
-			std::cout << " " << pair_kv->first << "\n";
+			std::cout << " \033[1;" << color << "m◖" << pair_kv->first << "◗\033[0m\n";
 			return;
 		}
 
 		for (int i = 0; i < current_level - 1; i++)
 		{
 			if (dirswap[i])
-				std::cout << " │  ";
+				std::cout << "  ┃  ";
 			else
-				std::cout << "    ";
+				std::cout << "     ";
 		}
 		if (!side)
-			std::cout << " └──";
+			std::cout << "  ┗━━━\033[1;" << color << "m◖";
 		else
-			std::cout << " ┌──";
-		std::cout << " " << pair_kv->first << "\n";
+			std::cout << "  ┏━━━\033[1;" << color << "m◖";
+		std::cout << "" << pair_kv->first << "◗\033[0m\n";
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
