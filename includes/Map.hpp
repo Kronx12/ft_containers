@@ -672,25 +672,26 @@ namespace ft
 	template< class Key, class T, class Compare, class Allocator >
 	void Map<Key, T, Compare, Allocator>::grapher(void *item, int current_level, bool side, int *dirswap)
 	{
+		int color = current_level % 2 ? 31 : 30;
 		std::pair<Key, T> *pair_kv = static_cast<std::pair<Key, T> *>(item);
 		if (current_level == 0)
 		{
-			std::cout << " " << pair_kv->first << "\n";
+			std::cout << " \033[1;" << color << "m◖" << pair_kv->first << "◗\033[0m\n";
 			return;
 		}
 
 		for (int i = 0; i < current_level - 1; i++)
 		{
 			if (dirswap[i])
-				std::cout << " │  ";
+				std::cout << "  ┃  ";
 			else
-				std::cout << "    ";
+				std::cout << "     ";
 		}
 		if (!side)
-			std::cout << " └──";
+			std::cout << "  ┗━━━\033[1;" << color << "m◖";
 		else
-			std::cout << " ┌──";
-		std::cout << " " << pair_kv->first << "\n";
+			std::cout << "  ┏━━━\033[1;" << color << "m◖";
+		std::cout << "" << pair_kv->first << "◗\033[0m\n";
 	}
 
 	template< class Key, class T, class Compare, class Allocator >

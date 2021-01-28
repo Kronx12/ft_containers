@@ -10,6 +10,7 @@
 # include <string>
 # include <iostream>
 # include <iomanip>
+# include <sstream>
 
 # ifdef __linux__
 #  include <limits>
