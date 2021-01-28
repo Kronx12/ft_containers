@@ -340,13 +340,17 @@ namespace ft
 			_data->value = _alloc.allocate(1);
 			_data->parent = NULL;
 			_alloc.construct(_data->value, std::pair< Key, T >(value.first, value.second));
+			_data->left = this->_rend;
+			_data->right = this->_end;
+			this->_rend->parent = _data;
+			this->_end->parent = _data;
 			_size++;
 		}
 		else if (value.first == ptr->value->first)
 			; // Skip if existing key
 		else if (tmp_cmp(value, *ptr->value))
 		{
-			if (ptr->left != NULL)
+			if (ptr->left != NULL && ptr->left != this->_rend)
 				p_insert_node(value, ptr->left);
 			else
 			{
@@ -354,13 +358,18 @@ namespace ft
 				ptr->left->value = _alloc.allocate(1);
 				ptr->left->parent = ptr;
 				_alloc.construct(ptr->left->value, std::pair< Key, T >(value.first, value.second));
+				if (ptr->left == this->_rend)
+				{
+					ptr->left->left = this->_rend;
+					this->_rend->parent = ptr->left;
+				}
 				_size++;
 				return (iterator(ptr->left));
 			}
 		}
 		else
 		{
-			if (ptr->right != NULL)
+			if (ptr->right != NULL && ptr->right != this->_end)
 				p_insert_node(value, ptr->right);
 			else
 			{
@@ -368,6 +377,11 @@ namespace ft
 				ptr->right->value = _alloc.allocate(1);
 				ptr->right->parent = ptr;
 				_alloc.construct(ptr->right->value, std::pair< Key, T >(value.first, value.second));
+				if (ptr->right == this->_end)
+				{
+					ptr->right->left = this->_end;
+					this->_end->parent = ptr->right;
+				}
 				_size++;
 				return (iterator(ptr->right));
 			}
