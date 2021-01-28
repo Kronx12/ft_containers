@@ -59,14 +59,10 @@ RESET	=	yes
 endif
 
 # Defauilt Make #
-all				:	directories #ART
-
-# ifdef INPUT
-# 	@\rm -rf test/*
-# endif
+all				:	directories
 
 # Start all tester #
-all_test		:	list stack queue vector map
+all_test		:	ART list stack queue vector map
 
 # set Restart #
 lreset			:
