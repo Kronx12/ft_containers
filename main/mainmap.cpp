@@ -166,7 +166,7 @@ void test()
 
 int main()
 {
-
+	srand(static_cast<unsigned int>(time(NULL)));
 #if TEST_MAP == 0 || TEST_MAP == 1
 # ifndef SIZE
     constructor_test(1000);
@@ -310,6 +310,47 @@ int main()
 	m.erase(8);
 	m.put_tree(10);
 
+	ft::Map<int, int> m2;
+
+	/*m2.insert(std::pair<int, int>(50, 1));
+	m2.insert(std::pair<int, int>(25, 2));
+	m2.insert(std::pair<int, int>(75, 3));
+	m2.insert(std::pair<int, int>(12, 4));
+	m2.insert(std::pair<int, int>(62, 5));
+	m2.insert(std::pair<int, int>(37, 6));
+	m2.insert(std::pair<int, int>(87, 7));
+	m2.insert(std::pair<int, int>(6, 8));
+	m2.insert(std::pair<int, int>(56, 9));
+	m2.insert(std::pair<int, int>(18, 10));
+	m2.insert(std::pair<int, int>(68, 11));
+	m2.insert(std::pair<int, int>(31, 12));
+	m2.insert(std::pair<int, int>(81, 13));
+	m2.insert(std::pair<int, int>(43, 14));
+	m2.insert(std::pair<int, int>(93, 15));
+	m2.insert(std::pair<int, int>(96, 15));
+	m2.insert(std::pair<int, int>(90, 15));
+	m2.insert(std::pair<int, int>(84, 15));
+	m2.insert(std::pair<int, int>(78, 15));
+	m2.insert(std::pair<int, int>(71, 15));
+	m2.insert(std::pair<int, int>(65, 15));
+	m2.insert(std::pair<int, int>(59, 15));
+	m2.insert(std::pair<int, int>(53, 15));
+	m2.insert(std::pair<int, int>(46, 15));
+	m2.insert(std::pair<int, int>(40, 15));
+	m2.insert(std::pair<int, int>(34, 15));
+	m2.insert(std::pair<int, int>(28, 15));
+	m2.insert(std::pair<int, int>(21, 15));
+	m2.insert(std::pair<int, int>(15, 15));
+	m2.insert(std::pair<int, int>(9, 15));
+	m2.insert(std::pair<int, int>(3, 15));
+	m2.insert(std::pair<int, int>(1, 15));
+	m2.insert(std::pair<int, int>(2, 15));
+	m2.insert(std::pair<int, int>(0, 15));
+	m2.insert(std::pair<int, int>(5, 15));
+	m2.insert(std::pair<int, int>(4, 15));*/
+	for (int i = 0; i < 150000; i++)
+			m2.insert(std::pair<int, int>(rand(), 15));
+	m2.put_tree(1000);
 
     end_test();
 }

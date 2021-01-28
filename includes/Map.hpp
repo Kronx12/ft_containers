@@ -417,7 +417,7 @@ namespace ft
 	template< class Key, class T, class Compare, class Allocator >
 	void Map<Key, T, Compare, Allocator>::p_erase_node(node_type *ptr, const key_type &key)
 	{
-		if (ptr == NULL)
+		if (ptr == NULL || ptr == _end || ptr == _rend)
 			return ;
 		if (ptr->value->first == key)
 		{
@@ -446,7 +446,7 @@ namespace ft
 				if (tmp_right && tmp_right != _end)
 				{
 					tmp = tmp_right;
-					while (tmp->left)
+					while (tmp->left && tmp->left != _rend)
 						tmp = tmp->left;
 					if (!(tmp == tmp_right))
 					{
@@ -456,8 +456,6 @@ namespace ft
 							tmp->parent->left = tmp->right;
 						tmp->right = tmp_right;
 					}
-					else
-						tmp->right = tmp_right->right;
 					tmp->left = tmp_left;
 					if (tmp_parent)
 					{
@@ -470,7 +468,7 @@ namespace ft
 						_data = tmp;
 					tmp->parent = tmp_parent;
 				}
-				else if (tmp_left != _rend)
+				else if (tmp_left && tmp_left != _rend)
 				{
 					tmp = tmp_left;
 					tmp->parent = tmp_parent;
@@ -494,9 +492,16 @@ namespace ft
 				}
 				else
 				{
-					_data = _end;
-					_end->left = _rend;
-					_rend->parent = _end;
+					if (tmp_right)
+					{
+						_end->parent = tmp_parent;
+						tmp_parent->right = _end;
+					}
+					else
+					{
+						_rend->parent = tmp_parent;
+						tmp_parent->left = _rend;
+					}
 				}
 				if (tmp_left)
 					tmp_left->parent = tmp;
@@ -746,7 +751,8 @@ namespace ft
 					dirswap[current_level - 1] = 0;
 				call(root->right, current_level + 1, 1, dirswap, maxsize);
 			}
-			grapher(root->value, current_level, side, dirswap);
+			if (root != _end && root != _rend && root != NULL)
+				grapher(root->value, current_level, side, dirswap);
 			if (root->left)
 			{
 				if (side != 0 && current_level != 0)
