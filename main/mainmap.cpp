@@ -58,6 +58,8 @@ void test()
 	m.insert(std::pair<int, int>(20, 20));
 	m.insert(std::pair<int, int>(16, 16));
 
+	// ft::Map<int, int> m2 = m;
+
 	std::cout << "std" << std::endl;
 	for (std::map<int, int>::iterator itr = mstd.begin(); itr != mstd.end(); itr++)
 		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
@@ -108,6 +110,36 @@ void test()
 	// std::cout << "std find 13 " << mstd.find(13)->first << std::endl;
 	// std::cout << " ft find 13 " << m.find(13)->first << std::endl;
 
+
+	std::cout << std::endl << "swap" << std::endl;
+	std::map<int, int> mstdswap;
+	mstdswap.insert(std::pair<int, int>(15, 15));
+	mstdswap.insert(std::pair<int, int>(2, 2));
+
+	std::map<int, int> mstdswap1;
+	mstdswap1.insert(std::pair<int, int>(14, 14));
+	mstdswap1.insert(std::pair<int, int>(1, 1));
+
+	ft::Map<int, int> mswap;
+	mswap.insert(std::pair<int, int>(15, 15));
+	mswap.insert(std::pair<int, int>(2, 2));
+
+	ft::Map<int, int> mswap1;
+	mswap1.insert(std::pair<int, int>(14, 14));
+	mswap1.insert(std::pair<int, int>(1, 1));
+
+	// mswap1.swap(mswap);
+	mstdswap1.swap(mstdswap);
+	std::cout << "std" << std::endl;
+	for (std::map<int, int>::iterator itr = mstdswap1.begin(); itr != mstdswap1.end(); itr++)
+		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
+	std::cout << "ft" << std::endl;
+	ft::Map<int, int>::iterator itrswap = mswap1.begin();
+	for (unsigned long i = 0; i < mswap1.size(); i++)
+	{
+		std::cout << "[ " << itrswap->first << " : " << itrswap->second << "]\n";
+		itrswap++;
+	}
 
 }
 
