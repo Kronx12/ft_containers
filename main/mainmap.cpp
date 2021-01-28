@@ -197,6 +197,7 @@ int main()
 		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
 
 	title("FT MAP erase big daddy:[10]\n");
+	m.put_tree();
 	m.erase(10);
 	m.put_tree();
 
