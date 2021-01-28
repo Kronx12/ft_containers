@@ -644,6 +644,55 @@ namespace ft
 				return (*this);
 			}
 	};
+
+	template < typename MapIterator >
+	class ReverseMapIterator : public MapIterator
+	{
+		public:
+			using typename MapIterator::value_type;
+			using typename MapIterator::pointer;
+			using typename MapIterator::const_pointer;
+			using typename MapIterator::reference;
+			using typename MapIterator::const_reference;
+
+			ReverseMapIterator() : MapIterator() {}
+			template<class Ts>
+			ReverseMapIterator(ReverseMapIterator<Ts> const &rhs) : MapIterator(rhs) {}
+			ReverseMapIterator(MapIterator const &rhs) : MapIterator(rhs) {}
+			~ReverseMapIterator() {}
+
+			ReverseMapIterator &operator=( ReverseMapIterator const &rhs )
+			{
+				if (this == &rhs) return(*this);
+				this->~ReverseMapIterator();
+				return *new(this) ReverseMapIterator(rhs);
+			}
+
+			ReverseMapIterator &operator++()
+			{
+				MapIterator::operator--();
+				return(*this);
+			}
+
+			ReverseMapIterator operator++(int)
+			{
+				ReverseMapIterator tmp(*this);
+				MapIterator::operator--(0);
+				return(tmp);
+			}
+
+			virtual ReverseMapIterator &operator--()
+			{
+				MapIterator::operator++();
+				return(*this);
+			}
+			virtual ReverseMapIterator operator--(int)
+			{
+				ReverseMapIterator tmp(*this);
+				MapIterator::operator++(0);
+				return(tmp);
+			}
+	};
 };
 
 #endif
