@@ -167,8 +167,7 @@ namespace ft
 	template< class Key, class T, class Compare, class Allocator >
 	Map<Key, T, Compare, Allocator>::Map(const Map &x) : _data(NULL), _alloc(x._alloc),_comp(x._comp),  _end(new node_type()), _rend(new node_type())
 	{
-		// TODO
-		// insert(x.begin(), x.end());
+		insert(x.begin(), x.end());
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
@@ -380,9 +379,7 @@ namespace ft
 	{
 		// marche pas
 		for (; first != last; first++)
-		{
 			insert(*(*first));
-		}
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
