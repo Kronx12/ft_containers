@@ -178,7 +178,7 @@ int main()
 	// itr++;
 
 	title("FT MAP:\n");
-	m.debug_tree();
+	m.put_tree();
 
 // Size
 
@@ -198,7 +198,7 @@ int main()
 
 	title("FT MAP erase big daddy:[10]\n");
 	m.erase(10);
-	m.debug_tree();
+	m.put_tree();
 
 	title("STD MAP erase leftmost loner:[2]\n");
 	mstd.erase(2);
@@ -207,7 +207,7 @@ int main()
 
 	title("FT MAP erase leftmost loner:[2]\n");
 	m.erase(2);
-	m.debug_tree();
+	m.put_tree();
 
 	title("STD MAP erase leftmost parent(rightchild):[3]\n");
 	mstd.erase(3);
@@ -216,7 +216,7 @@ int main()
 
 	title("FT MAP erase leftmost parent(rightchild):[3]\n");
 	m.erase(3);
-	m.debug_tree();
+	m.put_tree();
 
 	title("STD MAP erase rightmost loner:[18]\n");
 	mstd.erase(18);
@@ -225,7 +225,7 @@ int main()
 
 	title("FT MAP erase rightmost loner:[18]\n");
 	m.erase(18);
-	m.debug_tree();
+	m.put_tree();
 
 	title("STD MAP erase rightmost parent(leftchild):[17]\n");
 	mstd.erase(17);
@@ -234,7 +234,7 @@ int main()
 
 	title("FT MAP erase rightmost parent(leftchild):[17]\n");
 	m.erase(17);
-	m.debug_tree();
+	m.put_tree();
 
 	title("STD MAP erase non existing:[18]\n");
 	mstd.erase(18);
@@ -243,7 +243,7 @@ int main()
 
 	title("FT MAP erase non existing:[18]\n");
 	m.erase(18);
-	m.debug_tree();
+	m.put_tree();
 
 	title("STD MAP erase spam:\n");
 	mstd.erase(6);
@@ -258,8 +258,6 @@ int main()
 	m.erase(13);
 	m.erase(15);
 	m.erase(8);
-	m.debug_tree();
-
-
+	m.put_tree();
     end_test();
 }

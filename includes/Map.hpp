@@ -588,7 +588,7 @@ namespace ft
 	template< class Key, class T, class Compare, class Allocator >
 	typename Map<Key, T, Compare, Allocator>::const_iterator Map<Key, T, Compare, Allocator>::lower_bound(const Key &key) const
 	{
-		// verif
+		// TODO verif
 		iterator temp = find(key);
 		temp--;
 		return (temp);
@@ -597,7 +597,7 @@ namespace ft
 	template< class Key, class T, class Compare, class Allocator >
 	typename Map<Key, T, Compare, Allocator>::iterator Map<Key, T, Compare, Allocator>::upper_bound(const Key &key)
 	{
-		// verif
+		// TODO verif
 		iterator temp = find(key);
 		temp++;
 		return (temp);
@@ -606,7 +606,7 @@ namespace ft
 	template< class Key, class T, class Compare, class Allocator >
 	typename Map<Key, T, Compare, Allocator>::const_iterator Map<Key, T, Compare, Allocator>::upper_bound(const Key &key) const
 	{
-		// verif
+		// TODO verif
 		iterator temp = find(key);
 		temp++;
 		return (temp);
