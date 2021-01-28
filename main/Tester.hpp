@@ -56,35 +56,35 @@ void title(std::string title, int size);
 void check(std::stringstream *ss_std, std::stringstream *ss_ft, int flag);
 void end_test();
 
-// template < class K, class V >
-// void describe_map(std::map<K, V> std_map, ft::Map<K, V> ft_map)
-// {
-// 	std::stringstream ss_std;
-// 	std::stringstream ss_ft;
+template < class K, class V >
+void describe_map(std::map<K, V> std_map, ft::Map<K, V> ft_map)
+{
+	std::stringstream ss_std;
+	std::stringstream ss_ft;
 
-// 	ss_std << "- ";
-// 	ss_ft << "- ";
+	ss_std << "- ";
+	ss_ft << "- ";
 
-// 	int i = 0;
-// 	if (std_map.empty())
-// 		ss_std << "(empty)";
-// 	else
-// 		for (typename std::map<K, V>::iterator itr = std_map.begin(); itr != std_map.end(); itr++)
-// 		{
-// 			ss_std << itr->first << " : [" << itr->second << "]\n";
-// 			i++;
-// 		}
-// 	i = 0;
-// 	if (ft_map.empty())
-// 		ss_ft << "(empty)";
-// 	else
-// 		for (typename ft::Map<K, V>::iterator itr = ft_map.begin(); itr != ft_map.end(); itr++)
-// 		{
-// 			ss_std << itr->first << " : [" << itr->second << "]\n";
-// 			i++;
-// 		}
-// 	check(&ss_std, &ss_ft, DEFINED);
-// }
+	int i = 0;
+	if (std_map.empty())
+		ss_std << "(empty)";
+	else
+		for (typename std::map<K, V>::iterator itr = std_map.begin(); itr != std_map.end(); itr++)
+		{
+			ss_std << itr->first << " : [" << itr->second << "]\n";
+			i++;
+		}
+	i = 0;
+	if (ft_map.empty())
+		ss_ft << "(empty)";
+	else
+		for (typename ft::Map<K, V>::iterator itr = ft_map.begin(); itr != ft_map.end(); itr++)
+		{
+			ss_ft << itr->first << " : [" << itr->second << "]\n";
+			i++;
+		}
+	check(&ss_std, &ss_ft, DEFINED);
+}
 
 template < class T >
 void describe_vector(std::vector<T> std_vector, ft::Vector<T> ft_vector)

@@ -79,8 +79,8 @@ namespace ft
 			// TODO Remove
 			void debug_leaf(node_type *ptr);
 			void debug_tree();
-			static void grapher(void *item, int current_level, bool side, int *dirswap);
-			void put_tree(int i = 10);
+			void grapher(Mtree<Key, T> *item, int current_level, bool side, int *dirswap);
+			void put_tree(int i = 10000);
 			void call(Mtree<Key, T> *root, int current_level, bool side, int *dirswap, int maxsize);
 			int btree_level_count(Mtree<Key, T> *root);
 			void btree_apply_by_level(Mtree<Key, T> *root, int maxsize);
@@ -161,7 +161,7 @@ namespace ft
 	: _data(NULL), _size(0), _alloc(alloc), _comp(comp), _end(new node_type()), _rend(new node_type())
 	{
 		for (; first != last; first++)
-			insert(*first);
+			insert(*(*first));
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
@@ -173,7 +173,7 @@ namespace ft
 	template< class Key, class T, class Compare, class Allocator >
 	void Map<Key, T, Compare, Allocator>::p_deallocate_tree(node_type *node)
 	{
-		if (node == NULL)
+		if (node == NULL || node == _end || node == _rend)
 			return;
 		p_deallocate_tree(node->left);
 		p_deallocate_tree(node->right);
@@ -186,6 +186,8 @@ namespace ft
 	Map<Key, T, Compare, Allocator>::~Map()
 	{
 		p_deallocate_tree(_data);
+		delete _rend;
+		delete _end;
 	}
 			
 	template< class Key, class T, class Compare, class Allocator >
@@ -723,15 +725,9 @@ namespace ft
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
-	void Map<Key, T, Compare, Allocator>::grapher(void *item, int current_level, bool side, int *dirswap)
+	void Map<Key, T, Compare, Allocator>::grapher(Mtree<Key, T> *item, int current_level, bool side, int *dirswap)
 	{
 		int color = current_level % 2 ? 31 : 30;
-		std::pair<Key, T> *pair_kv = static_cast<std::pair<Key, T> *>(item);
-		if (current_level == 0)
-		{
-			std::cout << " \033[1;" << color << "m◖" << pair_kv->first << "◗\033[0m\n";
-			return;
-		}
 
 		for (int i = 0; i < current_level - 1; i++)
 		{
@@ -740,11 +736,24 @@ namespace ft
 			else
 				std::cout << "     ";
 		}
-		if (!side)
+		
+		if (!current_level)
+			std::cout << " \033[1;" << color << "m◖";
+		else if (!side)
 			std::cout << "  ┗━━━\033[1;" << color << "m◖";
 		else
 			std::cout << "  ┏━━━\033[1;" << color << "m◖";
-		std::cout << "" << pair_kv->first << "◗\033[0m\n";
+
+		if (item == _end)
+			std::cout << "(end)◗\033[0m\n";
+		else if (item == _rend)
+			std::cout << "(rend)◗\033[0m\n";
+		else if (begin() == iterator(item))
+			std::cout << item->value->first << "(begin)◗\033[0m\n";
+		else if (rbegin() == iterator(item))
+			std::cout << item->value->first << "(rbegin)◗\033[0m\n";
+		else
+			std::cout << item->value->first << "◗\033[0m\n";
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
@@ -766,8 +775,8 @@ namespace ft
 					dirswap[current_level - 1] = 0;
 				call(root->right, current_level + 1, 1, dirswap, maxsize);
 			}
-			if (root != _end && root != _rend && root != NULL)
-				grapher(root->value, current_level, side, dirswap);
+			if (root != NULL)
+				grapher(root, current_level, side, dirswap);
 			if (root->left)
 			{
 				if (side != 0 && current_level != 0)

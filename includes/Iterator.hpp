@@ -476,7 +476,6 @@ namespace ft
 			MapIterator() : _current(NULL) {}
 			MapIterator(MapIterator const &rhs) : _current(rhs._current) {}
 			MapIterator(ConstMapIterator<T, M> const &rhs) : _current(rhs._current) {}
-			
 			MapIterator(map_pointer current) : _current(current) {}
 
 			MapIterator &operator=(MapIterator const &rhs)
@@ -496,18 +495,18 @@ namespace ft
 			//Input Category
 			bool operator==(const MapIterator & rhs) { return (_current == rhs._current); }
 			bool operator!=(const MapIterator & rhs) { return (_current != rhs._current); }
-			bool operator==(const ConstMapIterator<T, M> & rhs) { return (this->_current == rhs._current); }
+			bool operator==(const ConstMapIterator<T, M> & rhs) { return (_current == rhs._current); }
 			bool operator!=(const ConstMapIterator<T, M> & rhs) { return (_current != rhs._current); }
-			T *operator*() { return(this->_current->value); }
-			T *operator->() { return(this->_current->value); }
+			T *operator*() { return(_current->value); }
+			T *operator->() { return(_current->value); }
 
 			//Bidirectional Category
 			MapIterator &operator++()
 			{
-				if (this->_current->right) // go droite si tu peux
+				if (_current->right) // go droite si tu peux
 				{
 					_current = _current->right;
-					while (this->_current->left) // go au max en bas a gauche
+					while (_current->left) // go au max en bas a gauche
 						_current = _current->left;
 				}
 				else // remonte tout les passages de droites jusqu'a gauche ou le centre sauf si cest la fin
@@ -521,10 +520,10 @@ namespace ft
 
 			MapIterator &operator--()
 			{
-				if (this->_current->left) // go au au max a droite de la gauche en bas
+				if (_current->left) // go au au max a droite de la gauche en bas
 				{
 					_current = _current->left;
-					while (this->_current->right) // en prenant tout les chemins de droite
+					while (_current->right) // en prenant tout les chemins de droite
 						_current = _current->right;
 				}
 				else // remonte tant que pas branche de droite
@@ -598,10 +597,10 @@ namespace ft
 			//Bidirectional Category
 			ConstMapIterator &operator++()
 			{
-				if (this->_current->right) // go droite si tu peux
+				if (_current->right) // go droite si tu peux
 				{
 					_current = _current->right;
-					while (this->_current->left) // go au max en bas a gauche
+					while (_current->left) // go au max en bas a gauche
 						_current = _current->left;
 				}
 				else // remonte tout les passages de droites jusqu'a gauche ou le centre sauf si cest la fin
@@ -615,10 +614,10 @@ namespace ft
 
 			ConstMapIterator &operator--()
 			{
-				if (this->_current->left) // go au au max a droite de la gauche en bas
+				if (_current->left) // go au au max a droite de la gauche en bas
 				{
 					_current = _current->left;
-					while (this->_current->right) // en prenant tout les chemins de droite
+					while (_current->right) // en prenant tout les chemins de droite
 						_current = _current->right;
 				}
 				else // remonte tant que pas branche de droite
