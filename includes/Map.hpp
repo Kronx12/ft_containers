@@ -13,6 +13,7 @@ namespace ft
 			Mtree						*parent;
 			Mtree						*left;
 			Mtree						*right;
+			bool						color;
 
 			Mtree() : value(NULL), parent(NULL), left(NULL), right(NULL) {};
 	};
@@ -164,9 +165,10 @@ namespace ft
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
-	Map<Key, T, Compare, Allocator>::Map(const Map &x) : _alloc(x._alloc),_comp(x._comp),  _end(new node_type()), _rend(new node_type())
+	Map<Key, T, Compare, Allocator>::Map(const Map &x) : _data(NULL), _alloc(x._alloc),_comp(x._comp),  _end(new node_type()), _rend(new node_type())
 	{
-		insert(x.begin(), x.end());
+		// TODO
+		// insert(x.begin(), x.end());
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
@@ -254,7 +256,7 @@ namespace ft
 	template< class Key, class T, class Compare, class Allocator >
 	typename Map<Key, T, Compare, Allocator>::size_type Map<Key, T, Compare, Allocator>::max_size() const
 	{
-		return (std::numeric_limits<size_type>::max() / sizeof(1 /*TODO Replace here*/ ));
+		return (std::numeric_limits<size_type>::max() / (sizeof(Mtree<Key, T>) - sizeof(void*) + sizeof(std::pair<Key, T>)));
 	}
 
 	// -------------------------------- Element acces --------------------------------
@@ -310,8 +312,7 @@ namespace ft
 			this->_end->parent = _data;
 			_size++;
 		}
-		else if (value.first == ptr->value->first)
-			; // Skip if existing key
+		else if (value.first == ptr->value->first) {} // Skip if existing key
 		else if (tmp_cmp(value, *ptr->value))
 		{
 			if (ptr->left != NULL && ptr->left != this->_rend)
@@ -379,45 +380,44 @@ namespace ft
 	{
 		// marche pas
 		for (; first != last; first++)
+		{
 			insert(*(*first));
+		}
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
 	void Map<Key, T, Compare, Allocator>::p_erase_node(node_type *ptr, const key_type &key)
 	{
-		if (ptr == NULL)
+		if (ptr == NULL || ptr == _end || ptr == _rend)
 			return ;
 		if (ptr->value->first == key)
 		{
+			node_type *tmp_parent = ptr->parent;
+			bool right;
+			node_type *tmp_left = ptr->left;
+			node_type *tmp_right = ptr->right;
+			node_type *tmp = tmp_right;
+			bool stop = 0;
+			if (ptr->parent)
+					right = (ptr == ptr->parent->right);
 			if (ptr->left == NULL && ptr->right == NULL)
 			{
 				if (ptr->parent && ptr->parent->left == ptr)
 					ptr->parent->left = NULL;
 				else if (ptr->parent)
 					ptr->parent->right = NULL;
-				_alloc.destroy(ptr->value);
-				_alloc.deallocate(ptr->value, 1);
-				delete ptr;
-				_size--;
+				stop = 1;
 			}
-			else
+			_alloc.destroy(ptr->value);
+			_alloc.deallocate(ptr->value, 1);
+			delete ptr;
+			_size--;
+			if (!stop)
 			{
-				node_type *tmp_parent = ptr->parent;
-				bool right;
-				node_type *tmp_left = ptr->left;
-				node_type *tmp_right = ptr->right;
-				node_type *tmp = tmp_right;
-
-				if (ptr->parent)
-					right = (ptr == ptr->parent->right);
-				_alloc.destroy(ptr->value);
-				_alloc.deallocate(ptr->value, 1);
-				delete ptr;
-				_size--;
 				if (tmp_right && tmp_right != _end)
 				{
 					tmp = tmp_right;
-					while (tmp->left)
+					while (tmp->left && tmp->left != _rend)
 						tmp = tmp->left;
 					if (!(tmp == tmp_right))
 					{
@@ -427,8 +427,6 @@ namespace ft
 							tmp->parent->left = tmp->right;
 						tmp->right = tmp_right;
 					}
-					else
-						tmp->right = tmp_right->right;
 					tmp->left = tmp_left;
 					if (tmp_parent)
 					{
@@ -441,7 +439,7 @@ namespace ft
 						_data = tmp;
 					tmp->parent = tmp_parent;
 				}
-				else if (tmp_left != _rend)
+				else if (tmp_left && tmp_left != _rend)
 				{
 					tmp = tmp_left;
 					tmp->parent = tmp_parent;
@@ -465,9 +463,16 @@ namespace ft
 				}
 				else
 				{
-					_data = _end;
-					_end->left = _rend;
-					_rend->parent = _end;
+					if (tmp_right)
+					{
+						_end->parent = tmp_parent;
+						tmp_parent->right = _end;
+					}
+					else
+					{
+						_rend->parent = tmp_parent;
+						tmp_parent->left = _rend;
+					}
 				}
 				if (tmp_left)
 					tmp_left->parent = tmp;
@@ -536,7 +541,7 @@ namespace ft
 		Mtree<Key, T> *temp;
 
 		temp = _data;
-		while (temp && temp != _end && temp != _rend)
+		while (temp != NULL && temp != _end && temp != _rend)
 		{
 			if (temp->value->first == key)
 			{
@@ -764,7 +769,8 @@ namespace ft
 					dirswap[current_level - 1] = 0;
 				call(root->right, current_level + 1, 1, dirswap, maxsize);
 			}
-			grapher(root->value, current_level, side, dirswap);
+			if (root != _end && root != _rend && root != NULL)
+				grapher(root->value, current_level, side, dirswap);
 			if (root->left)
 			{
 				if (side != 0 && current_level != 0)
