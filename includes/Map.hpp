@@ -543,6 +543,9 @@ namespace ft
 	template< class Key, class T, class Compare, class Allocator >
 	void Map<Key, T, Compare, Allocator>::swap(Map &other)
 	{
+		// Map temp = other;
+		// other = *this;
+		// *this = temp;
 		(void)other;
 		// TODO
 	}
