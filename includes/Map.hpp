@@ -13,6 +13,7 @@ namespace ft
 			Mtree						*parent;
 			Mtree						*left;
 			Mtree						*right;
+			bool						color;
 
 			Mtree() : value(NULL), parent(NULL), left(NULL), right(NULL) {};
 	};
@@ -164,9 +165,10 @@ namespace ft
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
-	Map<Key, T, Compare, Allocator>::Map(const Map &x) : _comp(x._comp), _alloc(other._alloc), _end(new node_type()), _rend(new node_type())
+	Map<Key, T, Compare, Allocator>::Map(const Map &x) : _alloc(x._alloc), _comp(x._comp), _end(new node_type()), _rend(new node_type())
 	{
-		insert(x.begin(), x.end());
+		// TODO
+		// insert(x.begin(), x.end());
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
@@ -254,7 +256,7 @@ namespace ft
 	template< class Key, class T, class Compare, class Allocator >
 	typename Map<Key, T, Compare, Allocator>::size_type Map<Key, T, Compare, Allocator>::max_size() const
 	{
-		return (std::numeric_limits<size_type>::max() / sizeof(1 /*TODO Replace here*/ ));
+		return (std::numeric_limits<size_type>::max() / (sizeof(Mtree<Key, T>) - sizeof(void*) + sizeof(std::pair<Key, T>)));
 	}
 
 	// -------------------------------- Element acces --------------------------------
@@ -513,27 +515,6 @@ namespace ft
 		Map temp = other;
 		other = *this;
 		*this = temp;
-		// TODO
-		// node_type *t_data = other._data;
-		// size_type t_size = other._size;
-		// allocator_type t_alloc = other._alloc;
-		// key_compare t_comp = other._comp;
-		// node_type *t_end = other._end;
-		// node_type *t_rend = other._rend;
-
-		// other._data = _data;
-		// other._size = _size;
-		// other._alloc = _alloc;
-		// other._comp = _comp;
-		// other._end = _end;
-		// other._rend = _rend;
-
-		// _data = t_data;
-		// _size = t_size;
-		// _alloc = t_alloc;
-		// _comp = t_comp;
-		// _end = t_end;
-		// _rend = t_rend;
 	}
 
 	// -------------------------------- Observers --------------------------------

@@ -218,6 +218,8 @@ int main()
 
 	ft::Map<int, int> m;
 	std::map<int, int> mstd;
+	ft::Map<std::string, int> ms;
+	std::map<std::string, int> mstds;
 
 	mstd.insert(std::pair<int, int>(10, 1));
 	mstd.insert(std::pair<int, int>(5, 2));
@@ -262,9 +264,15 @@ int main()
 
 // Size
 
-	// title("FT MAP (SIZE):\n");
-	// std::cout << "std_size : " << mstd.size() << std::endl;
-	// std::cout << "ft_size : " << m.size() << std::endl;
+	title("FT MAP (SIZE):\n");
+	std::cout << "std_size : " << mstd.size() << std::endl;
+	std::cout << "ft_size : " << m.size() << std::endl;
+
+	std::cout << "std_max_size : " << mstd.max_size() << "\n";
+	std::cout << "ft_max_size : " << m.max_size() << "\n";
+
+	std::cout << "std_max_size : " << mstds.max_size() << "\n";
+	std::cout << "ft_max_size : " << ms.max_size() << "\n";
 	
 // Operator []
 	// std::cout << m[8] << std::endl;
@@ -341,5 +349,6 @@ int main()
 	// m.erase(8);
 	// m.put_tree();
     // end_test();
-	test();
+	
+	// test();
 }
