@@ -198,7 +198,7 @@ int main()
 
 	title("FT MAP erase big daddy:[10]\n");
 	m.erase(10);
-	m.debug_tree();
+	m.put_tree();
 
 	title("STD MAP erase leftmost loner:[2]\n");
 	mstd.erase(2);
@@ -258,7 +258,7 @@ int main()
 	m.erase(13);
 	m.erase(15);
 	m.erase(8);
-	m.debug_tree();
+	m.put_tree(10);
 
 
     end_test();

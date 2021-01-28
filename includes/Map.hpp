@@ -78,11 +78,11 @@ namespace ft
 			// TODO Remove
 			void debug_leaf(node_type *ptr);
 			void debug_tree();
-			static void grapher(void *item, int current_level, bool side);
-			void put_tree();
-			void call(Mtree<Key, T> *root, int current_level, bool side, void (*applyf)(void *item, int current_level, bool side));
+			static void grapher(void *item, int current_level, bool side, int *dirswap);
+			void put_tree(int i = 10);
+			void call(Mtree<Key, T> *root, int current_level, bool side, int *dirswap, int maxsize);
 			int btree_level_count(Mtree<Key, T> *root);
-			void btree_apply_by_level(Mtree<Key, T> *root, void (*applyf)(void *item, int current_level, bool side));
+			void btree_apply_by_level(Mtree<Key, T> *root, int maxsize);
 
 			// -------------------------------- Member functions --------------------------------
 			explicit Map(const Compare &comp = key_compare(), const Allocator &alloc = allocator_type());
@@ -656,7 +656,7 @@ namespace ft
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
-	void Map<Key, T, Compare, Allocator>::grapher(void *item, int current_level, bool side)
+	void Map<Key, T, Compare, Allocator>::grapher(void *item, int current_level, bool side, int *dirswap)
 	{
 		std::pair<Key, T> *pair_kv = static_cast<std::pair<Key, T> *>(item);
 		if (current_level == 0)
@@ -666,30 +666,48 @@ namespace ft
 		}
 
 		for (int i = 0; i < current_level - 1; i++)
-			std::cout << " │  ";
+		{
+			if (dirswap[i])
+				std::cout << " │  ";
+			else
+				std::cout << "    ";
+		}
 		if (!side)
 			std::cout << " └──";
 		else
 			std::cout << " ┌──";
-		// for (int i = 0; i < current_level - 1; i++)
-		// 	std::cout << "───";
 		std::cout << " " << pair_kv->first << "\n";
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
-	void Map<Key, T, Compare, Allocator>::put_tree()
+	void Map<Key, T, Compare, Allocator>::put_tree(int i)
 	{
-		btree_apply_by_level(_data, Map::grapher);
+		btree_apply_by_level(_data, i);
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
-	void Map<Key, T, Compare, Allocator>::call(Mtree<Key, T> *root, int current_level, bool side, void (*applyf)(void *item, int current_level, bool side))
+	void Map<Key, T, Compare, Allocator>::call(Mtree<Key, T> *root, int current_level, bool side, int *dirswap, int maxsize)
 	{
-		if (root->right)
-			call(root->right, current_level + 1, 1, applyf);
-		applyf(root->value, current_level, side);
-		if (root->left)
-			call(root->left, current_level + 1, 0, applyf);
+		if (current_level < maxsize)
+		{
+			if (root->right)
+			{
+				if (side != 1 && current_level != 0)
+					dirswap[current_level - 1] = 1;
+				else if (current_level != 0)
+					dirswap[current_level - 1] = 0;
+				call(root->right, current_level + 1, 1, dirswap, maxsize);
+			}
+			grapher(root->value, current_level, side, dirswap);
+			if (root->left)
+			{
+				if (side != 0 && current_level != 0)
+					dirswap[current_level - 1] = 1;
+				else if (current_level != 0)
+					dirswap[current_level - 1] = 0;
+				call(root->left, current_level + 1, 0, dirswap, maxsize);
+			}
+		}
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
@@ -708,11 +726,16 @@ namespace ft
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
-	void Map<Key, T, Compare, Allocator>::btree_apply_by_level(Mtree<Key, T> *root, void (*applyf)(void *item, int current_level, bool side))
+	void Map<Key, T, Compare, Allocator>::btree_apply_by_level(Mtree<Key, T> *root, int maxsize)
 	{
+		int i[maxsize];
+		for (int j = 0; j < maxsize - 1; j++)
+		{
+			i[j] = 0;
+		}
 		if (!root)
 			return ;
-		call(root, 0, 0, applyf);
+		call(root, 0, 0, i, maxsize);
 	}
 };
 
