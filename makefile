@@ -53,68 +53,75 @@ LFLAGS  		=	-I $(TEST_INCS) -I $(INCS_DIR)
 CALLF			=	$(CC) $(CFLAGS) $(CVERSION)
 CALLFLIB		=	$(CC) $(CFLAGS) $(CVERSION) $(LFLAGS)
 
-# Defauilt Make #
-all				:	directories #ART
+# Verif if input is set #
+ifdef INPUT
+RESET	=	yes
+endif
 
-# ifdef INPUT
-# 	@\rm -rf test/*
-# endif
+# Defauilt Make #
+all				:	directories
 
 # Start all tester #
-all_test		:	list stack queue vector map
+all_test		:	ART list stack queue vector map
+
+# set Restart #
+lreset			:
+ifdef INPUT
+	$(eval RESET = $(LIST))
+endif
+
+vreset			:
+ifdef INPUT
+	$(eval RESET = $(VECTOR))
+endif
+
+mreset			:
+ifdef INPUT
+	$(eval RESET = $(MAP))
+endif
+
+sreset			:
+ifdef INPUT
+	$(eval RESET = $(STACK))
+endif
+
+qreset			:
+ifdef INPUT
+	$(eval RESET = $(QUEUE))
+endif
 
 # Restart exec #
-listrm			:
-ifdef INPUT
-	@\rm -rf test/$(LIST)
-endif
-
-vectorrm			:
-ifdef INPUT
-	@\rm -rf test/$(VECTOR)
-endif
-
-maprm			:
-ifdef INPUT
-	@\rm -rf test/$(MAP)
-endif
-
-stackrm			:
-ifdef INPUT
-	@\rm -rf test/$(STACK)
-endif
-
-queuerm			:
-ifdef INPUT
-	@\rm -rf test/$(QUEUE)
+reset			:
+ifdef RESET
+	@\rm -rf $(addprefix $(TEST_DIR),$(addsuffix $(RESET), /))
 endif
 
 # Containers test #
-list			:	all listrm $(LIST_PATH)
+list			:	all lreset reset $(LIST_PATH)
 	./$(addprefix $(TEST_DIR)/,$(LIST))
 
 $(LIST_PATH)	: $(LIST_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
 	$(CALLFLIB) ${INPUT} $(LIST_MAIN) $(TEST_MAIN) -o $(LIST_PATH)
 
-stack			:	all stackrm $(STACK_PATH)
+stack			:	all sreset reset $(STACK_PATH)
 	./$(addprefix $(TEST_DIR)/,$(STACK))
 
 $(STACK_PATH)	:	$(STACK_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
 	$(CALLFLIB) ${INPUT} $(STACK_MAIN) $(TEST_MAIN) -o $(addprefix $(TEST_DIR)/,$(STACK))
 
-queue			:	all queuerm $(QUEUE_PATH)
+queue			:	all qreset reset $(QUEUE_PATH)
 	./$(addprefix $(TEST_DIR)/,$(QUEUE))
 
 $(QUEUE_PATH)	:	$(QUEUE_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
 	$(CALLFLIB) ${INPUT} $(QUEUE_MAIN) $(TEST_MAIN) -o $(addprefix $(TEST_DIR)/,$(QUEUE))
 
-map				:	all maprm $(MAP_PATH)
+map				:	all mreset reset $(MAP_PATH)
 	./$(addprefix $(TEST_DIR)/,$(MAP))
 
 $(MAP_PATH)		:	$(MAP_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
 	$(CALLFLIB) ${INPUT} $(MAP_MAIN) $(TEST_MAIN) -o $(addprefix $(TEST_DIR)/,$(MAP))
 
-vector			:	all vectorrm $(VECTOR_PATH)
+vector			:	all vreset reset $(VECTOR_PATH)
 	./$(addprefix $(TEST_DIR)/,$(VECTOR))
 
 $(VECTOR_PATH)	:	$(VECTOR_MAIN) $(TEST_MAIN) $(TEST_INCS) $(INCS_PATH)
@@ -159,4 +166,4 @@ ART:
 		done ; echo ;                              \
 	done
 
-.PHONY			:	all fclean clean re directories ART list listrm vectorrm maprm stackrm queuerm
+.PHONY			:	all fclean clean re directories ART list map vector queue stack lreset vreset mreset sreset qreset reset

@@ -184,7 +184,7 @@ int main()
 
 	title("FT MAP (SIZE):\n");
 	std::cout << "std_size : " << mstd.size() << std::endl;
-	std::cout << "ft_size : " << m.size() << std::endl;
+	// std::cout << "ft_size : " << m.size() << std::endl;
 	
 // Operator []
 	// std::cout << m[8] << std::endl;
