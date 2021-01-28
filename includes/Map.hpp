@@ -591,35 +591,49 @@ namespace ft
 	template< class Key, class T, class Compare, class Allocator >
 	typename Map<Key, T, Compare, Allocator>::iterator Map<Key, T, Compare, Allocator>::lower_bound(const Key &key)
 	{
-		// marche pas
-		iterator temp = find(key);
-		return (temp);
+		for (iterator itr = begin(); itr != end(); itr++)
+		{
+			if (key_comp()(key, itr->first))
+			{
+				if (find(key) != end())
+					itr--;
+				return (itr);
+			}
+		}
+		return (end());
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
 	typename Map<Key, T, Compare, Allocator>::const_iterator Map<Key, T, Compare, Allocator>::lower_bound(const Key &key) const
 	{
-		// marche pas
-		iterator temp = find(key);
-		return (temp);
+		for (iterator itr = begin(); itr != end(); itr++)
+		{
+			if (key_comp()(key, itr->first))
+			{
+				if (find(key) != end())
+					itr--;
+				return (itr);
+			}
+		}
+		return (end());
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
 	typename Map<Key, T, Compare, Allocator>::iterator Map<Key, T, Compare, Allocator>::upper_bound(const Key &key)
 	{
-		// marche pas
-		iterator temp(find(key));
-		temp++;
-		return (temp);
+		for (iterator itr = begin(); itr != end(); itr++)
+			if (key_comp()(key, itr->first))
+				return (itr);
+		return (end());
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
 	typename Map<Key, T, Compare, Allocator>::const_iterator Map<Key, T, Compare, Allocator>::upper_bound(const Key &key) const
 	{
-		// marche pas
-		iterator temp(find(key));
-		temp++;
-		return (temp);
+		for (iterator itr = begin(); itr != end(); itr++)
+			if (key_comp()(key, itr->first))
+				return (itr);
+		return (end());
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
