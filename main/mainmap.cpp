@@ -100,6 +100,15 @@ void test()
 	m[18] = 11;
 	std::cout << "std[18] " << mstd[18] << std::endl;
 	std::cout << " ft[18] " << m[18] << std::endl;
+
+	std::cout << std::endl << "find" << std::endl;
+
+	std::cout << "std find 12 " << mstd.find(12)->first << std::endl;
+	std::cout << " ft find 12 " << m.find(12)->first << std::endl;
+	// std::cout << "std find 13 " << mstd.find(13)->first << std::endl;
+	// std::cout << " ft find 13 " << m.find(13)->first << std::endl;
+
+
 }
 
 // void map_test(int size)

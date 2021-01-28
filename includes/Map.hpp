@@ -564,9 +564,24 @@ namespace ft
 	template< class Key, class T, class Compare, class Allocator >
 	typename Map<Key, T, Compare, Allocator>::iterator Map<Key, T, Compare, Allocator>::find(const Key &key)
 	{
-		for (iterator itr = begin(); itr != end(); itr++)
-			if (itr->first == key)
+		Mtree<Key, T> *temp;
+
+		temp = _data;
+		while (temp && temp != _end && temp != _rend)
+		{
+			if (temp->value->first == key)
+			{
+				iterator itr = temp;
 				return (itr);
+			}
+			else if (key_comp()(temp->value->first, key))
+				temp = temp->right;
+			else
+				temp = temp->left;
+		}
+		// for (iterator itr = begin(); itr != end(); itr++)
+		// 	if (itr->first == key)
+		// 		return (itr);
 		return (end());
 	}
 
