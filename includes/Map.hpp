@@ -294,23 +294,20 @@ namespace ft
 	template< class Key, class T, class Compare, class Allocator >
 	T &Map<Key, T, Compare, Allocator>::operator[]( const Key &key )
 	{
-		// Mtree<Key, T> *temp;
+		Mtree<Key, T> *temp;
 
-		// temp = _data;
-		// while (temp)
-		// {
-		// 	if (temp->value->first == key)
-		// 		return (temp->value->second);
-		// 	else if (key_comp()(temp->value->first, key))
-		// 		temp = temp->left;
-		// 	else
-		// 		temp = temp->right;
-		// }
-		// insert(std::pair<Key, T>(key, T()));
-		// operator[](key);
-		// return (temp->value->second);
-		(void)key;
-		// TODO
+		temp = _data;
+		while (temp && temp != _end && temp != _rend)
+		{
+			if (temp->value->first == key)
+				return (temp->value->second);
+			else if (key_comp()(temp->value->first, key))
+				temp = temp->right;
+			else
+				temp = temp->left;
+		}
+		insert(std::pair<Key, T>(key, T()));
+		return (operator[](key));
 	}
 
 	// -------------------------------- Modifiers --------------------------------

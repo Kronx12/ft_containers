@@ -65,13 +65,13 @@ void test()
 	std::cout << "ft" << std::endl;
 	ft::Map<int, int>::iterator itr = m.begin();
 	ft::Map<int, int>::iterator itr2 = m.rbegin();
-	std::cout << "++" << std::endl;
+	std::cout << "ope++" << std::endl;
 	for (unsigned long i = 0; i < m.size(); i++)
 	{
 		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
 		itr++;
 	}
-	std::cout << "--" << std::endl;
+	std::cout << "ope--" << std::endl;
 	for (unsigned long i = 0; i < m.size(); i++)
 	{
 		std::cout << "[ " << itr2->first << " : " << itr2->second << "]\n";
@@ -80,16 +80,26 @@ void test()
 
 
 	std::cout << "Upper bound : (std) 7  " << mstd.upper_bound(7)->first << std::endl;
-	std::cout << "Upper bound : (std) 17 " << mstd.upper_bound(17)->first << std::endl;
 	std::cout << "Upper bound : (ft)  7  " << m.upper_bound(7)->first << std::endl;
+	std::cout << "Upper bound : (std) 17 " << mstd.upper_bound(17)->first << std::endl;
 	std::cout << "Upper bound : (ft)  17 " << m.upper_bound(17)->first << std::endl;
 
-	std::cout << "Lower bound : (std) 7  " << mstd.lower_bound(7)->first << std::endl;
-	std::cout << "Lower bound : (std) 17 " << mstd.lower_bound(17)->first << std::endl;
 	std::cout << "Lower bound : (std) 0  " << mstd.lower_bound(0)->first << std::endl;
-	std::cout << "Lower bound : (ft)  7  " << m.lower_bound(7)->first << std::endl;
-	std::cout << "Lower bound : (ft)  17 " << m.lower_bound(17)->first << std::endl;
 	std::cout << "Lower bound : (ft)  0  " << m.lower_bound(0)->first << std::endl;
+	std::cout << "Lower bound : (std) 7  " << mstd.lower_bound(7)->first << std::endl;
+	std::cout << "Lower bound : (ft)  7  " << m.lower_bound(7)->first << std::endl;
+	std::cout << "Lower bound : (std) 17 " << mstd.lower_bound(17)->first << std::endl;
+	std::cout << "Lower bound : (ft)  17 " << m.lower_bound(17)->first << std::endl;
+
+	std::cout << std::endl << "operator [] " << std::endl;
+	std::cout << "std[17] " << mstd[17] << std::endl;
+	std::cout << " ft[17] " << m[17] << std::endl;
+	std::cout << "std[18] " << mstd[18] << std::endl;
+	std::cout << " ft[18] " << m[18] << std::endl;
+	mstd[18] = 11;
+	m[18] = 11;
+	std::cout << "std[18] " << mstd[18] << std::endl;
+	std::cout << " ft[18] " << m[18] << std::endl;
 }
 
 // void map_test(int size)
@@ -202,20 +212,20 @@ int main()
 	m.insert(std::pair<int, int>(16, 14));
 	m.insert(std::pair<int, int>(18, 15));
 
-	// title("STD MAP:\n");
-	// std::map<int, int>::iterator itr;
-	// for (itr = mstd.begin(); itr != mstd.end(); itr++)
-	// 	std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
-	// // itr++;
+	title("STD MAP:\n");
+	std::map<int, int>::iterator itr;
+	for (itr = mstd.begin(); itr != mstd.end(); itr++)
+		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
+	// itr++;
 
-	// title("FT MAP:\n");
+	title("FT MAP:\n");
 	// m.put_tree();
 
 // Size
 
-	title("FT MAP (SIZE):\n");
-	std::cout << "std_size : " << mstd.size() << std::endl;
-	std::cout << "ft_size : " << m.size() << std::endl;
+	// title("FT MAP (SIZE):\n");
+	// std::cout << "std_size : " << mstd.size() << std::endl;
+	// std::cout << "ft_size : " << m.size() << std::endl;
 	
 // Operator []
 	// std::cout << m[8] << std::endl;
