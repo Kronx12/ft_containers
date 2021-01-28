@@ -178,14 +178,14 @@ int main()
 	// itr++;
 
 	title("FT MAP:\n");
-	m.debug_tree();
+	m.put_tree();
 
 // Size
 
 	title("FT MAP (SIZE):\n");
 	std::cout << "std_size : " << mstd.size() << std::endl;
 	// std::cout << "ft_size : " << m.size() << std::endl;
-	
+
 // Operator []
 	// std::cout << m[8] << std::endl;
 	// std::cout << mstd[8] << std::endl;
@@ -197,7 +197,6 @@ int main()
 		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
 
 	title("FT MAP erase big daddy:[10]\n");
-	m.put_tree();
 	m.erase(10);
 	m.put_tree();
 
@@ -208,7 +207,7 @@ int main()
 
 	title("FT MAP erase leftmost loner:[2]\n");
 	m.erase(2);
-	m.debug_tree();
+	m.put_tree();
 
 	title("STD MAP erase leftmost parent(rightchild):[3]\n");
 	mstd.erase(3);
@@ -217,7 +216,7 @@ int main()
 
 	title("FT MAP erase leftmost parent(rightchild):[3]\n");
 	m.erase(3);
-	m.debug_tree();
+	m.put_tree();
 
 	title("STD MAP erase rightmost loner:[18]\n");
 	mstd.erase(18);
@@ -226,7 +225,7 @@ int main()
 
 	title("FT MAP erase rightmost loner:[18]\n");
 	m.erase(18);
-	m.debug_tree();
+	m.put_tree();
 
 	title("STD MAP erase rightmost parent(leftchild):[17]\n");
 	mstd.erase(17);
@@ -235,7 +234,7 @@ int main()
 
 	title("FT MAP erase rightmost parent(leftchild):[17]\n");
 	m.erase(17);
-	m.debug_tree();
+	m.put_tree();
 
 	title("STD MAP erase non existing:[18]\n");
 	mstd.erase(18);
@@ -244,7 +243,7 @@ int main()
 
 	title("FT MAP erase non existing:[18]\n");
 	m.erase(18);
-	m.debug_tree();
+	m.put_tree();
 
 	title("STD MAP erase spam:\n");
 	mstd.erase(6);
@@ -254,7 +253,7 @@ int main()
 	for (std::map<int, int>::iterator itr = mstd.begin(); itr != mstd.end(); itr++)
 		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
 
-	title("FT MAP erase spam:\n");
+	title("FT MAP erase spam:[6],[13],[15],[8]\n");
 	m.erase(6);
 	m.erase(13);
 	m.erase(15);

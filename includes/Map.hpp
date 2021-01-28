@@ -410,31 +410,28 @@ namespace ft
 			return ;
 		if (ptr->value->first == key)
 		{
+			node_type *tmp_parent = ptr->parent;
+			bool right;
+			node_type *tmp_left = ptr->left;
+			node_type *tmp_right = ptr->right;
+			node_type *tmp = tmp_right;
+			bool stop = 0;
+			if (ptr->parent)
+					right = (ptr == ptr->parent->right);
 			if (ptr->left == NULL && ptr->right == NULL)
 			{
 				if (ptr->parent && ptr->parent->left == ptr)
 					ptr->parent->left = NULL;
 				else if (ptr->parent)
 					ptr->parent->right = NULL;
-				_alloc.destroy(ptr->value);
-				_alloc.deallocate(ptr->value, 1);
-				delete ptr;
-				_size--;
+				stop = 1;
 			}
-			else
+			_alloc.destroy(ptr->value);
+			_alloc.deallocate(ptr->value, 1);
+			delete ptr;
+			_size--;
+			if (!stop)
 			{
-				node_type *tmp_parent = ptr->parent;
-				bool right;
-				node_type *tmp_left = ptr->left;
-				node_type *tmp_right = ptr->right;
-				node_type *tmp = tmp_right;
-
-				if (ptr->parent)
-					right = (ptr == ptr->parent->right);
-				_alloc.destroy(ptr->value);
-				_alloc.deallocate(ptr->value, 1);
-				delete ptr;
-				_size--;
 				if (tmp_right && tmp_right != _end)
 				{
 					tmp = tmp_right;
