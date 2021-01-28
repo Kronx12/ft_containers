@@ -41,6 +41,8 @@ namespace ft
 	class ConstListIterator;
 	template< class T >
 	class ConstVectorIterator;
+	template< class T, class M >
+	class ConstMapIterator;
 
 	template < typename It >
 	class ReverseIterator : public It
@@ -472,7 +474,7 @@ namespace ft
 			~MapIterator() {}
 			MapIterator() : _current(NULL) {}
 			MapIterator(MapIterator const &rhs) : _current(rhs._current) {}
-			// MapIterator(ConstMapIterator const &rhs) : current(rhs.current), begin(rhs.begin), end(rhs.end), rbegin(rhs.rbegin), rend(rhs.rend) {}
+			MapIterator(ConstMapIterator<T, M> const &rhs) : _current(rhs._current) {}
 			
 			MapIterator(map_pointer current) : _current(current) {}
 
@@ -483,18 +485,18 @@ namespace ft
         		return *new(this) MapIterator(rhs);
 			}
 
-			// MapIterator &operator=(ConstMapIterator<T, M> const &rhs)
-			// {
-			// 	if (this == &rhs) return(*this);
-        	// 	this->~MapIterator();
-        	// 	return *new(this) MapIterator(rhs);
-			// }
+			MapIterator &operator=(ConstMapIterator<T, M> const &rhs)
+			{
+				if (this == &rhs) return(*this);
+        		this->~MapIterator();
+        		return *new(this) MapIterator(rhs);
+			}
 
 			//Input Category
 			bool operator==(const MapIterator & rhs) { return (_current == rhs._current); }
 			bool operator!=(const MapIterator & rhs) { return (_current != rhs._current); }
-			// bool operator==(const ConstMapIterator<T, M> & rhs) { return (this->current == rhs.current); }
-			// bool operator!=(const ConstMapIterator<T, M> & rhs) { return (current != rhs.current); }
+			bool operator==(const ConstMapIterator<T, M> & rhs) { return (this->_current == rhs._current); }
+			bool operator!=(const ConstMapIterator<T, M> & rhs) { return (_current != rhs._current); }
 			T *operator*() { return(this->_current->value); }
 			T *operator->() { return(this->_current->value); }
 
@@ -551,6 +553,95 @@ namespace ft
 	template < class T, class M >
 	class ConstMapIterator
 	{
+		public:
+			typedef M map_type;
+			typedef map_type* map_pointer;
+			typedef T value_type;
+			typedef value_type* pointer;
+			typedef const value_type* const_pointer;
+			typedef value_type& reference;
+			typedef const value_type& const_reference;
+			typedef const_reference iterator_category;
+
+			map_pointer _current;
+
+			//BASICS
+			~ConstMapIterator() {}
+			ConstMapIterator() : _current(NULL) {}
+			ConstMapIterator(ConstMapIterator const &rhs) : _current(rhs._current) {}
+			ConstMapIterator(MapIterator<T, M> const &rhs) : _current(rhs._current) {}
+			ConstMapIterator(map_pointer current) : _current(current) {}
+
+			ConstMapIterator &operator=(ConstMapIterator const &rhs)
+			{
+				if (this == &rhs) return(*this);
+        		this->~ConstMapIterator();
+        		return *new(this) ConstMapIterator(rhs);
+			}
+
+			ConstMapIterator &operator=(MapIterator<T, M> const &rhs)
+			{
+				if (this == &rhs) return(*this);
+        		this->~ConstMapIterator();
+        		return *new(this) ConstMapIterator(rhs);
+			}
+
+			//Input Category
+			bool operator==(const ConstMapIterator & rhs) { return (_current == rhs._current); }
+			bool operator!=(const ConstMapIterator & rhs) { return (_current != rhs._current); }
+			bool operator==(const MapIterator<T, M> & rhs) { return (_current == rhs._current); }
+			bool operator!=(const MapIterator<T, M> & rhs) { return (_current != rhs._current); }
+			T *operator*() { return(this->_current->value); }
+			T *operator->() { return(this->_current->value); }
+
+			//Bidirectional Category
+			ConstMapIterator &operator++()
+			{
+				if (this->_current->right) // go droite si tu peux
+				{
+					_current = _current->right;
+					while (this->_current->left) // go au max en bas a gauche
+						_current = _current->left;
+				}
+				else // remonte tout les passages de droites jusqu'a gauche ou le centre sauf si cest la fin
+				{
+					while (_current->parent && _current == _current->parent->right) // remonte all droite
+						_current = _current->parent;
+					_current = _current->parent; // remonte un gauche
+				}
+				return (*this);
+			}
+
+			ConstMapIterator &operator--()
+			{
+				if (this->_current->left) // go au au max a droite de la gauche en bas
+				{
+					_current = _current->left;
+					while (this->_current->right) // en prenant tout les chemins de droite
+						_current = _current->right;
+				}
+				else // remonte tant que pas branche de droite
+				{ 
+					while (_current->parent && _current == _current->parent->left) // remonte tout les gauches
+						_current = _current->parent;
+					_current = _current->parent; // remonte un droite// remonte une fois si cest pas le last
+				}
+				return (*this);
+			}
+
+			ConstMapIterator operator++(int)
+			{
+				ConstMapIterator tmp(*this);
+				++(*this);
+				return (tmp);
+			}
+
+			ConstMapIterator operator--(int)
+			{
+				ConstMapIterator tmp(*this);
+				--(*this);
+				return (*this);
+			}
 	};
 };
 
