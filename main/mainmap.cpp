@@ -58,6 +58,8 @@ void test()
 	m.insert(std::pair<int, int>(20, 20));
 	m.insert(std::pair<int, int>(16, 16));
 
+	// ft::Map<int, int> m2 = m;
+
 	std::cout << "std" << std::endl;
 	for (std::map<int, int>::iterator itr = mstd.begin(); itr != mstd.end(); itr++)
 		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
@@ -126,7 +128,7 @@ void test()
 	mswap1.insert(std::pair<int, int>(14, 14));
 	mswap1.insert(std::pair<int, int>(1, 1));
 
-	mswap1.swap(mswap);
+	// mswap1.swap(mswap);
 	mstdswap1.swap(mstdswap);
 	std::cout << "std" << std::endl;
 	for (std::map<int, int>::iterator itr = mstdswap1.begin(); itr != mstdswap1.end(); itr++)

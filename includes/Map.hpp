@@ -117,8 +117,8 @@ namespace ft
 			// -------------------------------- Modifiers --------------------------------
 			std::pair<iterator,bool> insert( const value_type &value );
 
-			template< class InputIt >
-			void insert(InputIt first, InputIt last);
+			template< class InputIterator >
+			void insert(InputIterator first, InputIterator last);
 			void erase(iterator pos);
 			void erase(iterator first, iterator last);
 			size_type erase(const key_type &key);
@@ -164,7 +164,7 @@ namespace ft
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
-	Map<Key, T, Compare, Allocator>::Map(const Map &x) : _comp(x._comp), _alloc(other._alloc), _end(new node_type()), _rend(new node_type())
+	Map<Key, T, Compare, Allocator>::Map(const Map &x) : _alloc(x._alloc),_comp(x._comp),  _end(new node_type()), _rend(new node_type())
 	{
 		insert(x.begin(), x.end());
 	}
@@ -374,11 +374,12 @@ namespace ft
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
-	template< class InputIt >
-	void Map<Key, T, Compare, Allocator>::insert(InputIt first, InputIt last)
+	template< class InputIterator >
+	void Map<Key, T, Compare, Allocator>::insert(InputIterator first, InputIterator last)
 	{
+		// marche pas
 		for (; first != last; first++)
-			insert(*first);
+			insert(*(*first));
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
@@ -510,30 +511,9 @@ namespace ft
 	template< class Key, class T, class Compare, class Allocator >
 	void Map<Key, T, Compare, Allocator>::swap(Map &other)
 	{
-		Map temp = other;
+		Map temp(other);
 		other = *this;
 		*this = temp;
-		// TODO
-		// node_type *t_data = other._data;
-		// size_type t_size = other._size;
-		// allocator_type t_alloc = other._alloc;
-		// key_compare t_comp = other._comp;
-		// node_type *t_end = other._end;
-		// node_type *t_rend = other._rend;
-
-		// other._data = _data;
-		// other._size = _size;
-		// other._alloc = _alloc;
-		// other._comp = _comp;
-		// other._end = _end;
-		// other._rend = _rend;
-
-		// _data = t_data;
-		// _size = t_size;
-		// _alloc = t_alloc;
-		// _comp = t_comp;
-		// _end = t_end;
-		// _rend = t_rend;
 	}
 
 	// -------------------------------- Observers --------------------------------
@@ -568,9 +548,6 @@ namespace ft
 			else
 				temp = temp->left;
 		}
-		// for (iterator itr = begin(); itr != end(); itr++)
-		// 	if (itr->first == key)
-		// 		return (itr);
 		return (end());
 	}
 
@@ -776,6 +753,97 @@ namespace ft
 		if (!root)
 			return ;
 		call(root, 0, 0, i, maxsize);
+	}
+
+	template< class Key, class T, class Compare, class Allocator >
+	bool operator==(Map<Key, T, Compare, Allocator> &lhs, Map<Key, T, Compare, Allocator> &rhs)
+	{
+		if (lhs.size() != rhs.size())
+			return (false);
+
+		typename ft::Map<Key, T, Compare, Allocator>::iterator itr_l = lhs.begin();
+		typename ft::Map<Key, T, Compare, Allocator>::iterator itr_r = rhs.begin();
+		while (itr_l != lhs.end() && itr_r != rhs.end())
+		{
+			if (*itr_l != *itr_r)
+				return (false);
+			itr_l++;
+			itr_r++;
+		}
+		return (true);
+	}
+
+	template< class Key, class T, class Compare, class Allocator >
+	bool operator!=(Map<Key, T, Compare, Allocator> &lhs, Map<Key, T, Compare, Allocator> &rhs)
+	{
+		if (lhs.size() != rhs.size())
+			return (true);
+
+		typename ft::Map<Key, T, Compare, Allocator>::iterator itr_l = lhs.begin();
+		typename ft::Map<Key, T, Compare, Allocator>::iterator itr_r = rhs.begin();
+		while (itr_l != lhs.end() && itr_r != rhs.end())
+		{
+			if (*itr_l != *itr_r)
+				return (true);
+			itr_l++;
+			itr_r++;
+		}
+		return (false);
+	}
+
+	template< class Key, class T, class Compare, class Allocator >
+	bool operator<=(Map<Key, T, Compare, Allocator> &lhs, Map<Key, T, Compare, Allocator> &rhs)
+	{
+		typename ft::Map<Key, T, Compare, Allocator>::iterator itr_l = lhs.begin();
+		typename ft::Map<Key, T, Compare, Allocator>::iterator itr_r = rhs.begin();
+		if (lhs.empty() && rhs.empty())
+			return (true);
+		while (itr_l != lhs.end() && itr_r != rhs.end())
+		{
+			if (*itr_l < *itr_r)
+				return (true);
+			if (*itr_l > *itr_r)
+				return (false);
+			itr_l++;
+			itr_r++;
+		}
+		return (true);
+	}
+
+	template< class Key, class T, class Compare, class Allocator >
+	bool operator>(Map<Key, T, Compare, Allocator> &lhs, Map<Key, T, Compare, Allocator> &rhs)
+	{
+		typename ft::Map<Key, T, Compare, Allocator>::iterator itr_l = lhs.begin();
+		typename ft::Map<Key, T, Compare, Allocator>::iterator itr_r = rhs.begin();
+		while (itr_l != lhs.end() && itr_r != rhs.end())
+		{
+			if (*itr_l > *itr_r)
+				return (true);
+			else if (*itr_l < *itr_r)
+				return (false);
+			itr_l++;
+			itr_r++;
+		}
+		return (false);
+	}
+
+	template< class Key, class T, class Compare, class Allocator >
+	bool operator>=(Map<Key, T, Compare, Allocator> &lhs, Map<Key, T, Compare, Allocator> &rhs)
+	{
+		typename ft::Map<Key, T, Compare, Allocator>::iterator itr_l = lhs.begin();
+		typename ft::Map<Key, T, Compare, Allocator>::iterator itr_r = rhs.begin();
+		if (lhs.empty() && rhs.empty())
+			return (true);
+		while (itr_l != lhs.end() && itr_r != rhs.end())
+		{
+			if (*itr_l > *itr_r)
+				return (true);
+			if (*itr_l < *itr_r)
+				return (false);
+			itr_l++;
+			itr_r++;
+		}
+		return (true);
 	}
 };
 
