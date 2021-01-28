@@ -164,7 +164,7 @@ namespace ft
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
-	Map<Key, T, Compare, Allocator>::Map(const Map &x) : _alloc(x._alloc),_comp(x._comp),  _end(new node_type()), _rend(new node_type())
+	Map<Key, T, Compare, Allocator>::Map(const Map &x) : _data(NULL), _alloc(x._alloc),_comp(x._comp),  _end(new node_type()), _rend(new node_type())
 	{
 		insert(x.begin(), x.end());
 	}
@@ -310,8 +310,7 @@ namespace ft
 			this->_end->parent = _data;
 			_size++;
 		}
-		else if (value.first == ptr->value->first)
-			; // Skip if existing key
+		else if (value.first == ptr->value->first) {} // Skip if existing key
 		else if (tmp_cmp(value, *ptr->value))
 		{
 			if (ptr->left != NULL && ptr->left != this->_rend)
@@ -379,7 +378,9 @@ namespace ft
 	{
 		// marche pas
 		for (; first != last; first++)
+		{
 			insert(*(*first));
+		}
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
@@ -538,7 +539,7 @@ namespace ft
 		Mtree<Key, T> *temp;
 
 		temp = _data;
-		while (temp && temp != _end && temp != _rend)
+		while (temp != NULL && temp != _end && temp != _rend)
 		{
 			if (temp->value->first == key)
 			{

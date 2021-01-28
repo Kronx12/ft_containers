@@ -58,7 +58,7 @@ void test()
 	m.insert(std::pair<int, int>(20, 20));
 	m.insert(std::pair<int, int>(16, 16));
 
-	// ft::Map<int, int> m2 = m;
+	ft::Map<int, int> m2 = m;
 
 	std::cout << "std" << std::endl;
 	for (std::map<int, int>::iterator itr = mstd.begin(); itr != mstd.end(); itr++)
@@ -128,18 +128,14 @@ void test()
 	mswap1.insert(std::pair<int, int>(14, 14));
 	mswap1.insert(std::pair<int, int>(1, 1));
 
-	// mswap1.swap(mswap);
+	mswap1.swap(mswap);
 	mstdswap1.swap(mstdswap);
 	std::cout << "std" << std::endl;
 	for (std::map<int, int>::iterator itr = mstdswap1.begin(); itr != mstdswap1.end(); itr++)
 		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
 	std::cout << "ft" << std::endl;
-	ft::Map<int, int>::iterator itrswap = mswap1.begin();
-	for (unsigned long i = 0; i < mswap1.size(); i++)
-	{
-		std::cout << "[ " << itrswap->first << " : " << itrswap->second << "]\n";
-		itrswap++;
-	}
+	for (ft::Map<int, int>::iterator itr = mswap1.begin(); itr != mswap1.end(); itr++)
+		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
 
 }
 
@@ -380,9 +376,10 @@ int main()
 	m2.insert(std::pair<int, int>(0, 15));
 	m2.insert(std::pair<int, int>(5, 15));
 	m2.insert(std::pair<int, int>(4, 15));*/
-	for (int i = 0; i < 150000; i++)
+	/*for (int i = 0; i < 150000; i++)
 			m2.insert(std::pair<int, int>(rand(), 15));
-	m2.put_tree(1000);
+	m2.put_tree(1000);*/
 
     end_test();
+    test();
 }
