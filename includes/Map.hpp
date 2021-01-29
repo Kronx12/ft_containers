@@ -80,7 +80,7 @@ namespace ft
 			void debug_leaf(node_type *ptr);
 			void debug_tree();
 			void grapher(Mtree<Key, T> *item, int current_level, bool side, int *dirswap);
-			void put_tree(int i = 10);
+			void put_tree(int i = 50);
 			void call(Mtree<Key, T> *root, int current_level, bool side, int *dirswap, int maxsize);
 			int btree_level_count(Mtree<Key, T> *root);
 			void btree_apply_by_level(Mtree<Key, T> *root, int maxsize);
@@ -399,6 +399,13 @@ namespace ft
 					ptr->parent->right = NULL;
 				stop = 1;
 			}
+			if (ptr->left == _rend && ptr->right == _end)
+			{
+				_rend->parent = NULL;
+				_end->parent = NULL;
+				_data = NULL;
+				stop = 1;
+			}
 			_alloc.destroy(ptr->value);
 			_alloc.deallocate(ptr->value, 1);
 			delete ptr;
@@ -410,12 +417,14 @@ namespace ft
 					tmp = tmp_right;
 					while (tmp->left && tmp->left != _rend)
 						tmp = tmp->left;
-					if (!(tmp == tmp_right))
+					if (tmp != tmp_right)
 					{
-						if (tmp == tmp->parent->right)
-							tmp->parent->right = tmp->right;
-						else
+						if (tmp->parent)
+						{
 							tmp->parent->left = tmp->right;
+							if (tmp->right)
+									tmp->right->parent = tmp->parent;
+						}
 						tmp->right = tmp_right;
 					}
 					tmp->left = tmp_left;
@@ -456,18 +465,18 @@ namespace ft
 				{
 					if (tmp_right)
 					{
-						_end->parent = tmp_parent;
-						tmp_parent->right = _end;
+						tmp = tmp_parent;
+						tmp->right = _end;
 					}
 					else
 					{
-						_rend->parent = tmp_parent;
-						tmp_parent->left = _rend;
+						tmp = tmp_parent;
+						tmp->left = _rend;
 					}
 				}
 				if (tmp_left)
 					tmp_left->parent = tmp;
-				if (tmp_right)
+				if (tmp_right && !(tmp == tmp_right))
 					tmp_right->parent = tmp;
 			}
 		}
@@ -486,8 +495,14 @@ namespace ft
 	template< class Key, class T, class Compare, class Allocator >
 	void Map<Key, T, Compare, Allocator>::erase(iterator first, iterator last)
 	{
-		for (; first != last; first++)
+		iterator temp;
+		while (first != last)
+		{
+			temp = first;
+			temp++;
 			erase(first);
+			first = temp;
+		}
 	}
 	
 	template< class Key, class T, class Compare, class Allocator >
@@ -774,10 +789,14 @@ namespace ft
 	template< class Key, class T, class Compare, class Allocator >
 	void Map<Key, T, Compare, Allocator>::put_tree(int i)
 	{
+		#if SHOW==1
 		if (empty())
 			std::cout << "Put tree : (empty map)" << std::endl;
 		else
 			btree_apply_by_level(_data, i);
+		#else
+			static_cast<void>(i);
+		#endif
 	}
 
 	template< class Key, class T, class Compare, class Allocator >

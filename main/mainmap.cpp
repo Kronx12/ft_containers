@@ -186,22 +186,23 @@ void modifiers_test(int size)
 	// ft_map_bis.put_tree();
 	// describe_map(std_map, ft_map);
 
-	title("Clear : ");
 	// TODO Replace random par 0->Size quand auto balancing
 	for (int i = 0; i < size; i++)
 		put_random(std_map, ft_map);
 
 	// TODO Error on clear (erase)
-	// title("Empty (false) :");
-	// ss_std << "- Empty(" << std_map.empty() << ")";
-	// ss_ft << "- Empty(" << ft_map.empty() << ")";
-	// check(&ss_std, &ss_ft, DEFINED);
-	// std_map.clear();
-	// ft_map.clear();
-	// title("Empty (true) :");
-	// ss_std << "- Empty(" << std_map.empty() << ")";
-	// ss_ft << "- Empty(" << ft_map.empty() << ")";
-	// check(&ss_std, &ss_ft, DEFINED);
+	title("Empty (false) :");
+	ss_std << "- Empty(" << std_map.empty() << ")";
+	ss_ft << "- Empty(" << ft_map.empty() << ")";
+	check(&ss_std, &ss_ft, DEFINED);
+	std_map.clear();
+	ft_map.put_tree();
+	ft_map.clear();
+	ft_map.put_tree();
+	title("Empty (true) :");
+	ss_std << "- Empty(" << std_map.empty() << ")";
+	ss_ft << "- Empty(" << ft_map.empty() << ")";
+	check(&ss_std, &ss_ft, DEFINED);
 
 	title("Swap : ");
 	for (int i = 0; i < size; i++)
@@ -680,14 +681,6 @@ int main()
 #if TEST_MAP == 0 || TEST_MAP == 8
 # ifndef SIZE
     operators_functions(100);
-	operators_functions(90);
-	operators_functions(80);
-	operators_functions(70);
-	operators_functions(60);
-	operators_functions(50);
-	operators_functions(40);
-	operators_functions(30);
-	operators_functions(20);
 	operators_functions(10);
 	operators_functions(5);
 	operators_functions(2);
