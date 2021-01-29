@@ -140,14 +140,6 @@ namespace ft
 			const_iterator upper_bound(const Key &key) const;
 			std::pair<iterator,iterator> equal_range(const Key &key);
 			std::pair<const_iterator,const_iterator> equal_range(const Key &key) const;	
-
-			// -------------------------------- Non-member functions --------------------------------
-			bool operator==(const Map &rhs);
-			bool operator!=(const Map &rhs);
-			bool operator<(const Map &rhs);
-			bool operator<=(const Map &rhs);
-			bool operator>(const Map &rhs);
-			bool operator>=(const Map &rhs);
 	};
 
 	// -------------------------------- Member functions --------------------------------
@@ -643,7 +635,7 @@ namespace ft
 		typename ft::Map<Key, T, Compare, Allocator>::iterator itr_r = rhs.begin();
 		while (itr_l != lhs.end() && itr_r != rhs.end())
 		{
-			if (*itr_l != *itr_r)
+			if (itr_l->first != itr_r->first)
 				return (false);
 			itr_l++;
 			itr_r++;
@@ -661,13 +653,31 @@ namespace ft
 		typename ft::Map<Key, T, Compare, Allocator>::iterator itr_r = rhs.begin();
 		while (itr_l != lhs.end() && itr_r != rhs.end())
 		{
-			if (*itr_l != *itr_r)
+			if (itr_l->first != itr_r->first)
 				return (true);
 			itr_l++;
 			itr_r++;
 		}
 		return (false);
 	}
+
+	template< class Key, class T, class Compare, class Allocator >
+	bool operator<(Map<Key, T, Compare, Allocator> &lhs, Map<Key, T, Compare, Allocator> &rhs)
+	{
+		typename ft::Map<Key, T, Compare, Allocator>::iterator itr_l = lhs.begin();
+		typename ft::Map<Key, T, Compare, Allocator>::iterator itr_r = rhs.begin();
+		while (itr_l != lhs.end() && itr_r != rhs.end())
+		{
+			if (itr_l->first < itr_r->first)
+				return (true);
+			else if (itr_l->first > itr_r->first)
+				return (false);
+			itr_l++;
+			itr_r++;
+		}
+		return (false);
+	}
+
 
 	template< class Key, class T, class Compare, class Allocator >
 	bool operator<=(Map<Key, T, Compare, Allocator> &lhs, Map<Key, T, Compare, Allocator> &rhs)
@@ -678,9 +688,9 @@ namespace ft
 			return (true);
 		while (itr_l != lhs.end() && itr_r != rhs.end())
 		{
-			if (*itr_l < *itr_r)
+			if (itr_l->first < itr_r->first)
 				return (true);
-			if (*itr_l > *itr_r)
+			else if (itr_l->first > itr_r->first)
 				return (false);
 			itr_l++;
 			itr_r++;
@@ -695,9 +705,9 @@ namespace ft
 		typename ft::Map<Key, T, Compare, Allocator>::iterator itr_r = rhs.begin();
 		while (itr_l != lhs.end() && itr_r != rhs.end())
 		{
-			if (*itr_l > *itr_r)
+			if (itr_l->first > itr_r->first)
 				return (true);
-			else if (*itr_l < *itr_r)
+			else if (itr_l->first < itr_r->first)
 				return (false);
 			itr_l++;
 			itr_r++;
@@ -714,9 +724,9 @@ namespace ft
 			return (true);
 		while (itr_l != lhs.end() && itr_r != rhs.end())
 		{
-			if (*itr_l > *itr_r)
+			if (itr_l->first > itr_r->first)
 				return (true);
-			if (*itr_l < *itr_r)
+			if (itr_l->first < itr_r->first)
 				return (false);
 			itr_l++;
 			itr_r++;
@@ -752,11 +762,11 @@ namespace ft
 		else if (item == _rend)
 			ss << "(rend)◗";
 		else if (begin() == iterator(item))
-			ss << item->value->first << "(begin)◗";
+			ss << item->value->first << ":" << item->value->second << "(begin)◗";
 		else if (rbegin() == iterator(item))
-			ss << item->value->first << "(rbegin)◗";
+			ss << item->value->first << ":" << item->value->second << "(rbegin)◗";
 		else
-			ss << item->value->first << "◗";
+			ss << item->value->first << ":" << item->value->second << "◗";
 		ss << reset << std::endl;
 		std::cout << ss.str();
 	}

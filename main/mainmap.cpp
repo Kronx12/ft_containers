@@ -161,6 +161,9 @@ void modifiers_test(int size)
 	std::map<int, int> std_map_bis;
 	ft::Map<int, int> ft_map_bis;
 
+	std::stringstream ss_std;
+	std::stringstream ss_ft;
+
 	// TODO Replace random par 0->Size quand auto balancing
 	for (int i = 0; i < size; i++)
 		put_random(std_map, ft_map);
@@ -174,7 +177,7 @@ void modifiers_test(int size)
 	ft_map_bis.put_tree();
 	describe_map(std_map_bis, ft_map_bis);
 
-	// TODO Heap-Use-After-Free
+	// TODO Heap-Use-After-Free (All erase test)
 	// while (!std_map.empty())
 	// 	std_map.erase(std_map.begin());
 	// while (!ft_map.empty())
@@ -182,6 +185,352 @@ void modifiers_test(int size)
 	// title("After Erase (Position) : ");
 	// ft_map_bis.put_tree();
 	// describe_map(std_map, ft_map);
+
+	title("Clear : ");
+	// TODO Replace random par 0->Size quand auto balancing
+	for (int i = 0; i < size; i++)
+		put_random(std_map, ft_map);
+
+	// TODO Error on clear (erase)
+	// title("Empty (false) :");
+	// ss_std << "- Empty(" << std_map.empty() << ")";
+	// ss_ft << "- Empty(" << ft_map.empty() << ")";
+	// check(&ss_std, &ss_ft, DEFINED);
+	// std_map.clear();
+	// ft_map.clear();
+	// title("Empty (true) :");
+	// ss_std << "- Empty(" << std_map.empty() << ")";
+	// ss_ft << "- Empty(" << ft_map.empty() << ")";
+	// check(&ss_std, &ss_ft, DEFINED);
+
+	title("Swap : ");
+	for (int i = 0; i < size; i++)
+		put_random(std_map, ft_map);
+	describe_map(std_map, ft_map);
+	describe_map(std_map_bis, ft_map_bis);
+	ft_map.put_tree();
+	ft_map_bis.put_tree();
+	std_map.swap(std_map_bis);
+	ft_map.swap(ft_map_bis);
+	describe_map(std_map, ft_map);
+	describe_map(std_map_bis, ft_map_bis);
+	ft_map.put_tree();
+	ft_map_bis.put_tree();
+}
+
+void observers_test(int size)
+{
+	title("Observers Size", size);
+	// TODO ?
+}
+
+void operations_test(int size)
+{
+	title("Operations Size", size);
+
+	std::map<int, int> std_map;
+	ft::Map<int, int> ft_map;
+
+	std::stringstream ss_std;
+	std::stringstream ss_ft;
+
+	// TODO Replace random par 0->Size quand auto balancing
+	for (int i = 0; i < size; i++)
+		put_random(std_map, ft_map);
+	describe_map(std_map, ft_map);
+	ft_map.put_tree();
+
+	title("Find : ");
+	if (std_map.size() > 0)
+	{
+		std::map<int, int>::iterator itr = std_map.find(std_map.begin()->first);
+		std::map<int, int>::iterator itr_b = std_map.find((--(std_map.end()))->first);
+		ss_std << "{ " << itr->first << " : " << itr->second << " } ";
+		ss_std << "{ " << itr_b->first << " : " << itr_b->second << " } ";
+	}
+	if (ft_map.size() > 0)
+	{
+		ft::Map<int, int>::iterator itr = ft_map.find(ft_map.begin()->first);
+		ft::Map<int, int>::iterator itr_b = ft_map.find((--(ft_map.end()))->first);
+		ss_ft << "{ " << itr->first << " : " << itr->second << " } ";
+		ss_ft << "{ " << itr_b->first << " : " << itr_b->second << " } ";
+	}
+	check(&ss_std, &ss_ft, DEFINED);
+
+	title("Const Find : ");
+	if (std_map.size() > 0)
+	{
+		std::map<int, int>::const_iterator itr = std_map.find(std_map.begin()->first);
+		std::map<int, int>::const_iterator itr_b = std_map.find((--(std_map.end()))->first);
+		ss_std << "{ " << itr->first << " : " << itr->second << " } ";
+		ss_std << "{ " << itr_b->first << " : " << itr_b->second << " } ";
+	}
+	if (ft_map.size() > 0)
+	{
+		ft::Map<int, int>::const_iterator itr = ft_map.find(ft_map.begin()->first);
+		ft::Map<int, int>::const_iterator itr_b = ft_map.find((--(ft_map.end()))->first);
+		ss_ft << "{ " << itr->first << " : " << itr->second << " } ";
+		ss_ft << "{ " << itr_b->first << " : " << itr_b->second << " } ";
+	}
+	check(&ss_std, &ss_ft, DEFINED);
+
+	title("Count : ");
+	if (std_map.size() > 0)
+	{
+		std::map<int, int>::size_type ret = std_map.count(std_map.begin()->first);
+		std::map<int, int>::size_type ret_b = std_map.count((--(std_map.end()))->first);
+		std::map<int, int>::size_type ret_c = std_map.count(-1);
+		ss_std << "count : " << ret << " | ";
+		ss_std << "count : " << ret_b << " | ";
+		ss_std << "count : " << ret_c;
+	}
+	if (ft_map.size() > 0)
+	{
+		ft::Map<int, int>::size_type ret = ft_map.count(ft_map.begin()->first);
+		ft::Map<int, int>::size_type ret_b = ft_map.count((--(ft_map.end()))->first);
+		ft::Map<int, int>::size_type ret_c = ft_map.count(-1);
+		ss_ft << "count : " << ret << " | ";
+		ss_ft << "count : " << ret_b << " | ";
+		ss_ft << "count : " << ret_c;
+	}
+	check(&ss_std, &ss_ft, DEFINED);
+
+	title("Lower_Bound : "); // TODO Lower bound debug
+	describe_map(std_map, ft_map);
+	ft_map.put_tree();
+	if (std_map.size() > 0)
+	{
+		// std::map<int, int>::iterator itr_a = std_map.lower_bound(std_map.begin()->first);
+		// std::map<int, int>::iterator itr_b = std_map.lower_bound((--(std_map.end()))->first);
+		// std::map<int, int>::iterator itr_c = std_map.lower_bound(-1);
+		// ss_std << "lower_bound : " << itr_a->first << " | ";
+		// ss_std << "lower_bound : " << itr_b->first << " | ";
+		// ss_std << "lower_bound : " << itr_c->first;
+		// ft::Map<int, int>::iterator itr_a = ft_map.lower_bound(ft_map.begin()->first);
+		// ft::Map<int, int>::iterator itr_b = ft_map.lower_bound((--(ft_map.end()))->first);
+		// ft::Map<int, int>::iterator itr_c = ft_map.lower_bound(-1);
+		// ss_ft << "lower_bound : " << itr_a->first << " | ";
+		// ss_ft << "lower_bound : " << itr_b->first << " | ";
+		// ss_ft << "lower_bound : " << itr_c->first;
+		// check(&ss_std, &ss_ft, DEFINED);
+	}
+
+	title("Const Lower_Bound : "); // TODO Const Lower bound debug
+	describe_map(std_map, ft_map);
+	ft_map.put_tree();
+	if (std_map.size() > 0)
+	{
+		// std::map<int, int>::const_iterator itr_a = std_map.lower_bound(std_map.begin()->first);
+		// std::map<int, int>::const_iterator itr_b = std_map.lower_bound((--(std_map.end()))->first);
+		// std::map<int, int>::const_iterator itr_c = std_map.lower_bound(-1);
+		// ss_std << "const lower_bound : " << itr_a->first << " | ";
+		// ss_std << "const lower_bound : " << itr_b->first << " | ";
+		// ss_std << "const lower_bound : " << itr_c->first;
+		// ft::Map<int, int>::const_iterator itr_a = ft_map.lower_bound(ft_map.begin()->first);
+		// ft::Map<int, int>::const_iterator itr_b = ft_map.lower_bound((--(ft_map.end()))->first);
+		// ft::Map<int, int>::const_iterator itr_c = ft_map.lower_bound(-1);
+		// ss_ft << "const lower_bound : " << itr_a->first << " | ";
+		// ss_ft << "const lower_bound : " << itr_b->first << " | ";
+		// ss_ft << "const lower_bound : " << itr_c->first;
+		// check(&ss_std, &ss_ft, DEFINED);
+	}
+
+	title("Upper_Bound : ");
+	describe_map(std_map, ft_map); // TODO Upper bound debug
+	ft_map.put_tree();
+	if (std_map.size() > 0)
+	{
+		// std::map<int, int>::iterator itr_a = std_map.upper_bound(std_map.begin()->first);
+		// std::map<int, int>::iterator itr_b = std_map.upper_bound((--(std_map.end()))->first);
+		// std::map<int, int>::iterator itr_c = std_map.upper_bound(-1);
+		// ss_std << "upper_bound : " << itr_a->first << " | ";
+		// ss_std << "upper_bound : " << itr_b->first << " | ";
+		// ss_std << "upper_bound : " << itr_c->first;
+		// ft::Map<int, int>::iterator itr_a = ft_map.upper_bound(ft_map.begin()->first);
+		// ft::Map<int, int>::iterator itr_b = ft_map.upper_bound((--(ft_map.end()))->first);
+		// ft::Map<int, int>::iterator itr_c = ft_map.upper_bound(-1);
+		// ss_ft << "upper_bound : " << itr_a->first << " | ";
+		// ss_ft << "upper_bound : " << itr_b->first << " | ";
+		// ss_ft << "upper_bound : " << itr_c->first;
+		// check(&ss_std, &ss_ft, DEFINED);
+	}
+
+	title("Const Upper_Bound : ");
+	describe_map(std_map, ft_map); // TODO Const Upper bound debug
+	ft_map.put_tree();
+	if (std_map.size() > 0)
+	{
+		// std::map<int, int>::const_iterator itr_a = std_map.upper_bound(std_map.begin()->first);
+		// std::map<int, int>::const_iterator itr_b = std_map.upper_bound((--(std_map.end()))->first);
+		// std::map<int, int>::const_iterator itr_c = std_map.upper_bound(-1);
+		// ss_std << "const upper_bound : " << itr_a->first << " | ";
+		// ss_std << "upper_bound : " << itr_b->first << " | ";
+		// ss_std << "upper_bound : " << itr_c->first;
+		// ft::Map<int, int>::const_iterator itr_a = ft_map.upper_bound(ft_map.begin()->first);
+		// ft::Map<int, int>::const_iterator itr_b = ft_map.upper_bound((--(ft_map.end()))->first);
+		// ft::Map<int, int>::const_iterator itr_c = ft_map.upper_bound(-1);
+		// ss_ft << "const upper_bound : " << itr_a->first << " | ";
+		// ss_ft << "const upper_bound : " << itr_b->first << " | ";
+		// ss_ft << "const upper_bound : " << itr_c->first;
+		// check(&ss_std, &ss_ft, DEFINED);
+	}
+
+	title("Equal_Range : ");
+	describe_map(std_map, ft_map); // TODO Equal Range debug
+	ft_map.put_tree();
+	if (std_map.size() > 0)
+	{
+	// 	std::pair<std::map<int, int>::iterator, std::map<int, int>::iterator> itr_std_a = std_map.equal_range(std_map.begin()->first);
+	// 	std::pair<std::map<int, int>::iterator, std::map<int, int>::iterator>  itr_std_b = std_map.equal_range((--(std_map.end()))->first);
+	// 	std::pair<std::map<int, int>::iterator, std::map<int, int>::iterator>  itr_std_c = std_map.equal_range(-1);
+	// 	ss_std << "equal_range : " << itr_std_a.first->first << " : " << itr_std_a.second->first << " | ";
+	// 	ss_std << "equal_range : " << itr_std_b.first->first << " : " << itr_std_b.second->first << " | ";
+	// 	ss_std << "equal_range : " << itr_std_c.first->first << " : " << itr_std_c.second->first;
+	// std::pair<ft::Map<int, int>::iterator, ft::Map<int, int>::iterator> itr_ft_a = ft_map.equal_range(ft_map.begin()->first);
+	// 	std::pair<ft::Map<int, int>::iterator, ft::Map<int, int>::iterator> itr_ft_b = ft_map.equal_range((--(ft_map.end()))->first);
+	// 	std::pair<ft::Map<int, int>::iterator, ft::Map<int, int>::iterator> itr_ft_c = ft_map.equal_range(-1);
+	// 	ss_ft << "equal_range : " << itr_ft_a.first->first << " : " << itr_ft_a.second->first << " | ";
+	// 	ss_ft << "equal_range : " << itr_ft_b.first->first << " : " << itr_ft_a.second->first << " | ";
+	// 	ss_ft << "equal_range : " << itr_ft_c.first->first << " : " << itr_ft_a.second->first;
+	// 	check(&ss_std, &ss_ft, DEFINED);
+	}
+
+	title("Const Equal_Range : ");
+	describe_map(std_map, ft_map); // TODO Const Equal Range debug
+	ft_map.put_tree();
+	if (std_map.size() > 0)
+	{
+	// 	std::pair<std::map<int, int>::const_iterator, std::map<int, int>::const_iterator> itr_std_a = std_map.equal_range(std_map.begin()->first);
+	// 	std::pair<std::map<int, int>::const_iterator, std::map<int, int>::const_iterator>  itr_std_b = std_map.equal_range((--(std_map.end()))->first);
+	// 	std::pair<std::map<int, int>::const_iterator, std::map<int, int>::const_iterator>  itr_std_c = std_map.equal_range(-1);
+	// 	ss_std << "const equal_range : " << itr_std_a.first->first << " : " << itr_std_a.second->first << " | ";
+	// 	ss_std << "const equal_range : " << itr_std_b.first->first << " : " << itr_std_b.second->first << " | ";
+	// 	ss_std << "const equal_range : " << itr_std_c.first->first << " : " << itr_std_c.second->first;
+	// 	std::pair<ft::Map<int, int>::const_iterator, ft::Map<int, int>::const_iterator> itr_ft_a = ft_map.equal_range(ft_map.begin()->first);
+	// 	std::pair<ft::Map<int, int>::const_iterator, ft::Map<int, int>::const_iterator> itr_ft_b = ft_map.equal_range((--(ft_map.end()))->first);
+	// 	std::pair<ft::Map<int, int>::const_iterator, ft::Map<int, int>::const_iterator> itr_ft_c = ft_map.equal_range(-1);
+	// 	ss_ft << "const equal_range : " << itr_ft_a.first->first << " : " << itr_ft_a.second->first << " | ";
+	// 	ss_ft << "const equal_range : " << itr_ft_b.first->first << " : " << itr_ft_a.second->first << " | ";
+	// 	ss_ft << "const equal_range : " << itr_ft_c.first->first << " : " << itr_ft_a.second->first;
+	// 	check(&ss_std, &ss_ft, DEFINED);
+	}
+}
+
+void operators_functions(int size)
+{
+	title("Operators Size", size);
+
+	std::map<int, int> std_map;
+	ft::Map<int, int> ft_map;
+	std::map<int, int> std_map_bis;
+	ft::Map<int, int> ft_map_bis;
+
+	std::stringstream ss_std;
+	std::stringstream ss_ft;
+
+	for (int i = 0; i < size; i++)
+	{
+		put_random(std_map, ft_map);
+		put_random(std_map_bis, ft_map_bis);
+	}
+	ft_map.put_tree();
+	ft_map_bis.put_tree();
+
+	title("Operator== (map == map) :");
+	ss_std << (std_map == std_map);
+	ss_ft << (ft_map == ft_map);
+	check(&ss_std, &ss_ft, DEFINED);
+	
+	title("Operator== (map == map_bis) :");
+	ss_std << (std_map == std_map_bis);
+	ss_ft << (ft_map == ft_map_bis);
+	check(&ss_std, &ss_ft, DEFINED);
+	
+	title("Operator== (map_bis == map) :");
+	ss_std << (std_map_bis == std_map);
+	ss_ft << (ft_map_bis == ft_map);
+	check(&ss_std, &ss_ft, DEFINED);
+
+
+	title("Operator!= (map != map) :");
+	ss_std << (std_map != std_map);
+	ss_ft << (ft_map != ft_map);
+	check(&ss_std, &ss_ft, DEFINED);
+
+	title("Operator!= (map != map_bis):");
+	ss_std << (std_map != std_map_bis);
+	ss_ft << (ft_map != ft_map_bis);
+	check(&ss_std, &ss_ft, DEFINED);
+
+	title("Operator!= (map_bis != map) :");
+	ss_std << (std_map_bis != std_map);
+	ss_ft << (ft_map_bis != ft_map);
+	check(&ss_std, &ss_ft, DEFINED);
+
+
+	title("Operator< (map < map):");
+	ss_std << (std_map < std_map);
+	ss_ft << (ft_map < ft_map);
+	check(&ss_std, &ss_ft, DEFINED);
+
+	title("Operator< (map < map_bis):");
+	ss_std << (std_map < std_map_bis);
+	ss_ft << (ft_map < ft_map_bis);
+	check(&ss_std, &ss_ft, DEFINED);
+
+	title("Operator< (map_bis < map):");
+	ss_std << (std_map_bis < std_map);
+	ss_ft << (ft_map_bis < ft_map);
+	check(&ss_std, &ss_ft, DEFINED);
+	
+
+	title("Operator<= (map <= map):");
+	ss_std << (std_map <= std_map);
+	ss_ft << (ft_map <= ft_map);
+	check(&ss_std, &ss_ft, DEFINED);
+
+	title("Operator<= (map <= map_bis):");
+	ss_std << (std_map <= std_map_bis);
+	ss_ft << (ft_map <= ft_map_bis);
+	check(&ss_std, &ss_ft, DEFINED);
+
+	title("Operator<= (map_bis <= map):");
+	ss_std << (std_map_bis <= std_map);
+	ss_ft << (ft_map_bis <= ft_map);
+	check(&ss_std, &ss_ft, DEFINED);
+	
+
+	title("Operator> (map > map):");
+	ss_std << (std_map > std_map);
+	ss_ft << (ft_map > ft_map);
+	check(&ss_std, &ss_ft, DEFINED);
+
+	title("Operator> (map > map_bis):");
+	ss_std << (std_map > std_map_bis);
+	ss_ft << (ft_map > ft_map_bis);
+	check(&ss_std, &ss_ft, DEFINED);
+
+	title("Operator> (map_bis > map):");
+	ss_std << (std_map_bis > std_map);
+	ss_ft << (ft_map_bis > ft_map);
+	check(&ss_std, &ss_ft, DEFINED);
+
+
+	title("Operator>= (map >= map):");
+	ss_std << (std_map >= std_map);
+	ss_ft << (ft_map >= ft_map);
+	check(&ss_std, &ss_ft, DEFINED);
+
+	title("Operator>= (map >= map_bis):");
+	ss_std << (std_map >= std_map_bis);
+	ss_ft << (ft_map >= ft_map_bis);
+	check(&ss_std, &ss_ft, DEFINED);
+
+	title("Operator>= (map_bis >= map):");
+	ss_std << (std_map_bis >= std_map);
+	ss_ft << (ft_map_bis >= ft_map);
+	check(&ss_std, &ss_ft, DEFINED);
+
 }
 
 int main()
@@ -251,6 +600,53 @@ int main()
 	modifiers_test(0);
 # else
 	modifiers_test(SIZE);
+# endif
+#endif
+
+#if TEST_MAP == 0 || TEST_MAP == 6
+# ifndef SIZE
+    observers_test(100);
+	observers_test(10);
+	observers_test(5);
+	observers_test(2);
+	observers_test(1);
+	observers_test(0);
+# else
+	observers_test(SIZE);
+# endif
+#endif
+
+#if TEST_MAP == 0 || TEST_MAP == 7
+# ifndef SIZE
+    operations_test(100);
+	operations_test(10);
+	operations_test(5);
+	operations_test(2);
+	operations_test(1);
+	operations_test(0);
+# else
+	operations_test(SIZE);
+# endif
+#endif
+
+#if TEST_MAP == 0 || TEST_MAP == 8
+# ifndef SIZE
+    operators_functions(100);
+	operators_functions(90);
+	operators_functions(80);
+	operators_functions(70);
+	operators_functions(60);
+	operators_functions(50);
+	operators_functions(40);
+	operators_functions(30);
+	operators_functions(20);
+	operators_functions(10);
+	operators_functions(5);
+	operators_functions(2);
+	operators_functions(1);
+	operators_functions(0);
+# else
+	operators_functions(SIZE);
 # endif
 #endif
 
