@@ -177,20 +177,24 @@ void modifiers_test(int size)
 	ft_map_bis.put_tree();
 	describe_map(std_map_bis, ft_map_bis);
 
-	// TODO Heap-Use-After-Free (All erase test)
-	// while (!std_map.empty())
-	// 	std_map.erase(std_map.begin());
-	// while (!ft_map.empty())
-	// 	ft_map.erase(ft_map.begin());
-	// title("After Erase (Position) : ");
+	// int v = rand() % 1000000;
+	// std_map_bis.insert(std_map_bis.begin(), std::pair<int, int>(v, v));
+	// ft_map_bis.insert(ft_map_bis.begin(), std::pair<int, int>(v, v));
+	// title("After Insert (First, Value) : ");
 	// ft_map_bis.put_tree();
-	// describe_map(std_map, ft_map);
+	// describe_map(std_map_bis, ft_map_bis);
 
-	// TODO Replace random par 0->Size quand auto balancing
+	while (!std_map.empty())
+		std_map.erase(std_map.begin());
+	while (!ft_map.empty())
+		ft_map.erase(ft_map.begin());
+	title("After Erase (Position) : ");
+	ft_map_bis.put_tree();
+	describe_map(std_map, ft_map);
+
 	for (int i = 0; i < size; i++)
 		put_random(std_map, ft_map);
 
-	// TODO Error on clear (erase)
 	title("Empty (false) :");
 	ss_std << "- Empty(" << std_map.empty() << ")";
 	ss_ft << "- Empty(" << ft_map.empty() << ")";
@@ -235,7 +239,6 @@ void operations_test(int size)
 	std::stringstream ss_std;
 	std::stringstream ss_ft;
 
-	// TODO Replace random par 0->Size quand auto balancing
 	for (int i = 0; i < size; i++)
 		put_random(std_map, ft_map);
 	describe_map(std_map, ft_map);
@@ -460,7 +463,7 @@ void operations_test(int size)
 	}
 
 	title("Const Equal_Range : ");
-	describe_map(std_map, ft_map); // TODO Const Equal Range debug
+	describe_map(std_map, ft_map);
 	ft_map.put_tree();
 	if (std_map.size() > 0)
 	{

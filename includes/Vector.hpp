@@ -96,6 +96,7 @@ namespace ft
 			size_type max_size() const;
 			void reserve(size_type new_cap);
 			size_type capacity() const;
+			void resize(size_type count, T value = T());
 //--
 			// modifiers
 			void clear();
@@ -110,8 +111,6 @@ namespace ft
 
 			void push_back(const T &value);
 			void pop_back();
-
-			void resize(size_type count, T value = T());
 
 			void swap(Vector &other);
 	};

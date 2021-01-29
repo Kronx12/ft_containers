@@ -72,23 +72,19 @@ namespace ft
 			node_type *_rend;
 
 			// Recursive inserter
-			void p_erase_node(node_type *ptr, const key_type &key);
-			iterator p_insert_node(const value_type &value, node_type *ptr);
-			void grapher(Mtree<Key, T> *item, int current_level, bool side, int *dirswap);
-			void call(Mtree<Key, T> *root, int current_level, bool side, int *dirswap, int maxsize);
-			int btree_level_count(Mtree<Key, T> *root);
-			void btree_apply_by_level(Mtree<Key, T> *root, int maxsize);
-			// Recursive delete
-			void p_deallocate_tree(node_type *node);
-
+			int p_btree_level_count(Mtree<Key, T> *root);
 			void p_checkrb(node_type *end);
-			void p_zigzag(node_type *P, node_type *C, node_type *G);
+			void p_deallocate_tree(node_type *node);
+			void p_erase_node(node_type *ptr, const key_type &key);
+			void p_btree_apply_by_level(Mtree<Key, T> *root, int maxsize);
+			void p_grapher(Mtree<Key, T> *item, int current_level, bool side, int *dirswap);
+			void p_call(Mtree<Key, T> *root, int current_level, bool side, int *dirswap, int maxsize);
 			void p_zigzig(node_type *P, node_type *C, node_type *G, node_type *PS);
 			void p_swap(node_type *P, node_type *C, node_type *G, node_type *PS);
+			void p_zigzag(node_type *P, node_type *C, node_type *G);
+			iterator p_insert_node(const value_type &value, node_type *ptr);
 
 		public:
-
-			// TODO Remove
 			void put_tree(int i = 50);
 
 			// -------------------------------- Member functions --------------------------------
@@ -123,6 +119,9 @@ namespace ft
 
 			// -------------------------------- Modifiers --------------------------------
 			std::pair<iterator,bool> insert( const value_type &value );
+
+			// TODO
+			// iterator insert(iterator position, const value_type& val);
 
 			template< class InputIterator >
 			void insert(InputIterator first, InputIterator last);
@@ -360,6 +359,16 @@ namespace ft
 	{
 		return (std::pair<iterator, bool>(p_insert_node(value, _data), true));
 	}
+
+// TODO
+	// template< class Key, class T, class Compare, class Allocator >
+	// typename Map<Key, T, Compare, Allocator>::iterator Map<Key, T, Compare, Allocator>::insert(iterator position, const value_type& val)
+	// {
+	// 	iterator itr = begin();
+	// 	for (; itr != end() && itr != position; itr++)
+
+	// 	return (std::pair<iterator, bool>(p_insert_node(val, &(*position)), true));
+	// }
 
 	template< class Key, class T, class Compare, class Allocator >
 	template< class InputIterator >
@@ -630,7 +639,7 @@ namespace ft
 	std::pair<	typename Map<Key, T, Compare, Allocator>::const_iterator,
 				typename Map<Key, T, Compare, Allocator>::const_iterator> Map<Key, T, Compare, Allocator>::equal_range(const Key &key) const
 	{
-		return (std::pair<iterator, iterator>(lower_bound(key), upper_bound(key)));
+		return (std::pair<const_iterator, const_iterator>(lower_bound(key), upper_bound(key)));
 	}
 
 	// -------------------------------- Non-member functions --------------------------------
@@ -744,7 +753,7 @@ namespace ft
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
-	void Map<Key, T, Compare, Allocator>::grapher(Mtree<Key, T> *item, int current_level, bool side, int *dirswap)
+	void Map<Key, T, Compare, Allocator>::p_grapher(Mtree<Key, T> *item, int current_level, bool side, int *dirswap)
 	{
 		std::string color = item->color ? "\033[1;31m" : "\033[1;97m";
 		std::string pipe = "\033[2;37m";
@@ -787,14 +796,14 @@ namespace ft
 		if (empty())
 			std::cout << "Put tree : (empty map)" << std::endl;
 		else
-			btree_apply_by_level(_data, i);
+			p_btree_apply_by_level(_data, i);
 		#else
 			static_cast<void>(i);
 		#endif
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
-	void Map<Key, T, Compare, Allocator>::call(Mtree<Key, T> *root, int current_level, bool side, int *dirswap, int maxsize)
+	void Map<Key, T, Compare, Allocator>::p_call(Mtree<Key, T> *root, int current_level, bool side, int *dirswap, int maxsize)
 	{
 		if (current_level < maxsize)
 		{
@@ -804,23 +813,23 @@ namespace ft
 					dirswap[current_level - 1] = 1;
 				else if (current_level != 0)
 					dirswap[current_level - 1] = 0;
-				call(root->right, current_level + 1, 1, dirswap, maxsize);
+				p_call(root->right, current_level + 1, 1, dirswap, maxsize);
 			}
 			if (root != NULL)
-				grapher(root, current_level, side, dirswap);
+				p_grapher(root, current_level, side, dirswap);
 			if (root->left)
 			{
 				if (side != 0 && current_level != 0)
 					dirswap[current_level - 1] = 1;
 				else if (current_level != 0)
 					dirswap[current_level - 1] = 0;
-				call(root->left, current_level + 1, 0, dirswap, maxsize);
+				p_call(root->left, current_level + 1, 0, dirswap, maxsize);
 			}
 		}
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
-	int	Map<Key, T, Compare, Allocator>::btree_level_count(Mtree<Key, T> *root)
+	int	Map<Key, T, Compare, Allocator>::p_btree_level_count(Mtree<Key, T> *root)
 	{
 		int	count;
 
@@ -828,14 +837,14 @@ namespace ft
 		if (!root)
 			return (0);
 		if (root->left)
-			count = std::max(count, btree_level_count(root->left));
+			count = std::max(count, p_btree_level_count(root->left));
 		if (root->right)
-			count = std::max(count, btree_level_count(root->right));
+			count = std::max(count, p_btree_level_count(root->right));
 		return (count + 1);
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
-	void Map<Key, T, Compare, Allocator>::btree_apply_by_level(Mtree<Key, T> *root, int maxsize)
+	void Map<Key, T, Compare, Allocator>::p_btree_apply_by_level(Mtree<Key, T> *root, int maxsize)
 	{
 		int i[maxsize];
 		for (int j = 0; j < maxsize - 1; j++)
@@ -844,7 +853,7 @@ namespace ft
 		}
 		if (!root)
 			return ;
-		call(root, 0, 0, i, maxsize);
+		p_call(root, 0, 0, i, maxsize);
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
