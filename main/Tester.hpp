@@ -57,6 +57,15 @@ void check(std::stringstream *ss_std, std::stringstream *ss_ft, int flag);
 void end_test();
 
 template < class K, class V >
+void put_random(std::map<K, V> &std_map, ft::Map<K, V> &ft_map)
+{
+	int k = rand() % 1000;
+	int v = rand() % 1000;
+	std_map.insert(std::pair<int, int>(k, v));
+	ft_map.insert(std::pair<int, int>(k, v));
+}
+
+template < class K, class V >
 void describe_map(std::map<K, V> std_map, ft::Map<K, V> ft_map)
 {
 	std::stringstream ss_std;
@@ -65,24 +74,16 @@ void describe_map(std::map<K, V> std_map, ft::Map<K, V> ft_map)
 	ss_std << "- ";
 	ss_ft << "- ";
 
-	int i = 0;
 	if (std_map.empty())
 		ss_std << "(empty)";
 	else
 		for (typename std::map<K, V>::iterator itr = std_map.begin(); itr != std_map.end(); itr++)
-		{
-			ss_std << itr->first << " : [" << itr->second << "]\n";
-			i++;
-		}
-	i = 0;
+			ss_std << "{ " << itr->first << " : " << itr->second << " } ";
 	if (ft_map.empty())
 		ss_ft << "(empty)";
 	else
 		for (typename ft::Map<K, V>::iterator itr = ft_map.begin(); itr != ft_map.end(); itr++)
-		{
-			ss_ft << itr->first << " : [" << itr->second << "]\n";
-			i++;
-		}
+			ss_ft << "{ " << itr->first << " : " << itr->second << " } ";
 	check(&ss_std, &ss_ft, DEFINED);
 }
 

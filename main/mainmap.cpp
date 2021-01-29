@@ -1,218 +1,197 @@
 #include "Tester.hpp"
 
-bool test_max_int(const int lhs) { return (lhs > 12 ? true : false); }
-
 void constructor_test(int size)
 {
-	title("Constructor size", size);
+	title("Constructor Size", size);
 
 	title("Defaut constructor");
 	std::map<int, int> std_map;
 	ft::Map<int, int> ft_map;
-	// describe_map(std_map, ft_map);
+	describe_map(std_map, ft_map);
 
+	// TODO Replace random par 0->Size quand auto balancing
 	for (int i = 0; i < size; i++)
-	{
-		// TODO Replace random par 0->Size quand auto balancing
-		int k = rand() % 1000;
-		int v = rand() % 1000;
-		std_map.insert(std::pair<int, int>(k, v));
-		ft_map.insert(std::pair<int, int>(k, v));
-	}
+		put_random(std_map, ft_map);
 	ft_map.put_tree();
-	// describe_map(std_map, ft_map);
+	title("");
+	describe_map(std_map, ft_map);
 
-	// title("Range constructor");
-	// std::map<int, int> std_map_bis(std_map.begin(), std_map.end());
-	// ft::Map<int, int> ft_map_bis(ft_map.begin(), ft_map.end());
-	// describe_map(std_map, ft_map);
+	title("Range constructor :");
+	std::map<int, int> std_map_range(std_map.begin(), std_map.end());
+	ft::Map<int, int> ft_map_range(ft_map.begin(), ft_map.end());
+	describe_map(std_map_range, ft_map_range);
 
+	title("Copy constructor :");
+	std::map<int, int> std_map_copy(std_map);
+	ft::Map<int, int> ft_map_copy(ft_map);
+	describe_map(std_map_copy, ft_map_copy);
 
+	title("Assignement operator :");
+	std::map<int, int> std_map_assign;
+	ft::Map<int, int> ft_map_assign;
+	std_map_assign = std_map;
+	ft_map_assign = ft_map;
+	describe_map(std_map_assign, ft_map_assign);
 }
 
-void test()
+void iterator_test(int size)
 {
-	std::map<int, int> mstd;
-	std::map<std::string, std::string> t;
-	ft::Map<int, int> m;
+	title("Iterator Size", size);
 
-	std::cout << "TEST" << std::endl; 
-	// t.insert(std::pair<std::string, std::string>(NULL, NULL));
-	t.insert(std::pair<std::string, std::string>("la", "la"));
-	t.insert(std::pair<std::string, std::string>("le", "le"));
-	for (std::map<std::string, std::string>::iterator itr = t.begin(); itr != t.end(); itr++)
-		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
+	std::map<int, int> std_map;
+	ft::Map<int, int> ft_map;
 
-	mstd.insert(std::pair<int, int>(15, 15));
-	mstd.insert(std::pair<int, int>(2, 2));
-	mstd.insert(std::pair<int, int>(1, 1));
-	mstd.insert(std::pair<int, int>(5, 5));
-	mstd.insert(std::pair<int, int>(4, 4));
-	mstd.insert(std::pair<int, int>(3, 3));
-	mstd.insert(std::pair<int, int>(10, 10));
-	mstd.insert(std::pair<int, int>(11, 11));
-	mstd.insert(std::pair<int, int>(12, 12));
-	mstd.insert(std::pair<int, int>(6, 6));
-	mstd.insert(std::pair<int, int>(8, 8));
-	mstd.insert(std::pair<int, int>(17, 17));
-	mstd.insert(std::pair<int, int>(20, 20));
-	mstd.insert(std::pair<int, int>(16, 16));
+	// TODO Replace random par 0->Size quand auto balancing
+	for (int i = 0; i < size; i++)
+		put_random(std_map, ft_map);
+	ft_map.put_tree();
+	title("");
+	describe_map(std_map, ft_map);
 
-	m.insert(std::pair<int, int>(15, 15));
-	m.insert(std::pair<int, int>(2, 2));
-	m.insert(std::pair<int, int>(1, 1));
-	m.insert(std::pair<int, int>(5, 5));
-	m.insert(std::pair<int, int>(4, 4));
-	m.insert(std::pair<int, int>(3, 3));
-	m.insert(std::pair<int, int>(10, 10));
-	m.insert(std::pair<int, int>(11, 11));
-	m.insert(std::pair<int, int>(12, 12));
-	m.insert(std::pair<int, int>(6, 6));
-	m.insert(std::pair<int, int>(8, 8));
-	m.insert(std::pair<int, int>(17, 17));
-	m.insert(std::pair<int, int>(20, 20));
-	m.insert(std::pair<int, int>(16, 16));
+	std::stringstream ss_std;
+	std::stringstream ss_ft;
 
-	ft::Map<int, int> m2 = m;
+	title("Begin - End :");
+	ss_std << "- ";
+	ss_ft << "- ";
+	for (std::map<int, int>::iterator itr = std_map.begin(); itr != std_map.end(); itr++)
+		ss_std << "{ " << itr->first << " : " << itr->second << " } ";
+	for (ft::Map<int, int>::iterator itr = ft_map.begin(); itr != ft_map.end(); itr++)
+		ss_ft << "{ " << itr->first << " : " << itr->second << " } ";
+	check(&ss_std, &ss_ft, DEFINED);
 
-	std::cout << "std" << std::endl;
-	for (std::map<int, int>::iterator itr = mstd.begin(); itr != mstd.end(); itr++)
-		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
+	title("Const Begin - Const End :");
+	ss_std << "- ";
+	ss_ft << "- ";
+	for (std::map<int, int>::const_iterator itr = std_map.begin(); itr != std_map.end(); itr++)
+		ss_std << "{ " << itr->first << " : " << itr->second << " } ";
+	for (ft::Map<int, int>::const_iterator itr = ft_map.begin(); itr != ft_map.end(); itr++)
+		ss_ft << "{ " << itr->first << " : " << itr->second << " } ";
+	check(&ss_std, &ss_ft, DEFINED);
 
-	std::cout << "ft" << std::endl;
-	ft::Map<int, int>::iterator itr = m.begin();
-	ft::Map<int, int>::iterator itr2 = m.rbegin();
-	std::cout << "ope++" << std::endl;
-	for (unsigned long i = 0; i < m.size(); i++)
-	{
-		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
-		itr++;
-	}
-	std::cout << "ope--" << std::endl;
-	for (unsigned long i = 0; i < m.size(); i++)
-	{
-		std::cout << "[ " << itr2->first << " : " << itr2->second << "]\n";
-		itr2--;
-	}
+	title("Reverse Begin - Reverse End :");
+	ss_std << "- ";
+	ss_ft << "- ";
+	for (std::map<int, int>::reverse_iterator itr = std_map.rbegin(); itr != std_map.rend(); itr++)
+		ss_std << "{ " << itr->first << " : " << itr->second << " } ";
+	for (ft::Map<int, int>::reverse_iterator itr = ft_map.rbegin(); itr != ft_map.rend(); itr++)
+		ss_ft << "{ " << itr->first << " : " << itr->second << " } ";
+	check(&ss_std, &ss_ft, DEFINED);
 
-
-	std::cout << "Upper bound : (std) 7  " << mstd.upper_bound(7)->first << std::endl;
-	std::cout << "Upper bound : (ft)  7  " << m.upper_bound(7)->first << std::endl;
-	std::cout << "Upper bound : (std) 17 " << mstd.upper_bound(17)->first << std::endl;
-	std::cout << "Upper bound : (ft)  17 " << m.upper_bound(17)->first << std::endl;
-
-	std::cout << "Lower bound : (std) 0  " << mstd.lower_bound(0)->first << std::endl;
-	std::cout << "Lower bound : (ft)  0  " << m.lower_bound(0)->first << std::endl;
-	std::cout << "Lower bound : (std) 7  " << mstd.lower_bound(7)->first << std::endl;
-	std::cout << "Lower bound : (ft)  7  " << m.lower_bound(7)->first << std::endl;
-	std::cout << "Lower bound : (std) 17 " << mstd.lower_bound(17)->first << std::endl;
-	std::cout << "Lower bound : (ft)  17 " << m.lower_bound(17)->first << std::endl;
-
-	std::cout << std::endl << "operator [] " << std::endl;
-	std::cout << "std[17] " << mstd[17] << std::endl;
-	std::cout << " ft[17] " << m[17] << std::endl;
-	std::cout << "std[18] " << mstd[18] << std::endl;
-	std::cout << " ft[18] " << m[18] << std::endl;
-	mstd[18] = 11;
-	m[18] = 11;
-	std::cout << "std[18] " << mstd[18] << std::endl;
-	std::cout << " ft[18] " << m[18] << std::endl;
-
-	std::cout << std::endl << "find" << std::endl;
-
-	std::cout << "std find 12 " << mstd.find(12)->first << std::endl;
-	std::cout << " ft find 12 " << m.find(12)->first << std::endl;
-	// std::cout << "std find 13 " << mstd.find(13)->first << std::endl;
-	// std::cout << " ft find 13 " << m.find(13)->first << std::endl;
-
-
-	std::cout << std::endl << "swap" << std::endl;
-	std::map<int, int> mstdswap;
-	mstdswap.insert(std::pair<int, int>(15, 15));
-	mstdswap.insert(std::pair<int, int>(2, 2));
-
-	std::map<int, int> mstdswap1;
-	mstdswap1.insert(std::pair<int, int>(14, 14));
-	mstdswap1.insert(std::pair<int, int>(1, 1));
-
-	ft::Map<int, int> mswap;
-	mswap.insert(std::pair<int, int>(15, 15));
-	mswap.insert(std::pair<int, int>(2, 2));
-
-	ft::Map<int, int> mswap1;
-	mswap1.insert(std::pair<int, int>(14, 14));
-	mswap1.insert(std::pair<int, int>(1, 1));
-
-	mswap1.swap(mswap);
-	mstdswap1.swap(mstdswap);
-	std::cout << "std" << std::endl;
-	for (std::map<int, int>::iterator itr = mstdswap1.begin(); itr != mstdswap1.end(); itr++)
-		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
-	std::cout << "ft" << std::endl;
-	for (ft::Map<int, int>::iterator itr = mswap1.begin(); itr != mswap1.end(); itr++)
-		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
-
+	title("Const Reverse Begin - Const Reverse End :");
+	ss_std << "- ";
+	ss_ft << "- ";
+	for (std::map<int, int>::const_reverse_iterator itr = std_map.rbegin(); itr != std_map.rend(); itr++)
+		ss_std << "{ " << itr->first << " : " << itr->second << " } ";
+	for (ft::Map<int, int>::const_reverse_iterator itr = ft_map.rbegin(); itr != ft_map.rend(); itr++)
+		ss_ft << "{ " << itr->first << " : " << itr->second << " } ";
+	check(&ss_std, &ss_ft, DEFINED);
 }
 
-// void map_test(int size)
-// {
-//     title("Map", size);
-	
-// 	std::map<char, std::string> std_map;
-// 	ft::Map<char, std::string> ft_map;
-// 	std_map['a'] = "str1" ;
-// 	std_map['b'] = "str1" ;
-// 	std_map['a'] = "str1" ;
-// 	ft_map['a'] = "str1" ;
+void capacity_test(int size)
+{
+	title("Capacity Size", size);
 
-// 	std::map<char, std::string> m;
-// 	m['a'] = "str1" ;
-// 	m['b'] = "str2" ;
-// 	m['c'] = "str3" ;
-//     std::pair<char,std::string> last = *m.rbegin(); 
-//     std::map<char,std::string>::iterator i = m.begin(); 
+	std::map<int, int> std_map;
+	ft::Map<int, int> ft_map;
 
-// 	std::map<char, int> m2;
-// 	m2['b'] = 26 ;
-// 	m2['y'] = 24 ;
-// 	m2['y'] = 22 ;
-// 	m2['t'] = 25 ;
-// 	m2['u'] = 23 ;
-// 	m2['u'] = 24 ;
-// 	m2['d'] = 13 ;
-// 	m2['c'] = 11 ;
-// 	m2['e'] = 12 ;
-// 	m2['a'] = 14 ;
+	std::stringstream ss_std;
+	std::stringstream ss_ft;
 
-//     std::pair<char,int> last2 = *m2.rbegin(); 
-//     std::map<char,int>::iterator i2 = m2.begin(); 
-  
-//     std::cout
-// 		<< "Map contains "
-// 		<< "following elements"
-// 	<< std::endl; 
-//     do { 
-//         std::cout
-// 			<< i->first
-// 			<< " = "
-// 			<< i->second
-// 		<< std::endl; 
-//     } while (m.value_comp()(*i++, last)); 
+	title("Empty (true) :");
+	ss_std << "- Empty(" << std_map.empty() << ")";
+	ss_ft << "- Empty(" << ft_map.empty() << ")";
+	check(&ss_std, &ss_ft, DEFINED);
 
+	// TODO Replace random par 0->Size quand auto balancing
+	for (int i = 0; i < size; i++)
+		put_random(std_map, ft_map);
+	ft_map.put_tree();
+	title("");
+	describe_map(std_map, ft_map);
 
-// 	  std::cout << "Map2 contains " << "following elements" << std::endl; 
-//     do { 
-//         std::cout << i2->first << " = " << i2->second << std::endl; 
-//     } while (m2.value_comp()(*i2++, last2));
-  
-// }
+	title("Empty (false) :");
+	ss_std << "- Empty(" << std_map.empty() << ")";
+	ss_ft << "- Empty(" << ft_map.empty() << ")";
+	check(&ss_std, &ss_ft, DEFINED);
+
+	title("Size :");
+	ss_std << "- Size(" << std_map.size() << ")";
+	ss_ft << "- Size(" << ft_map.size() << ")";
+	check(&ss_std, &ss_ft, DEFINED);
+
+	title("Max_Size (false) :");
+	ss_std << "- Max_Size(" << std_map.max_size() << ")";
+	ss_ft << "- Max_Size(" << ft_map.max_size() << ")";
+	check(&ss_std, &ss_ft, DEFINED);
+}
+
+void element_access(int size)
+{
+	title("Element_Access Size", size);
+
+	std::map<int, int> std_map;
+	ft::Map<int, int> ft_map;
+
+	std::stringstream ss_std;
+	std::stringstream ss_ft;
+
+	// TODO Replace random par 0->Size quand auto balancing
+	for (int i = 0; i < size; i++)
+		put_random(std_map, ft_map);
+	ft_map.put_tree();
+	title("");
+	describe_map(std_map, ft_map);
+
+	ss_std << "- ";
+	ss_ft << "- ";
+	for (std::map<int, int>::iterator itr = std_map.begin(); itr != std_map.end(); itr++)
+		ss_std << std_map[itr->first] << ", ";
+	for (ft::Map<int, int>::iterator itr = ft_map.begin(); itr != ft_map.end(); itr++)
+		ss_ft << ft_map[itr->first] << ", ";
+	check(&ss_std, &ss_ft, DEFINED);
+}
+
+void modifiers_test(int size)
+{
+	title("Modifiers Size", size);
+
+	std::map<int, int> std_map;
+	ft::Map<int, int> ft_map;
+	std::map<int, int> std_map_bis;
+	ft::Map<int, int> ft_map_bis;
+
+	// TODO Replace random par 0->Size quand auto balancing
+	for (int i = 0; i < size; i++)
+		put_random(std_map, ft_map);
+	title("After Insert (Value) :");
+	ft_map.put_tree();
+	describe_map(std_map, ft_map);
+
+	std_map_bis.insert(std_map.begin(), std_map.end());
+	ft_map_bis.insert(ft_map.begin(), ft_map.end());
+	title("After Insert (First, Last) : ");
+	ft_map_bis.put_tree();
+	describe_map(std_map_bis, ft_map_bis);
+
+	// TODO Heap-Use-After-Free
+	// while (!std_map.empty())
+	// 	std_map.erase(std_map.begin());
+	// while (!ft_map.empty())
+	// 	ft_map.erase(ft_map.begin());
+	// title("After Erase (Position) : ");
+	// ft_map_bis.put_tree();
+	// describe_map(std_map, ft_map);
+}
 
 int main()
 {
+	// Init Random
 	srand(static_cast<unsigned int>(time(NULL)));
+
 #if TEST_MAP == 0 || TEST_MAP == 1
 # ifndef SIZE
-    constructor_test(50);
+    constructor_test(100);
 	constructor_test(10);
 	constructor_test(5);
 	constructor_test(2);
@@ -223,188 +202,57 @@ int main()
 # endif
 #endif
 
+#if TEST_MAP == 0 || TEST_MAP == 2
+# ifndef SIZE
+    iterator_test(100);
+	iterator_test(10);
+	iterator_test(5);
+	iterator_test(2);
+	iterator_test(1);
+	iterator_test(0);
+# else
+	iterator_test(SIZE);
+# endif
+#endif
+
+#if TEST_MAP == 0 || TEST_MAP == 3
+# ifndef SIZE
+    capacity_test(100);
+	capacity_test(10);
+	capacity_test(5);
+	capacity_test(2);
+	capacity_test(1);
+	capacity_test(0);
+# else
+	capacity_test(SIZE);
+# endif
+#endif
+
+#if TEST_MAP == 0 || TEST_MAP == 4
+# ifndef SIZE
+    element_access(100);
+	element_access(10);
+	element_access(5);
+	element_access(2);
+	element_access(1);
+	element_access(0);
+# else
+	element_access(SIZE);
+# endif
+#endif
+
+#if TEST_MAP == 0 || TEST_MAP == 5
+# ifndef SIZE
+    modifiers_test(100);
+	modifiers_test(10);
+	modifiers_test(5);
+	modifiers_test(2);
+	modifiers_test(1);
+	modifiers_test(0);
+# else
+	modifiers_test(SIZE);
+# endif
+#endif
+
     end_test();
-
-    // constructor_test(1000); // OK Sur linux (juste chiant a afficher)
-	// map_test(10);
-	// map_test(5);
-	// map_test(2);
-	// map_test(1);
-	// map_test(0);
-
-	ft::Map<int, int> m;
-// 	std::map<int, int> mstd;
-// 	ft::Map<std::string, int> ms;
-// 	std::map<std::string, int> mstds;
-
-// 	mstd.insert(std::pair<int, int>(10, 1));
-// 	mstd.insert(std::pair<int, int>(5, 2));
-// 	mstd.insert(std::pair<int, int>(3, 3));
-// 	mstd.insert(std::pair<int, int>(2, 4));
-// 	mstd.insert(std::pair<int, int>(4, 5));
-// 	mstd.insert(std::pair<int, int>(7, 6));
-// 	mstd.insert(std::pair<int, int>(6, 7));
-// 	mstd.insert(std::pair<int, int>(8, 8));
-// 	mstd.insert(std::pair<int, int>(15, 9));
-// 	mstd.insert(std::pair<int, int>(13, 10));
-// 	mstd.insert(std::pair<int, int>(12, 11));
-// 	mstd.insert(std::pair<int, int>(14, 12));
-// 	mstd.insert(std::pair<int, int>(17, 13));
-// 	mstd.insert(std::pair<int, int>(16, 14));
-// 	mstd.insert(std::pair<int, int>(18, 15));
-	
-	// m.insert(std::pair<int, int>(10, 1));
-	// m.insert(std::pair<int, int>(5, 2));
-	// m.insert(std::pair<int, int>(3, 3));
-	// m.insert(std::pair<int, int>(2, 4));
-	// m.insert(std::pair<int, int>(4, 5));
-	// m.insert(std::pair<int, int>(7, 6));
-	// m.insert(std::pair<int, int>(6, 7));
-	// m.insert(std::pair<int, int>(8, 8));
-	// m.insert(std::pair<int, int>(15, 9));
-	// m.insert(std::pair<int, int>(13, 10));
-	// m.insert(std::pair<int, int>(12, 11));
-	// m.insert(std::pair<int, int>(14, 12));
-	// m.insert(std::pair<int, int>(17, 13));
-	// m.insert(std::pair<int, int>(16, 14));
-	// m.insert(std::pair<int, int>(18, 15));
-
-// 	title("STD MAP:\n");
-// 	std::map<int, int>::iterator itr;
-// 	for (itr = mstd.begin(); itr != mstd.end(); itr++)
-// 		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
-// 	// itr++;
-
-	// title("FT MAP:\n");
-	// m.put_tree();
-
-// // Size
-
-// 	title("FT MAP (SIZE):\n");
-// 	std::cout << "std_size : " << mstd.size() << std::endl;
-// 	std::cout << "ft_size : " << m.size() << std::endl;
-
-// 	std::cout << "std_max_size : " << mstd.max_size() << "\n";
-// 	std::cout << "ft_max_size : " << m.max_size() << "\n";
-
-// 	std::cout << "std_max_size : " << mstds.max_size() << "\n";
-// 	std::cout << "ft_max_size : " << ms.max_size() << "\n";
-	
-// // Operator []
-// 	// std::cout << m[8] << std::endl;
-// 	// std::cout << mstd[8] << std::endl;
-// 	// TODO
-
-// 	title("STD MAP erase big daddy:[10]\n");
-// 	mstd.erase(10);
-// 	for (std::map<int, int>::iterator itr = mstd.begin(); itr != mstd.end(); itr++)
-// 		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
-
-// 	title("FT MAP erase big daddy:[10]\n");
-// 	m.erase(10);
-// 	m.put_tree();
-
-// 	title("STD MAP erase leftmost loner:[2]\n");
-// 	mstd.erase(2);
-// 	for (std::map<int, int>::iterator itr = mstd.begin(); itr != mstd.end(); itr++)
-// 		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
-
-// 	title("FT MAP erase leftmost loner:[2]\n");
-// 	m.erase(2);
-// 	m.put_tree();
-
-// 	title("STD MAP erase leftmost parent(rightchild):[3]\n");
-// 	mstd.erase(3);
-// 	for (std::map<int, int>::iterator itr = mstd.begin(); itr != mstd.end(); itr++)
-// 		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
-
-// 	title("FT MAP erase leftmost parent(rightchild):[3]\n");
-// 	m.erase(3);
-// 	m.put_tree();
-
-// 	title("STD MAP erase rightmost loner:[18]\n");
-// 	mstd.erase(18);
-// 	for (std::map<int, int>::iterator itr = mstd.begin(); itr != mstd.end(); itr++)
-// 		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
-
-// 	title("FT MAP erase rightmost loner:[18]\n");
-// 	m.erase(18);
-// 	m.put_tree();
-
-// 	title("STD MAP erase rightmost parent(leftchild):[17]\n");
-// 	mstd.erase(17);
-// 	for (std::map<int, int>::iterator itr = mstd.begin(); itr != mstd.end(); itr++)
-// 		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
-
-// 	title("FT MAP erase rightmost parent(leftchild):[17]\n");
-// 	m.erase(17);
-// 	m.put_tree();
-
-// 	title("STD MAP erase non existing:[18]\n");
-// 	mstd.erase(18);
-// 	for (std::map<int, int>::iterator itr = mstd.begin(); itr != mstd.end(); itr++)
-// 		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
-
-// 	title("FT MAP erase non existing:[18]\n");
-// 	m.erase(18);
-// 	m.put_tree();
-
-// 	title("STD MAP erase spam:\n");
-// 	mstd.erase(6);
-// 	mstd.erase(13);
-// 	mstd.erase(15);
-// 	mstd.erase(8);
-// 	for (std::map<int, int>::iterator itr = mstd.begin(); itr != mstd.end(); itr++)
-// 		std::cout << "[ " << itr->first << " : " << itr->second << "]\n";
-
-// 	title("FT MAP erase spam:[6],[13],[15],[8]\n");
-// 	m.erase(6);
-// 	m.erase(13);
-// 	m.erase(15);
-// 	m.erase(8);
-// 	m.put_tree(10);
-
-// 	ft::Map<int, int> m2;
-
-// 	/*m2.insert(std::pair<int, int>(50, 1));
-// 	m2.insert(std::pair<int, int>(25, 2));
-// 	m2.insert(std::pair<int, int>(75, 3));
-// 	m2.insert(std::pair<int, int>(12, 4));
-// 	m2.insert(std::pair<int, int>(62, 5));
-// 	m2.insert(std::pair<int, int>(37, 6));
-// 	m2.insert(std::pair<int, int>(87, 7));
-// 	m2.insert(std::pair<int, int>(6, 8));
-// 	m2.insert(std::pair<int, int>(56, 9));
-// 	m2.insert(std::pair<int, int>(18, 10));
-// 	m2.insert(std::pair<int, int>(68, 11));
-// 	m2.insert(std::pair<int, int>(31, 12));
-// 	m2.insert(std::pair<int, int>(81, 13));
-// 	m2.insert(std::pair<int, int>(43, 14));
-// 	m2.insert(std::pair<int, int>(93, 15));
-// 	m2.insert(std::pair<int, int>(96, 15));
-// 	m2.insert(std::pair<int, int>(90, 15));
-// 	m2.insert(std::pair<int, int>(84, 15));
-// 	m2.insert(std::pair<int, int>(78, 15));
-// 	m2.insert(std::pair<int, int>(71, 15));
-// 	m2.insert(std::pair<int, int>(65, 15));
-// 	m2.insert(std::pair<int, int>(59, 15));
-// 	m2.insert(std::pair<int, int>(53, 15));
-// 	m2.insert(std::pair<int, int>(46, 15));
-// 	m2.insert(std::pair<int, int>(40, 15));
-// 	m2.insert(std::pair<int, int>(34, 15));
-// 	m2.insert(std::pair<int, int>(28, 15));
-// 	m2.insert(std::pair<int, int>(21, 15));
-// 	m2.insert(std::pair<int, int>(15, 15));
-// 	m2.insert(std::pair<int, int>(9, 15));
-// 	m2.insert(std::pair<int, int>(3, 15));
-// 	m2.insert(std::pair<int, int>(1, 15));
-// 	m2.insert(std::pair<int, int>(2, 15));
-// 	m2.insert(std::pair<int, int>(0, 15));
-// 	m2.insert(std::pair<int, int>(5, 15));
-// 	m2.insert(std::pair<int, int>(4, 15));*/
-// 	/*for (int i = 0; i < 150000; i++)
-// 			m2.insert(std::pair<int, int>(rand(), 15));
-// 	m2.put_tree(1000);*/
-
-    // test();
 }

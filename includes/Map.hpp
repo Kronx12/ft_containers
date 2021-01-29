@@ -80,7 +80,7 @@ namespace ft
 			void debug_leaf(node_type *ptr);
 			void debug_tree();
 			void grapher(Mtree<Key, T> *item, int current_level, bool side, int *dirswap);
-			void put_tree(int i = 10000);
+			void put_tree(int i = 10);
 			void call(Mtree<Key, T> *root, int current_level, bool side, int *dirswap, int maxsize);
 			int btree_level_count(Mtree<Key, T> *root);
 			void btree_apply_by_level(Mtree<Key, T> *root, int maxsize);
@@ -165,7 +165,7 @@ namespace ft
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
-	Map<Key, T, Compare, Allocator>::Map(const Map &x) : _data(NULL), _alloc(x._alloc),_comp(x._comp),  _end(new node_type()), _rend(new node_type())
+	Map<Key, T, Compare, Allocator>::Map(const Map &x) : _data(NULL), _size(0), _alloc(x._alloc),_comp(x._comp),  _end(new node_type()), _rend(new node_type())
 	{
 		insert(x.begin(), x.end());
 	}
@@ -727,39 +727,47 @@ namespace ft
 	template< class Key, class T, class Compare, class Allocator >
 	void Map<Key, T, Compare, Allocator>::grapher(Mtree<Key, T> *item, int current_level, bool side, int *dirswap)
 	{
-		int color = current_level % 2 ? 31 : 30;
+		std::string color = current_level % 2 ? "\033[1;31m" : "\033[1;97m";
+		std::string pipe = "\033[2;37m";
+		std::string reset = "\033[0m";
+		std::stringstream ss;
 
 		for (int i = 0; i < current_level - 1; i++)
 		{
 			if (dirswap[i])
-				std::cout << "  ┃  ";
+				ss << "  " << pipe << "┃" << reset << "  ";
 			else
-				std::cout << "     ";
+				ss << "     ";
 		}
 		
 		if (!current_level)
-			std::cout << " \033[1;" << color << "m◖";
+			ss << " " << color << "◖";
 		else if (!side)
-			std::cout << "  ┗━━━\033[1;" << color << "m◖";
+			ss << "  " << pipe << "┗━━━" << reset << color << "◖";
 		else
-			std::cout << "  ┏━━━\033[1;" << color << "m◖";
+			ss << "  " << pipe << "┏━━━" << reset << color << "◖";
 
 		if (item == _end)
-			std::cout << "(end)◗\033[0m\n";
+			ss << "(end)◗";
 		else if (item == _rend)
-			std::cout << "(rend)◗\033[0m\n";
+			ss << "(rend)◗";
 		else if (begin() == iterator(item))
-			std::cout << item->value->first << "(begin)◗\033[0m\n";
+			ss << item->value->first << "(begin)◗";
 		else if (rbegin() == iterator(item))
-			std::cout << item->value->first << "(rbegin)◗\033[0m\n";
+			ss << item->value->first << "(rbegin)◗";
 		else
-			std::cout << item->value->first << "◗\033[0m\n";
+			ss << item->value->first << "◗";
+		ss << reset << std::endl;
+		std::cout << ss.str();
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
 	void Map<Key, T, Compare, Allocator>::put_tree(int i)
 	{
-		btree_apply_by_level(_data, i);
+		if (empty())
+			std::cout << "Put tree : (empty map)" << std::endl;
+		else
+			btree_apply_by_level(_data, i);
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
