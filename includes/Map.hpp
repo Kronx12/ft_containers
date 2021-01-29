@@ -629,14 +629,14 @@ namespace ft
 	std::pair<	typename Map<Key, T, Compare, Allocator>::iterator,
 				typename Map<Key, T, Compare, Allocator>::iterator> Map<Key, T, Compare, Allocator>::equal_range(const Key &key)
 	{
-		return (std::pair<iterator, iterator>(find(key), ++find(key)));
+		return (std::pair<iterator, iterator>(lower_bound(key), ++lower_bound(key)));
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
 	std::pair<	typename Map<Key, T, Compare, Allocator>::const_iterator,
 				typename Map<Key, T, Compare, Allocator>::const_iterator> Map<Key, T, Compare, Allocator>::equal_range(const Key &key) const
 	{
-		return (std::pair<iterator, iterator>(find(key), ++find(key)));
+		return (std::pair<iterator, iterator>(lower_bound(key), ++lower_bound(key)));
 	}
 
 	// -------------------------------- Non-member functions --------------------------------

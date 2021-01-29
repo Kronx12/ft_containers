@@ -427,21 +427,21 @@ void operations_test(int size)
 	title("Equal_Range : ");
 	describe_map(std_map, ft_map); // TODO Equal Range debug
 	ft_map.put_tree();
-	if (std_map.size() > 0)
+	if (std_map.size() > 3)
 	{
 	// 	std::pair<std::map<int, int>::iterator, std::map<int, int>::iterator> itr_std_a = std_map.equal_range(std_map.begin()->first);
 	// 	std::pair<std::map<int, int>::iterator, std::map<int, int>::iterator>  itr_std_b = std_map.equal_range((--(std_map.end()))->first);
-	// 	std::pair<std::map<int, int>::iterator, std::map<int, int>::iterator>  itr_std_c = std_map.equal_range(-1);
+		std::pair<std::map<int, int>::iterator, std::map<int, int>::iterator>  itr_std_c = std_map.equal_range(-1);
 	// 	ss_std << "equal_range : " << itr_std_a.first->first << " : " << itr_std_a.second->first << " | ";
 	// 	ss_std << "equal_range : " << itr_std_b.first->first << " : " << itr_std_b.second->first << " | ";
-	// 	ss_std << "equal_range : " << itr_std_c.first->first << " : " << itr_std_c.second->first;
+		ss_std << "equal_range : " << itr_std_c.first->first << " : " << itr_std_c.second->first;
 	// std::pair<ft::Map<int, int>::iterator, ft::Map<int, int>::iterator> itr_ft_a = ft_map.equal_range(ft_map.begin()->first);
 	// 	std::pair<ft::Map<int, int>::iterator, ft::Map<int, int>::iterator> itr_ft_b = ft_map.equal_range((--(ft_map.end()))->first);
-	// 	std::pair<ft::Map<int, int>::iterator, ft::Map<int, int>::iterator> itr_ft_c = ft_map.equal_range(-1);
+		std::pair<ft::Map<int, int>::iterator, ft::Map<int, int>::iterator> itr_ft_c = ft_map.equal_range(-1);
 	// 	ss_ft << "equal_range : " << itr_ft_a.first->first << " : " << itr_ft_a.second->first << " | ";
-	// 	ss_ft << "equal_range : " << itr_ft_b.first->first << " : " << itr_ft_a.second->first << " | ";
-	// 	ss_ft << "equal_range : " << itr_ft_c.first->first << " : " << itr_ft_a.second->first;
-	// 	check(&ss_std, &ss_ft, DEFINED);
+	// 	ss_ft << "equal_range : " << itr_ft_b.first->first << " : " << itr_ft_b.second->first << " | ";
+		ss_ft << "equal_range : " << itr_ft_c.first->first << " : " << itr_ft_c.second->first;
+		// check(&ss_std, &ss_ft, DEFINED);
 	}
 
 	title("Const Equal_Range : ");
