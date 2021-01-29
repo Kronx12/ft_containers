@@ -107,7 +107,7 @@ void constructor_test(int size, T type)
 
 
 // assignment constructor
-	title("assignment operator");
+	title("Assignment operator");
 	std::list<T> std_lst_assignment;
 	ft::List<T> ft_lst_assignment;
 	std_lst_assignment = std_lst_range;

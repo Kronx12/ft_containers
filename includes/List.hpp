@@ -180,6 +180,8 @@ namespace ft
 	List<T>::~List()
 	{
 		clear();
+		delete _end;
+		delete _rend;
 	}
 
 	//-------------------------- ITERATORS --------------------------
@@ -498,9 +500,8 @@ namespace ft
 				tmp.push_back(*itr_other);
 				itr_other++;
 			}
+		other.clear();
 		swap(tmp);
-		tmp.~List();
-		other.~List();
 	}
 
 	template < class T >
@@ -535,8 +536,6 @@ namespace ft
 				itr_other++;
 			}
 		swap(tmp);
-		tmp.~List();
-		other.~List();
 	}
 
 	template < class T >
@@ -568,7 +567,6 @@ namespace ft
 			if (*itr != value)
 				tmp.push_back(*itr);
 		swap(tmp);
-		tmp.~List();
 	}
 	
 	template < class T >
@@ -580,7 +578,6 @@ namespace ft
 			if (!p(*itr))
 				tmp.push_back(*itr);
 		swap(tmp);
-		tmp.~List();
 	}
 
 	template < class T >
@@ -589,8 +586,7 @@ namespace ft
 		List<T> tmp;
 		for (iterator itr = begin(); itr != end(); itr++)
 			tmp.push_front(*itr);
-		swap(tmp);
-		tmp.~List();				
+		swap(tmp);			
 	}
 
 	template < class T >
@@ -601,7 +597,6 @@ namespace ft
 			if (tmp.empty() || tmp.back() != *itr)
 				tmp.push_back(*itr);
 		swap(tmp);
-		tmp.~List();
 	}
 
 	template < class T >
@@ -613,7 +608,6 @@ namespace ft
 			if (!p(tmp.back(), *itr))
 				tmp.push_back(*itr);
 		swap(tmp);
-		tmp.~List();
 	}
 
 	template < class T >
