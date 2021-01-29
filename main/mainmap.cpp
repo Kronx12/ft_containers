@@ -4,7 +4,7 @@ void constructor_test(int size)
 {
 	title("Constructor Size", size);
 
-	title("Defaut constructor");
+	title("Defaut constructor"); // TODO constructor with other parameters (fnct cmp)
 	std::map<int, int> std_map;
 	ft::Map<int, int> ft_map;
 	describe_map(std_map, ft_map);
