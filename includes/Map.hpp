@@ -3,6 +3,9 @@
 
 # include "Iterator.hpp"
 
+# define C_BLACK 0
+# define C_RED 1
+
 namespace ft
 {
 	template < typename Key, typename T >
@@ -15,7 +18,7 @@ namespace ft
 			Mtree						*right;
 			bool						color;
 
-			Mtree() : value(NULL), parent(NULL), left(NULL), right(NULL) {};
+			Mtree() : value(NULL), parent(NULL), left(NULL), right(NULL), color(C_RED) {};
 	};
 
 	template < class Key, class T, class Compare = std::less<Key>, class Allocator = std::allocator<std::pair<const Key,T> > >
@@ -71,19 +74,22 @@ namespace ft
 			// Recursive inserter
 			void p_erase_node(node_type *ptr, const key_type &key);
 			iterator p_insert_node(const value_type &value, node_type *ptr);
+			void grapher(Mtree<Key, T> *item, int current_level, bool side, int *dirswap);
+			void call(Mtree<Key, T> *root, int current_level, bool side, int *dirswap, int maxsize);
+			int btree_level_count(Mtree<Key, T> *root);
+			void btree_apply_by_level(Mtree<Key, T> *root, int maxsize);
 			// Recursive delete
 			void p_deallocate_tree(node_type *node);
+
+			void p_checkrb(node_type *end);
+			void p_zigzag(node_type *P, node_type *C, node_type *G);
+			void p_zigzig(node_type *P, node_type *C, node_type *G, node_type *PS);
+			void p_swap(node_type *P, node_type *C, node_type *G, node_type *PS);
 
 		public:
 
 			// TODO Remove
-			void debug_leaf(node_type *ptr);
-			void debug_tree();
-			void grapher(Mtree<Key, T> *item, int current_level, bool side, int *dirswap);
 			void put_tree(int i = 50);
-			void call(Mtree<Key, T> *root, int current_level, bool side, int *dirswap, int maxsize);
-			int btree_level_count(Mtree<Key, T> *root);
-			void btree_apply_by_level(Mtree<Key, T> *root, int maxsize);
 
 			// -------------------------------- Member functions --------------------------------
 			explicit Map(const Compare &comp = key_compare(), const Allocator &alloc = allocator_type());
@@ -145,7 +151,7 @@ namespace ft
 	// -------------------------------- Member functions --------------------------------
 	template< class Key, class T, class Compare, class Allocator >
 	Map<Key, T, Compare, Allocator>::Map(const Compare &comp, const Allocator &alloc)
-	: _data(NULL), _size(0), _alloc(alloc), _comp(comp), _end(new node_type()), _rend(new node_type()) {}
+	: _data(NULL), _size(0), _alloc(alloc), _comp(comp), _end(new node_type()), _rend(new node_type()) {_end->color = C_BLACK; _rend->color = C_BLACK;}
 
 	template< class Key, class T, class Compare, class Allocator >
 	template <class InputIterator>
@@ -273,21 +279,6 @@ namespace ft
 	}
 
 	// -------------------------------- Modifiers --------------------------------
-	template< class Key, class T, class Compare, class Allocator >
-	void Map<Key, T, Compare, Allocator>::debug_leaf(node_type *ptr)
-	{
-		if (ptr->left != NULL&& ptr->left != _rend)
-			debug_leaf(ptr->left);
-		std::cout << "{ " << ptr->value->first << " : " << ptr->value->second << " }\n";
-		if (ptr->right != NULL && ptr->right != _end)
-			debug_leaf(ptr->right);
-	}
-
-	template< class Key, class T, class Compare, class Allocator >
-	void Map<Key, T, Compare, Allocator>::debug_tree()
-	{
-		debug_leaf(_data);
-	}
 
 	template< class Key, class T, class Compare, class Allocator >
 	typename Map<Key, T, Compare, Allocator>::iterator Map<Key, T, Compare, Allocator>::p_insert_node(const value_type &value, node_type *ptr)
@@ -296,6 +287,7 @@ namespace ft
 		if (_data == NULL)
 		{
 			_data = new node_type();
+			_data->color = C_BLACK;
 			_data->value = _alloc.allocate(1);
 			_data->parent = NULL;
 			_alloc.construct(_data->value, std::pair< Key, T >(value.first, value.second));
@@ -329,6 +321,7 @@ namespace ft
 					_alloc.construct(ptr->left->value, std::pair< Key, T >(value.first, value.second));
 				}
 				_size++;
+				p_checkrb(ptr->left);
 				return (iterator(ptr->left));
 			}
 		}
@@ -355,6 +348,7 @@ namespace ft
 					_alloc.construct(ptr->right->value, std::pair< Key, T >(value.first, value.second));
 				}
 				_size++;
+				p_checkrb(ptr->right);
 				return (iterator(ptr->right));
 			}
 		}
@@ -752,7 +746,7 @@ namespace ft
 	template< class Key, class T, class Compare, class Allocator >
 	void Map<Key, T, Compare, Allocator>::grapher(Mtree<Key, T> *item, int current_level, bool side, int *dirswap)
 	{
-		std::string color = current_level % 2 ? "\033[1;31m" : "\033[1;97m";
+		std::string color = item->color ? "\033[1;31m" : "\033[1;97m";
 		std::string pipe = "\033[2;37m";
 		std::string reset = "\033[0m";
 		std::stringstream ss;
@@ -851,6 +845,189 @@ namespace ft
 		if (!root)
 			return ;
 		call(root, 0, 0, i, maxsize);
+	}
+
+	template< class Key, class T, class Compare, class Allocator >
+	void Map<Key, T, Compare, Allocator>::p_zigzag(node_type *P, node_type *C, node_type *G)
+	{
+		//first swap;
+		C->parent = G;
+		P->parent = C;
+		if (C == P->left)
+		{
+			G->right = C;
+			P->left = C->right;
+			if (C->right)
+				C->right->parent = P;
+			C->right = P;
+		}
+		else
+		{
+			G->left = C;
+			P->right = C->left;
+			if (C->left)
+				C->left->parent = P;
+			C->left = P;
+		}
+
+		//second swap
+		C->parent = G->parent;
+		if (C == G->right)
+		{
+			if (G->parent)
+			{
+				if (G == G->parent->left)
+					G->parent->left = C;
+				else
+					G->parent->right = C;
+			}
+			else
+				_data = C;
+			G->right = C->left;
+			if (C->left)
+				C->left->parent = G;
+			C->left = G;
+		}
+		else
+		{
+			if (G->parent)
+			{
+				if (G == G->parent->left)
+					G->parent->left = C;
+				else
+					G->parent->right = C;
+			}
+			else
+				_data = C;
+			G->left = C->right;
+			if (C->right)
+				C->right->parent = G;
+			C->right = G;
+		}
+		G->parent = C;
+		//color swap + base color swap
+		if (C->color != G->color)
+		{
+			C->color = G->color;
+			G->color = !G->color;
+		}
+		_data->color = C_BLACK;
+	}
+	template< class Key, class T, class Compare, class Allocator >
+	void Map<Key, T, Compare, Allocator>::p_zigzig(node_type *P, node_type *C, node_type *G, node_type *PS)
+	{
+		P->parent = G->parent;
+		if (P == G->right)
+		{
+			if (G->parent)
+			{
+				if (G == G->parent->left)
+					G->parent->left = P;
+				else
+					G->parent->right = P;
+			}
+			else
+				_data = P;
+			G->right = P->left;
+			if (P->left)
+				P->left->parent = G;
+			P->left = G;
+		}
+		else
+		{
+			if (G->parent)
+			{
+				if (G == G->parent->left)
+					G->parent->left = P;
+				else
+					G->parent->right = P;
+			}
+			else
+				_data = P;
+			G->left = P->right;
+			if (P->right)
+				P->right->parent = G;
+			P->right = G;
+		}
+		G->parent = P;
+		if (P->color != G->color)
+		{
+			P->color = G->color;
+			G->color = !G->color;
+		}
+		_data->color = C_BLACK;
+		(void)C;
+		(void)PS;
+	}
+
+	template< class Key, class T, class Compare, class Allocator >
+	void Map<Key, T, Compare, Allocator>::p_swap(node_type *P, node_type *C, node_type *G, node_type *PS)
+	{
+		bool temp = P->color; 
+		P->color = G->color;
+		PS->color = G->color;
+		G->color = temp;
+		_data->color = C_BLACK;
+		(void)C;
+	}
+
+	template< class Key, class T, class Compare, class Allocator >
+	void Map<Key, T, Compare, Allocator>::p_checkrb(node_type *end)
+	{
+		node_type *P;
+		node_type *C;
+		node_type *G;
+		node_type *PS;
+
+		while (1)
+		{
+			G = NULL;
+			PS = NULL;
+			P = end->parent;
+			if (P)
+				G = P->parent;
+			C = end;
+			if (G && P == G->right)
+				PS = G->left;
+			else if (G)
+				PS = G->right;
+			if (G && P->color == C_RED && C->color == C_RED)
+			{
+				if (!PS || PS->color == C_BLACK)
+				{
+					if (P == G->right)
+					{
+						if (C == P->left)
+							p_zigzag(P, C, G);
+						else
+							p_zigzig(P, C, G, PS);
+					}
+					else
+					{
+						if (C == P->right)
+							p_zigzag(P, C, G);
+						else
+							p_zigzig(P, C, G, PS);
+					}
+				}
+				else
+				{
+					if (P == G->right)
+					{
+						if (C == P->right)
+							p_swap(P, C, G, PS);
+					}
+					if (P == G->left)
+					{
+						if (C == P->left)
+							p_swap(P, C, G, PS);
+					}
+				}
+			}
+			if (!end->parent || !end->parent->parent)
+				break;
+			end = end->parent;
+		}
 	}
 };
 

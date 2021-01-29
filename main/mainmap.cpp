@@ -664,5 +664,25 @@ int main()
 # endif
 #endif
 
+#if TEST_MAP == 0 || TEST_MAP == 9
+	ft::Map<int, int> ft_map;
+	ft_map.insert(std::pair<int, int>(30, 1));
+	ft_map.put_tree();
+	ft_map.insert(std::pair<int, int>(50, 3));
+	ft_map.put_tree();
+	ft_map.insert(std::pair<int, int>(40, 2));
+	ft_map.put_tree();
+	ft_map.insert(std::pair<int, int>(20, 2));
+	ft_map.put_tree();
+	ft_map.insert(std::pair<int, int>(10, 2));
+	ft_map.put_tree();
+	ft_map.insert(std::pair<int, int>(9, 2));
+	ft_map.put_tree();
+	ft_map.insert(std::pair<int, int>(8, 2));
+	ft_map.put_tree();
+	ft_map.insert(std::pair<int, int>(7, 2));
+	ft_map.put_tree();
+#endif
+
     end_test();
 }
