@@ -315,10 +315,16 @@ void operations_test(int size)
 			check(&ss_std, &ss_ft, DEFINED);
 		}
 
-		// std::map<int, int>::iterator itr_b = std_map.lower_bound((--(std_map.end()))->first);
-		// ss_std << "lower_bound : " << itr_b->first << " | ";
-		// ft::Map<int, int>::iterator itr_b2 = ft_map.lower_bound((--(ft_map.end()))->first);
-		// ss_ft << "lower_bound : " << itr_b2->first << " | ";
+		int rint = rand();
+		rint %= size;
+		std::map<int, int>::iterator itr_b = std_map.lower_bound(rint);
+		ft::Map<int, int>::iterator itr_b2 = ft_map.lower_bound(rint);
+		if (itr_b != std_map.end() && itr_b2 != ft_map.end())
+		{
+			ss_std << "lower_bound : " << itr_b->first << " | ";
+			ss_ft << "lower_bound : " << itr_b2->first << " | ";
+			check(&ss_std, &ss_ft, DEFINED);
+		}
 	}
 
 	title("Const Lower_Bound : "); // TODO Const Lower bound debug
@@ -340,10 +346,17 @@ void operations_test(int size)
 			ss_ft << "const lower_bound : " << itr_a2->first << " | ";
 			check(&ss_std, &ss_ft, DEFINED);
 		}
-		// std::map<int, int>::const_iterator itr_b = std_map.lower_bound((--(std_map.end()))->first);
-		// ss_std << "const lower_bound : " << itr_b->first << " | ";
-		// ft::Map<int, int>::const_iterator itr_b2 = ft_map.lower_bound((--(ft_map.end()))->first);
-		// ss_ft << "const lower_bound : " << itr_b2->first << " | ";
+
+		int rint = rand();
+		rint %= size;
+		std::map<int, int>::const_iterator itr_b = std_map.lower_bound(rint);
+		ft::Map<int, int>::const_iterator itr_b2 = ft_map.lower_bound(rint);
+		if (itr_b != std_map.end() && itr_b2 != ft_map.end())
+		{
+			ss_std << "const lower_bound : " << itr_b->first << " | ";
+			ss_ft << "const lower_bound : " << itr_b2->first << " | ";
+			check(&ss_std, &ss_ft, DEFINED);
+		}
 	}
 
 	title("Upper_Bound : ");
@@ -365,10 +378,17 @@ void operations_test(int size)
 			ss_ft << "upper_bound : " << itr_a2->first << " | ";
 			check(&ss_std, &ss_ft, DEFINED);
 		}
-		// std::map<int, int>::iterator itr_b = std_map.upper_bound((--(std_map.end()))->first);
-		// ss_std << "upper_bound : " << itr_b->first << " | ";
-		// ft::Map<int, int>::iterator itr_b2 = ft_map.upper_bound((--(ft_map.end()))->first);
-		// ss_ft << "upper_bound : " << itr_b2->first << " | ";
+
+		int rint = rand();
+		rint %= size;
+		std::map<int, int>::iterator itr_b = std_map.upper_bound(rint);
+		ft::Map<int, int>::iterator itr_b2 = ft_map.upper_bound(rint);
+		if (itr_b != std_map.end() && itr_b2 != ft_map.end())
+		{
+			ss_std << "upper_bound : " << itr_b->first << " | ";
+			ss_ft << "upper_bound : " << itr_b2->first << " | ";
+			check(&ss_std, &ss_ft, DEFINED);
+		}
 	}
 
 	title("Const Upper_Bound : ");
@@ -390,10 +410,17 @@ void operations_test(int size)
 			ss_ft << "const upper_bound : " << itr_a2->first << " | ";
 			check(&ss_std, &ss_ft, DEFINED);
 		}
-		// std::map<int, int>::const_iterator itr_b = std_map.upper_bound((--(std_map.end()))->first);
-		// ss_std << "const upper_bound : " << itr_b->first << " | ";
-		// ft::Map<int, int>::const_iterator itr_b2 = ft_map.upper_bound((--(ft_map.end()))->first);
-		// ss_ft << "const upper_bound : " << itr_b2->first << " | ";
+
+		int rint = rand();
+		rint %= size;
+		std::map<int, int>::const_iterator itr_b = std_map.upper_bound(rint);
+		ft::Map<int, int>::const_iterator itr_b2 = ft_map.upper_bound(rint);
+		if (itr_b != std_map.end() && itr_b2 != ft_map.end())
+		{
+			ss_std << "const upper_bound : " << itr_b->first << " | ";
+			ss_ft << "const upper_bound : " << itr_b2->first << " | ";
+			check(&ss_std, &ss_ft, DEFINED);
+		}
 	}
 
 	title("Equal_Range : ");
