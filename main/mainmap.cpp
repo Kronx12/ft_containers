@@ -4,7 +4,7 @@ void constructor_test(int size)
 {
 	title("Constructor Size", size);
 
-	title("Defaut constructor");
+	title("Defaut constructor"); // TODO constructor with other parameters (fnct cmp)
 	std::map<int, int> std_map;
 	ft::Map<int, int> ft_map;
 	describe_map(std_map, ft_map);
@@ -296,7 +296,7 @@ void operations_test(int size)
 	}
 	check(&ss_std, &ss_ft, DEFINED);
 
-	title("Lower_Bound : "); // TODO Lower bound debug
+	title("Lower_Bound : ");
 	describe_map(std_map, ft_map);
 	ft_map.put_tree();
 	if (std_map.size() > 0)
@@ -310,19 +310,26 @@ void operations_test(int size)
 		if (std_map.size() > 1)
 		{
 			std::map<int, int>::iterator itr_a = std_map.lower_bound(std_map.begin()->first);
-			ss_std << "lower_bound : " << itr_a->first << " | ";
+			ss_std << "lower_bound : " << itr_a->first;
 			ft::Map<int, int>::iterator itr_a2 = ft_map.lower_bound(ft_map.begin()->first);
-			ss_ft << "lower_bound : " << itr_a2->first << " | ";
+			ss_ft << "lower_bound : " << itr_a2->first;
 			check(&ss_std, &ss_ft, DEFINED);
 		}
 
-		// std::map<int, int>::iterator itr_b = std_map.lower_bound((--(std_map.end()))->first);
-		// ss_std << "lower_bound : " << itr_b->first << " | ";
-		// ft::Map<int, int>::iterator itr_b2 = ft_map.lower_bound((--(ft_map.end()))->first);
-		// ss_ft << "lower_bound : " << itr_b2->first << " | ";
+		int rint = rand();
+		if (ft_map.rbegin()->second)
+			rint %= ft_map.rbegin()->second;
+		std::map<int, int>::iterator itr_b = std_map.lower_bound(rint);
+		ft::Map<int, int>::iterator itr_b2 = ft_map.lower_bound(rint);
+		if (itr_b != std_map.end() && itr_b2 != ft_map.end())
+		{
+			ss_std << "lower_bound : " << itr_b->first;
+			ss_ft << "lower_bound : " << itr_b2->first;
+			check(&ss_std, &ss_ft, DEFINED);
+		}
 	}
 
-	title("Const Lower_Bound : "); // TODO Const Lower bound debug
+	title("Const Lower_Bound : ");
 	describe_map(std_map, ft_map);
 	ft_map.put_tree();
 	if (std_map.size() > 0)
@@ -336,19 +343,27 @@ void operations_test(int size)
 		if (std_map.size() > 1)
 		{
 			std::map<int, int>::const_iterator itr_a = std_map.lower_bound(std_map.begin()->first);
-			ss_std << "const lower_bound : " << itr_a->first << " | ";
+			ss_std << "const lower_bound : " << itr_a->first;
 			ft::Map<int, int>::const_iterator itr_a2 = ft_map.lower_bound(ft_map.begin()->first);
-			ss_ft << "const lower_bound : " << itr_a2->first << " | ";
+			ss_ft << "const lower_bound : " << itr_a2->first;
 			check(&ss_std, &ss_ft, DEFINED);
 		}
-		// std::map<int, int>::const_iterator itr_b = std_map.lower_bound((--(std_map.end()))->first);
-		// ss_std << "const lower_bound : " << itr_b->first << " | ";
-		// ft::Map<int, int>::const_iterator itr_b2 = ft_map.lower_bound((--(ft_map.end()))->first);
-		// ss_ft << "const lower_bound : " << itr_b2->first << " | ";
+
+		int rint = rand();
+		if (ft_map.rbegin()->second)
+			rint %= ft_map.rbegin()->second;
+		std::map<int, int>::const_iterator itr_b = std_map.lower_bound(rint);
+		ft::Map<int, int>::const_iterator itr_b2 = ft_map.lower_bound(rint);
+		if (itr_b != std_map.end() && itr_b2 != ft_map.end())
+		{
+			ss_std << "const lower_bound : " << itr_b->first;
+			ss_ft << "const lower_bound : " << itr_b2->first;
+			check(&ss_std, &ss_ft, DEFINED);
+		}
 	}
 
 	title("Upper_Bound : ");
-	describe_map(std_map, ft_map); // TODO Upper bound debug
+	describe_map(std_map, ft_map);
 	ft_map.put_tree();
 	if (std_map.size() > 0)
 	{
@@ -361,19 +376,27 @@ void operations_test(int size)
 		if (std_map.size() > 1)
 		{
 			std::map<int, int>::iterator itr_a = std_map.upper_bound(std_map.begin()->first); // crash so size =< 1
-			ss_std << "upper_bound : " << itr_a->first << " | ";
+			ss_std << "upper_bound : " << itr_a->first;
 			ft::Map<int, int>::iterator itr_a2 = ft_map.upper_bound(ft_map.begin()->first);
-			ss_ft << "upper_bound : " << itr_a2->first << " | ";
+			ss_ft << "upper_bound : " << itr_a2->first;
 			check(&ss_std, &ss_ft, DEFINED);
 		}
-		// std::map<int, int>::iterator itr_b = std_map.upper_bound((--(std_map.end()))->first);
-		// ss_std << "upper_bound : " << itr_b->first << " | ";
-		// ft::Map<int, int>::iterator itr_b2 = ft_map.upper_bound((--(ft_map.end()))->first);
-		// ss_ft << "upper_bound : " << itr_b2->first << " | ";
+
+		int rint = rand();
+		if (ft_map.rbegin()->second)
+			rint %= ft_map.rbegin()->second;
+		std::map<int, int>::iterator itr_b = std_map.upper_bound(rint);
+		ft::Map<int, int>::iterator itr_b2 = ft_map.upper_bound(rint);
+		if (itr_b != std_map.end() && itr_b2 != ft_map.end())
+		{
+			ss_std << "upper_bound : " << itr_b->first;
+			ss_ft << "upper_bound : " << itr_b2->first;
+			check(&ss_std, &ss_ft, DEFINED);
+		}
 	}
 
 	title("Const Upper_Bound : ");
-	describe_map(std_map, ft_map); // TODO Const Upper bound debug
+	describe_map(std_map, ft_map);
 	ft_map.put_tree();
 	if (std_map.size() > 0)
 	{
@@ -386,35 +409,54 @@ void operations_test(int size)
 		if (std_map.size() > 1)
 		{
 			std::map<int, int>::const_iterator itr_a = std_map.upper_bound(std_map.begin()->first); // crash so size =< 1
-			ss_std << "const upper_bound : " << itr_a->first << " | ";
+			ss_std << "const upper_bound : " << itr_a->first ;
 			ft::Map<int, int>::const_iterator itr_a2 = ft_map.upper_bound(ft_map.begin()->first);
-			ss_ft << "const upper_bound : " << itr_a2->first << " | ";
+			ss_ft  << "const upper_bound : " << itr_a2->first;
 			check(&ss_std, &ss_ft, DEFINED);
 		}
-		// std::map<int, int>::const_iterator itr_b = std_map.upper_bound((--(std_map.end()))->first);
-		// ss_std << "const upper_bound : " << itr_b->first << " | ";
-		// ft::Map<int, int>::const_iterator itr_b2 = ft_map.upper_bound((--(ft_map.end()))->first);
-		// ss_ft << "const upper_bound : " << itr_b2->first << " | ";
+
+		int rint = rand();
+		if (ft_map.rbegin()->second)
+			rint %= ft_map.rbegin()->second;
+		std::map<int, int>::const_iterator itr_b = std_map.upper_bound(rint);
+		ft::Map<int, int>::const_iterator itr_b2 = ft_map.upper_bound(rint);
+		if (itr_b != std_map.end() && itr_b2 != ft_map.end())
+		{
+			ss_std << "const upper_bound : " << itr_b->first;
+			ss_ft << "const upper_bound : " << itr_b2->first;
+			check(&ss_std, &ss_ft, DEFINED);
+		}
 	}
 
 	title("Equal_Range : ");
-	describe_map(std_map, ft_map); // TODO Equal Range debug
+	describe_map(std_map, ft_map);
 	ft_map.put_tree();
 	if (std_map.size() > 0)
 	{
-	// 	std::pair<std::map<int, int>::iterator, std::map<int, int>::iterator> itr_std_a = std_map.equal_range(std_map.begin()->first);
-	// 	std::pair<std::map<int, int>::iterator, std::map<int, int>::iterator>  itr_std_b = std_map.equal_range((--(std_map.end()))->first);
-	// 	std::pair<std::map<int, int>::iterator, std::map<int, int>::iterator>  itr_std_c = std_map.equal_range(-1);
-	// 	ss_std << "equal_range : " << itr_std_a.first->first << " : " << itr_std_a.second->first << " | ";
-	// 	ss_std << "equal_range : " << itr_std_b.first->first << " : " << itr_std_b.second->first << " | ";
-	// 	ss_std << "equal_range : " << itr_std_c.first->first << " : " << itr_std_c.second->first;
-	// std::pair<ft::Map<int, int>::iterator, ft::Map<int, int>::iterator> itr_ft_a = ft_map.equal_range(ft_map.begin()->first);
-	// 	std::pair<ft::Map<int, int>::iterator, ft::Map<int, int>::iterator> itr_ft_b = ft_map.equal_range((--(ft_map.end()))->first);
-	// 	std::pair<ft::Map<int, int>::iterator, ft::Map<int, int>::iterator> itr_ft_c = ft_map.equal_range(-1);
-	// 	ss_ft << "equal_range : " << itr_ft_a.first->first << " : " << itr_ft_a.second->first << " | ";
-	// 	ss_ft << "equal_range : " << itr_ft_b.first->first << " : " << itr_ft_a.second->first << " | ";
-	// 	ss_ft << "equal_range : " << itr_ft_c.first->first << " : " << itr_ft_a.second->first;
-	// 	check(&ss_std, &ss_ft, DEFINED);
+		std::pair<std::map<int, int>::iterator, std::map<int, int>::iterator>  itr_std_c = std_map.equal_range(-1);
+		std::pair<ft::Map<int, int>::iterator, ft::Map<int, int>::iterator> itr_ft_c = ft_map.equal_range(-1);
+		ss_std << "equal_range : " << itr_std_c.first->first << " : " << itr_std_c.second->first;
+		ss_ft << "equal_range : " << itr_ft_c.first->first << " : " << itr_ft_c.second->first;
+		check(&ss_std, &ss_ft, DEFINED);
+		if (std_map.size() > 1)
+		{
+			std::pair<std::map<int, int>::iterator, std::map<int, int>::iterator> itr_std_a = std_map.equal_range(std_map.begin()->first);
+			std::pair<ft::Map<int, int>::iterator, ft::Map<int, int>::iterator> itr_ft_a = ft_map.equal_range(ft_map.begin()->first);
+			ss_std << "equal_range : " << itr_std_a.first->first << " : " << itr_std_a.second->first;
+			ss_ft << "equal_range : " << itr_ft_a.first->first << " : " << itr_ft_a.second->first;
+			check(&ss_std, &ss_ft, DEFINED);
+		}
+		int rint = rand();
+		if (ft_map.rbegin()->second)
+			rint %= ft_map.rbegin()->second;
+		std::pair<std::map<int, int>::iterator, std::map<int, int>::iterator>  itr_std_b = std_map.equal_range(rint);
+		std::pair<ft::Map<int, int>::iterator, ft::Map<int, int>::iterator> itr_ft_b = ft_map.equal_range(rint);
+		if (itr_std_b.first != std_map.end() && itr_std_b.second != std_map.end() && itr_ft_b.first != ft_map.end() && itr_ft_b.second != ft_map.end())
+		{
+			ss_std << "equal_range : " << itr_std_b.first->first << " : " << itr_std_b.second->first;
+			ss_ft << "equal_range : " << itr_ft_b.first->first << " : " << itr_ft_b.second->first;
+			check(&ss_std, &ss_ft, DEFINED);
+		}
 	}
 
 	title("Const Equal_Range : ");
@@ -422,19 +464,30 @@ void operations_test(int size)
 	ft_map.put_tree();
 	if (std_map.size() > 0)
 	{
-	// 	std::pair<std::map<int, int>::const_iterator, std::map<int, int>::const_iterator> itr_std_a = std_map.equal_range(std_map.begin()->first);
-	// 	std::pair<std::map<int, int>::const_iterator, std::map<int, int>::const_iterator>  itr_std_b = std_map.equal_range((--(std_map.end()))->first);
-	// 	std::pair<std::map<int, int>::const_iterator, std::map<int, int>::const_iterator>  itr_std_c = std_map.equal_range(-1);
-	// 	ss_std << "const equal_range : " << itr_std_a.first->first << " : " << itr_std_a.second->first << " | ";
-	// 	ss_std << "const equal_range : " << itr_std_b.first->first << " : " << itr_std_b.second->first << " | ";
-	// 	ss_std << "const equal_range : " << itr_std_c.first->first << " : " << itr_std_c.second->first;
-	// 	std::pair<ft::Map<int, int>::const_iterator, ft::Map<int, int>::const_iterator> itr_ft_a = ft_map.equal_range(ft_map.begin()->first);
-	// 	std::pair<ft::Map<int, int>::const_iterator, ft::Map<int, int>::const_iterator> itr_ft_b = ft_map.equal_range((--(ft_map.end()))->first);
-	// 	std::pair<ft::Map<int, int>::const_iterator, ft::Map<int, int>::const_iterator> itr_ft_c = ft_map.equal_range(-1);
-	// 	ss_ft << "const equal_range : " << itr_ft_a.first->first << " : " << itr_ft_a.second->first << " | ";
-	// 	ss_ft << "const equal_range : " << itr_ft_b.first->first << " : " << itr_ft_a.second->first << " | ";
-	// 	ss_ft << "const equal_range : " << itr_ft_c.first->first << " : " << itr_ft_a.second->first;
-	// 	check(&ss_std, &ss_ft, DEFINED);
+		std::pair<std::map<int, int>::const_iterator, std::map<int, int>::const_iterator>  itr_std_c = std_map.equal_range(-1);
+		std::pair<ft::Map<int, int>::const_iterator, ft::Map<int, int>::const_iterator> itr_ft_c = ft_map.equal_range(-1);
+		ss_std << "equal_range : " << itr_std_c.first->first << " : " << itr_std_c.second->first;
+		ss_ft << "equal_range : " << itr_ft_c.first->first << " : " << itr_ft_c.second->first;
+		check(&ss_std, &ss_ft, DEFINED);
+		if (std_map.size() > 1)
+		{
+			std::pair<std::map<int, int>::const_iterator, std::map<int, int>::const_iterator> itr_std_a = std_map.equal_range(std_map.begin()->first);
+			std::pair<ft::Map<int, int>::const_iterator, ft::Map<int, int>::const_iterator> itr_ft_a = ft_map.equal_range(ft_map.begin()->first);
+			ss_std << "equal_range : " << itr_std_a.first->first << " : " << itr_std_a.second->first;
+			ss_ft << "equal_range : " << itr_ft_a.first->first << " : " << itr_ft_a.second->first;
+			check(&ss_std, &ss_ft, DEFINED);
+		}
+		int rint = rand();
+		if (ft_map.rbegin()->second)
+			rint %= ft_map.rbegin()->second;
+		std::pair<std::map<int, int>::const_iterator, std::map<int, int>::const_iterator>  itr_std_b = std_map.equal_range(rint);
+		std::pair<ft::Map<int, int>::const_iterator, ft::Map<int, int>::const_iterator> itr_ft_b = ft_map.equal_range(rint);
+		if (itr_std_b.first != std_map.end() && itr_std_b.second != std_map.end() && itr_ft_b.first != ft_map.end() && itr_ft_b.second != ft_map.end())
+		{
+			ss_std << "equal_range : " << itr_std_b.first->first << " : " << itr_std_b.second->first;
+			ss_ft << "equal_range : " << itr_ft_b.first->first << " : " << itr_ft_b.second->first;
+			check(&ss_std, &ss_ft, DEFINED);
+		}
 	}
 }
 
