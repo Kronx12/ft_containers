@@ -296,7 +296,7 @@ void operations_test(int size)
 	}
 	check(&ss_std, &ss_ft, DEFINED);
 
-	title("Lower_Bound : "); // TODO Lower bound debug
+	title("Lower_Bound : ");
 	describe_map(std_map, ft_map);
 	ft_map.put_tree();
 	if (std_map.size() > 0)
@@ -328,7 +328,7 @@ void operations_test(int size)
 		}
 	}
 
-	title("Const Lower_Bound : "); // TODO Const Lower bound debug
+	title("Const Lower_Bound : ");
 	describe_map(std_map, ft_map);
 	ft_map.put_tree();
 	if (std_map.size() > 0)
@@ -361,7 +361,7 @@ void operations_test(int size)
 	}
 
 	title("Upper_Bound : ");
-	describe_map(std_map, ft_map); // TODO Upper bound debug
+	describe_map(std_map, ft_map);
 	ft_map.put_tree();
 	if (std_map.size() > 0)
 	{
@@ -393,7 +393,7 @@ void operations_test(int size)
 	}
 
 	title("Const Upper_Bound : ");
-	describe_map(std_map, ft_map); // TODO Const Upper bound debug
+	describe_map(std_map, ft_map);
 	ft_map.put_tree();
 	if (std_map.size() > 0)
 	{
