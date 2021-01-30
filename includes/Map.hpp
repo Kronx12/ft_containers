@@ -83,6 +83,7 @@ namespace ft
 			void p_swap(node_type *P, node_type *C, node_type *G, node_type *PS);
 			void p_zigzag(node_type *P, node_type *C, node_type *G);
 			iterator p_insert_node(const value_type &value, node_type *ptr);
+			const value_type p_ptr_to_ref(const value_type *value);
 
 		public:
 			void put_tree(int i = 50);
@@ -156,7 +157,10 @@ namespace ft
 	: _data(NULL), _size(0), _alloc(alloc), _comp(comp), _end(new node_type()), _rend(new node_type())
 	{
 		for (; first != last; first++)
-			insert(*(*first));
+		{
+			std::pair<Key, T> tmp(first->first, first->second);
+			insert(tmp);
+		}
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
@@ -370,7 +374,10 @@ namespace ft
 	void Map<Key, T, Compare, Allocator>::insert(InputIterator first, InputIterator last)
 	{
 		for (; first != last; first++)
-			insert(*(*first));
+		{
+			std::pair<Key, T> tmp(first->first, first->second);
+			insert(tmp);
+		}
 	}
 
 	template< class Key, class T, class Compare, class Allocator >

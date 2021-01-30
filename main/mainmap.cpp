@@ -170,10 +170,9 @@ void modifiers_test(int size)
 		for (int i = 0; i < size; i++)
 			put_random(std_map, ft_map);
 		title("After Insert (Value) :");
-		int k = rand();
-		int v = rand();
-		std_map_bis.insert(++std_map.begin(), std::pair<int, int>(k, v));
-		ft_map_bis.insert(++ft_map.begin(), std::pair<int, int>(k, v));
+		int v = rand() % 10000;
+		std_map_bis.insert(++std_map.begin(), std::pair<int, int>(v, v));
+		ft_map_bis.insert(++ft_map.begin(), std::pair<int, int>(v, v));
 		ft_map.put_tree();
 		describe_map(std_map, ft_map);
 	}
@@ -184,12 +183,18 @@ void modifiers_test(int size)
 	ft_map_bis.put_tree();
 	describe_map(std_map_bis, ft_map_bis);
 
-	// int v = rand() % 1000000;
-	// std_map_bis.insert(std_map_bis.begin(), std::pair<int, int>(v, v));
-	// ft_map_bis.insert(ft_map_bis.begin(), std::pair<int, int>(v, v));
-	// title("After Insert (First, Value) : ");
-	// ft_map_bis.put_tree();
-	// describe_map(std_map_bis, ft_map_bis);
+	ft_map_bis.clear();
+	ft_map_bis.insert(std_map_bis.begin(), std_map_bis.end());
+	title("After Insert (First, Last (With std iterator)) : ");
+	ft_map_bis.put_tree();
+	describe_map(std_map_bis, ft_map_bis);
+
+	int v = rand() % 10000;
+	std_map_bis.insert(std_map_bis.begin(), std::pair<int, int>(v, v));
+	ft_map_bis.insert(ft_map_bis.begin(), std::pair<int, int>(v, v));
+	title("After Insert (First, Value) : ");
+	ft_map_bis.put_tree();
+	describe_map(std_map_bis, ft_map_bis);
 
 	while (!std_map.empty())
 		std_map.erase(std_map.begin());
