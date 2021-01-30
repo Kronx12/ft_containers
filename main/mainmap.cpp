@@ -720,41 +720,6 @@ int main()
 # endif
 #endif
 
-<<<<<<< HEAD
-#if TEST_MAP == 0 || TEST_MAP == 9
-	ft::Map<int, int> ft_map;
-	ft_map.insert(std::pair<int, int>(30, 1));
-	ft_map.put_tree();
-	ft_map.insert(std::pair<int, int>(50, 3));
-	ft_map.put_tree();
-	ft_map.insert(std::pair<int, int>(40, 2));
-	ft_map.put_tree();
-	ft_map.insert(std::pair<int, int>(20, 2));
-	ft_map.put_tree();
-	ft_map.insert(std::pair<int, int>(10, 2));
-	ft_map.put_tree();
-	ft_map.insert(std::pair<int, int>(9, 2));
-	ft_map.put_tree();
-	ft_map.insert(std::pair<int, int>(8, 2));
-	ft_map.put_tree();
-	ft_map.insert(std::pair<int, int>(7, 2));
-	ft_map.put_tree();
-	ft_map.insert(std::pair<int, int>(0, 2));
-	ft_map.put_tree();
-	ft_map.insert(std::pair<int, int>(6, 2));
-	ft_map.put_tree();
-	ft_map.insert(std::pair<int, int>(-6, 2));
-	ft_map.put_tree();
-	ft_map.insert(std::pair<int, int>(4, 2));
-	ft_map.put_tree();
-	ft_map.insert(std::pair<int, int>(-4, 2));
-	ft_map.put_tree();
-	ft_map.insert(std::pair<int, int>(5, 2));
-	ft_map.put_tree();
-	ft_map.insert(std::pair<int, int>(-5, 2));
-	ft_map.put_tree();
-#endif
-=======
 // #if TEST_MAP == 0 || TEST_MAP == 9
 	// ft::Map<int, int> ft_map;
 	// for (int i = 0; i < 500; i++)
@@ -774,7 +739,6 @@ int main()
 // #endif
 
 	
->>>>>>> 50afc2926a8019a3e614c46b260e01fa8e0d49bd
 
     end_test();
 }
