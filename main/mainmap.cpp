@@ -165,11 +165,18 @@ void modifiers_test(int size)
 	std::stringstream ss_ft;
 
 	// TODO Replace random par 0->Size quand auto balancing
-	for (int i = 0; i < size; i++)
-		put_random(std_map, ft_map);
-	title("After Insert (Value) :");
-	ft_map.put_tree();
-	describe_map(std_map, ft_map);
+	if (size > 2)
+	{
+		for (int i = 0; i < size; i++)
+			put_random(std_map, ft_map);
+		title("After Insert (Value) :");
+		int k = rand();
+		int v = rand();
+		std_map_bis.insert(++std_map.begin(), std::pair<int, int>(k, v));
+		ft_map_bis.insert(++ft_map.begin(), std::pair<int, int>(k, v));
+		ft_map.put_tree();
+		describe_map(std_map, ft_map);
+	}
 
 	std_map_bis.insert(std_map.begin(), std_map.end());
 	ft_map_bis.insert(std_map.begin(), std_map.end());
