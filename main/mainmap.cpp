@@ -735,6 +735,20 @@ int main()
 	ft_map.put_tree();
 	ft_map.insert(std::pair<int, int>(7, 2));
 	ft_map.put_tree();
+	ft_map.insert(std::pair<int, int>(0, 2));
+	ft_map.put_tree();
+	ft_map.insert(std::pair<int, int>(6, 2));
+	ft_map.put_tree();
+	ft_map.insert(std::pair<int, int>(-6, 2));
+	ft_map.put_tree();
+	ft_map.insert(std::pair<int, int>(4, 2));
+	ft_map.put_tree();
+	ft_map.insert(std::pair<int, int>(-4, 2));
+	ft_map.put_tree();
+	ft_map.insert(std::pair<int, int>(5, 2));
+	ft_map.put_tree();
+	ft_map.insert(std::pair<int, int>(-5, 2));
+	ft_map.put_tree();
 #endif
 
     end_test();

@@ -963,10 +963,9 @@ namespace ft
 	template< class Key, class T, class Compare, class Allocator >
 	void Map<Key, T, Compare, Allocator>::p_swap(node_type *P, node_type *C, node_type *G, node_type *PS)
 	{
-		bool temp = P->color; 
-		P->color = G->color;
-		PS->color = G->color;
-		G->color = temp;
+		P->color = C_BLACK; 
+		G->color = C_RED;
+		PS->color = C_BLACK;
 		_data->color = C_BLACK;
 		(void)C;
 	}
@@ -1012,16 +1011,7 @@ namespace ft
 				}
 				else
 				{
-					if (P == G->right)
-					{
-						if (C == P->right)
-							p_swap(P, C, G, PS);
-					}
-					if (P == G->left)
-					{
-						if (C == P->left)
-							p_swap(P, C, G, PS);
-					}
+					p_swap(P, C, G, PS);
 				}
 			}
 			if (!end->parent || !end->parent->parent)
