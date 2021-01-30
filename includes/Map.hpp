@@ -119,9 +119,7 @@ namespace ft
 
 			// -------------------------------- Modifiers --------------------------------
 			std::pair<iterator,bool> insert( const value_type &value );
-
-			// TODO
-			// iterator insert(iterator position, const value_type& val);
+			iterator insert(iterator position, const value_type& val);
 
 			template< class InputIterator >
 			void insert(InputIterator first, InputIterator last);
@@ -360,15 +358,12 @@ namespace ft
 		return (std::pair<iterator, bool>(p_insert_node(value, _data), true));
 	}
 
-// TODO
-	// template< class Key, class T, class Compare, class Allocator >
-	// typename Map<Key, T, Compare, Allocator>::iterator Map<Key, T, Compare, Allocator>::insert(iterator position, const value_type& val)
-	// {
-	// 	iterator itr = begin();
-	// 	for (; itr != end() && itr != position; itr++)
-
-	// 	return (std::pair<iterator, bool>(p_insert_node(val, &(*position)), true));
-	// }
+	template< class Key, class T, class Compare, class Allocator >
+	typename Map<Key, T, Compare, Allocator>::iterator Map<Key, T, Compare, Allocator>::insert(iterator position, const value_type& val)
+	{
+		static_cast<void>(position);
+		return (p_insert_node(val, _data));
+	}
 
 	template< class Key, class T, class Compare, class Allocator >
 	template< class InputIterator >
