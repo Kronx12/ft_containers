@@ -374,7 +374,6 @@ namespace ft
 	template< class InputIterator >
 	void Map<Key, T, Compare, Allocator>::insert(InputIterator first, InputIterator last)
 	{
-		// marche pas
 		for (; first != last; first++)
 			insert(*(*first));
 	}
