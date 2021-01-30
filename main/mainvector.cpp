@@ -1,5 +1,8 @@
-
 #include "Tester.hpp"
+
+// TODO Test Class
+// TODO Test String
+// TODO Test STD_Iterator
 
 void constructor_test(int size)
 {
