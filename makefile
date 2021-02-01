@@ -91,7 +91,7 @@ ifdef INPUT
 endif
 
 # Restart exec #
-			:
+reset			:
 ifdef RESET
 	@\rm -rf $(addprefix $(TEST_DIR),$(addsuffix $(RESET), /))
 endif

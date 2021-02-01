@@ -462,10 +462,10 @@ void modifiers_test(int size)
 			put_random(std_map, ft_map);
 		title("After Insert (Value) :");
 		int v = rand() % 10000;
-		std_map_bis.insert(++std_map.begin(), std::pair<int, int>(v, v));
-		ft_map_bis.insert(++ft_map.begin(), std::pair<int, int>(v, v));
-		ft_map.put_tree();
-		describe_map(std_map, ft_map);
+		std_map_bis.insert(std_map_bis.begin(), std::pair<int, int>(v, v));
+		ft_map_bis.insert(ft_map_bis.begin(), std::pair<int, int>(v, v));
+		ft_map_bis.put_tree();
+		describe_map(std_map_bis, ft_map_bis);
 	}
 
 	std_map_bis.insert(std_map.begin(), std_map.end());
