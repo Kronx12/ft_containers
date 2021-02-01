@@ -1,13 +1,10 @@
 #include "Tester.hpp"
 
-// TODO Test STD_Iterator
-// TODO Test with other comparator
-
 void constructor_test(int size)
 {
 	title("Constructor Size", size);
 
-	title("Defaut constructor"); // TODO constructor with other parameters (fnct cmp)
+	title("Defaut constructor");
 	std::map<int, int> std_map;
 	ft::Map<int, int> ft_map;
 	describe_map(std_map, ft_map);
@@ -40,7 +37,7 @@ void constructor_test_str(int size)
 {
 	title("Constructor (Str) Size", size);
 
-	title("Defaut constructor"); // TODO constructor with other parameters (fnct cmp)
+	title("Defaut constructor");
 	std::map<std::string, std::string> std_map;
 	ft::Map<std::string, std::string> ft_map;
 	describe_map(std_map, ft_map);
@@ -73,7 +70,7 @@ void constructor_test_class(int size)
 {
 	title("Constructor (Class) Size", size);
 
-	title("Defaut constructor"); // TODO constructor with other parameters (fnct cmp)
+	title("Defaut constructor");
 	std::map<Testclass, Testclass> std_map;
 	ft::Map<Testclass, Testclass> ft_map;
 	describe_map(std_map, ft_map);
@@ -552,12 +549,10 @@ void modifiers_test_str(int size)
 		std::random_shuffle(v.begin(), v.end());
 		k = k.substr(0, 5);
 		v = v.substr(0, 5);
-		// TODO ULTRA WEIRD !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		// std_map_bis.insert(++std_map.begin(), std::pair<std::string, std::string>(k, v));
-		// ft_map_bis.insert(++ft_map.begin(), std::pair<std::string, std::string>(k, v)); // TODO Le node n'existe plus
-		// ft_map_bis.put_tree();
-		// describe_map(std_map_bis, ft_map_bis);
-		// describe_map(std_map, ft_map);
+		std_map.insert(++std_map.begin(), std::pair<std::string, std::string>(k, v));
+		ft_map.insert(++ft_map.begin(), std::pair<std::string, std::string>(k, v));
+		ft_map.put_tree();
+		describe_map(std_map, ft_map);
 	}
 
 	std_map_bis.insert(std_map.begin(), std_map.end());
@@ -648,11 +643,10 @@ void modifiers_test_class(int size)
 		v = v.substr(0, 5);
 		Testclass kc(k);
 		Testclass vc(v);
-		// TODO ULTRA WEIRD !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		// std_map_bis.insert(++std_map.begin(), std::pair<Testclass, Testclass>(k, v));
-		// ft_map_bis.insert(++ft_map.begin(), std::pair<Testclass, Testclass>(k, v));
-		// ft_map.put_tree();
-		// describe_map(std_map, ft_map);
+		std_map.insert(++std_map.begin(), std::pair<Testclass, Testclass>(k, v));
+		ft_map.insert(++ft_map.begin(), std::pair<Testclass, Testclass>(k, v));
+		ft_map.put_tree();
+		describe_map(std_map, ft_map);
 	}
 
 	std_map_bis.insert(std_map.begin(), std_map.end());
@@ -716,24 +710,6 @@ void modifiers_test_class(int size)
 	describe_map(std_map_bis, ft_map_bis);
 	ft_map.put_tree();
 	ft_map_bis.put_tree();
-}
-
-void observers_test(int size)
-{
-	title("Observers Size", size);
-	// TODO ?
-}
-
-void observers_test_str(int size)
-{
-	title("Observers (Str) Size", size);
-	// TODO ?
-}
-
-void observers_test_class(int size)
-{
-	title("Observers (Class) Size", size);
-	// TODO ?
 }
 
 void operations_test(int size)
@@ -1494,33 +1470,6 @@ int main()
 
 #if TEST_MAP == 0 || TEST_MAP == 6
 # ifndef SIZE
-    observers_test(100);
-	observers_test(10);
-	observers_test(5);
-	observers_test(2);
-	observers_test(1);
-	observers_test(0);
-
-    observers_test_str(100);
-	observers_test_str(10);
-	observers_test_str(5);
-	observers_test_str(2);
-	observers_test_str(1);
-	observers_test_str(0);
-
-    observers_test_class(100);
-	observers_test_class(10);
-	observers_test_class(5);
-	observers_test_class(2);
-	observers_test_class(1);
-	observers_test_class(0);
-# else
-	observers_test(SIZE);
-# endif
-#endif
-
-#if TEST_MAP == 0 || TEST_MAP == 7
-# ifndef SIZE // TODO ////////////////////////////////////////////////////////////////////////////////////////////////
     operations_test(100);
 	operations_test(10);
 	operations_test(5);
@@ -1532,7 +1481,7 @@ int main()
 # endif
 #endif
 
-#if TEST_MAP == 0 || TEST_MAP == 8
+#if TEST_MAP == 0 || TEST_MAP == 7
 # ifndef SIZE
     operators_functions(100);
 	operators_functions(10);
@@ -1559,11 +1508,20 @@ int main()
 # endif
 #endif
 
-#if TEST_MAP == 0 || TEST_MAP == 9
+#if TEST_MAP == 0 || TEST_MAP == 8
+# ifndef SIZE
 	ft::Map<int, int> ft_map;
 	for (int i = 0; i < 1000; i++)
 		ft_map.insert(std::pair<int, int>(rand(), 0));
 	ft_map.put_tree();
+# else
+	ft::Map<int, int> ft_map;
+	for (int i = 0; i < SIZE; i++)
+		ft_map.insert(std::pair<int, int>(i, 0));
+	ft_map.put_tree();
+	ft_map.erase(8);
+	ft_map.put_tree();
+# endif
 #endif
 
     end_test();

@@ -366,11 +366,7 @@ namespace ft
 	typename Map<Key, T, Compare, Allocator>::iterator Map<Key, T, Compare, Allocator>::insert(iterator position, const value_type &value)
 	{
 		static_cast<void>(position);
-		std::cout << "In" << std::endl; 
-		put_tree();
 		std::pair<typename Map<Key, T, Compare, Allocator>::iterator, bool> p = insert(value);
-		put_tree();
-		std::cout << "Out" << std::endl; 
 		return (p.first);
 	}
 
@@ -388,6 +384,7 @@ namespace ft
 	template< class Key, class T, class Compare, class Allocator >
 	void Map<Key, T, Compare, Allocator>::p_erase_node(node_type *ptr, const key_type &key)
 	{
+		node_type *tmp = NULL;
 		if (ptr == NULL || ptr == _end || ptr == _rend)
 			return ;
 		if (ptr->value->first == key)
@@ -396,7 +393,7 @@ namespace ft
 			bool right;
 			node_type *tmp_left = ptr->left;
 			node_type *tmp_right = ptr->right;
-			node_type *tmp = tmp_right;
+			tmp = tmp_right;
 			bool stop = 0;
 			if (ptr->parent)
 					right = (ptr == ptr->parent->right);
@@ -493,6 +490,7 @@ namespace ft
 			p_erase_node(ptr->left, key);
 		else
 			p_erase_node(ptr->right, key);
+		p_checkrb(tmp);
 	}
 	
 	template< class Key, class T, class Compare, class Allocator >
@@ -993,7 +991,7 @@ namespace ft
 		node_type *G;
 		node_type *PS;
 
-		while (1)
+		while (1 && end)
 		{
 			G = NULL;
 			PS = NULL;
