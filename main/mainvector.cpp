@@ -1,9 +1,5 @@
 #include "Tester.hpp"
 
-// TODO Test Class
-// TODO Test String
-// TODO Test STD_Iterator
-
 void constructor_test(int size)
 {
 	title("Constructor (Int) Size", size);
@@ -34,6 +30,10 @@ void constructor_test(int size)
 	title("Range Constructor :");
 	std::vector<int> std_vec_bis(std_vec.begin(), std_vec.end());
 	ft::Vector<int> ft_vec_bis(ft_vec.begin(), ft_vec.end());
+	describe_vector(std_vec_bis, ft_vec_bis);
+
+	title("STD Iterator Constructor :");
+	ft_vec_bis = ft::Vector<int>(std_vec.begin(), std_vec.end());
 
 	describe_vector(std_vec_bis, ft_vec_bis);
 
@@ -905,6 +905,11 @@ void modifiers_test(int size)
 	title("Insert (end(), first, last) :");
 	std_vec.insert(std_vec.end(), std_vec_bis.begin(), std_vec_bis.end());
 	ft_vec.insert(ft_vec.end(), ft_vec_bis.begin(), ft_vec_bis.end());
+	describe_vector(std_vec, ft_vec);
+
+	title("Insert STD Iterator (end(), first, last) :");
+	std_vec.insert(std_vec.end(), std_vec_bis.begin(), std_vec_bis.end());
+	ft_vec.insert(ft_vec.end(), std_vec_bis.begin(), std_vec_bis.end());
 	describe_vector(std_vec, ft_vec);
 
 	title("Erase (begin()) :");

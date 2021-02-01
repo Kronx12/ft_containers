@@ -66,6 +66,34 @@ void put_random(std::map<K, V> &std_map, ft::Map<K, V> &ft_map)
 }
 
 template < class K, class V >
+void put_random_str(std::map<K, V> &std_map, ft::Map<K, V> &ft_map)
+{
+	std::string k = "abcdefghijklmnopqrstuvwxyz0123456789";
+	std::random_shuffle(k.begin(), k.end());
+	std::string v = "abcdefghijklmnopqrstuvwxyz0123456789";
+	std::random_shuffle(v.begin(), v.end());
+	k = k.substr(0, 5);
+	v = v.substr(0, 5);
+	std_map.insert(std::pair<std::string, std::string>(k, v));
+	ft_map.insert(std::pair<std::string, std::string>(k, v));
+}
+
+template < class K, class V >
+void put_random_class(std::map<K, V> &std_map, ft::Map<K, V> &ft_map)
+{
+	std::string k = "abcdefghijklmnopqrstuvwxyz0123456789";
+	std::random_shuffle(k.begin(), k.end());
+	std::string v = "abcdefghijklmnopqrstuvwxyz0123456789";
+	std::random_shuffle(v.begin(), v.end());
+	k = k.substr(0, 5);
+	v = v.substr(0, 5);
+	Testclass kc(k);
+	Testclass vc(v);
+	std_map.insert(std::pair<Testclass, Testclass>(k, v));
+	ft_map.insert(std::pair<Testclass, Testclass>(k, v));
+}
+
+template < class K, class V >
 void describe_map(std::map<K, V> std_map, ft::Map<K, V> ft_map)
 {
 	std::stringstream ss_std;

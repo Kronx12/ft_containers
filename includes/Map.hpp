@@ -363,10 +363,15 @@ namespace ft
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
-	typename Map<Key, T, Compare, Allocator>::iterator Map<Key, T, Compare, Allocator>::insert(iterator position, const value_type& val)
+	typename Map<Key, T, Compare, Allocator>::iterator Map<Key, T, Compare, Allocator>::insert(iterator position, const value_type &value)
 	{
 		static_cast<void>(position);
-		return (p_insert_node(val, _data));
+		std::cout << "In" << std::endl; 
+		put_tree();
+		std::pair<typename Map<Key, T, Compare, Allocator>::iterator, bool> p = insert(value);
+		put_tree();
+		std::cout << "Out" << std::endl; 
+		return (p.first);
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
