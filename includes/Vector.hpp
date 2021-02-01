@@ -119,7 +119,7 @@ namespace ft
 	template< class T, class Allocator >
 	void Vector<T, Allocator>::realloc(size_type len)
 	{
-		pointer tmp = _alloc.allocate(len);
+		pointer tmp = _alloc.allocate(len * sizeof(T));
 
 		for (size_type i = 0; i < _size && i < len; i++)
 			tmp[i] = _data[i];
@@ -397,7 +397,6 @@ namespace ft
 		for (iterator itr = pos; itr != end(); itr++)
 			tmp.push_back(*itr);
 		swap(tmp);
-		return (iterator(pos, _data));
 	}
 
 	template< class T, class Allocator >
