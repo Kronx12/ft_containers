@@ -214,9 +214,9 @@ namespace ft
 	{
 		clear();
 		node_alloc(_alloc).destroy(_end);
-		node_alloc(_alloc).dealloc(_end);
+		node_alloc(_alloc).deallocate(_end, 1);
 		node_alloc(_alloc).destroy(_rend);
-		node_alloc(_alloc).dealloc(_rend);
+		node_alloc(_alloc).deallocate(_rend, 1);
 	}
 
 	//-------------------------- ITERATORS --------------------------
@@ -434,7 +434,7 @@ namespace ft
 		pos.current->next->previous = pos.current->previous;
 		ret++;
 		node_alloc(_alloc).destroy(pos.current);
-		node_alloc(_alloc).dealloc(pos.current);
+		node_alloc(_alloc).deallocate(pos.current, 1);
 		_size--;
 		return (ret);
 	}
@@ -449,13 +449,13 @@ namespace ft
 			if (first.current->previous == _begin)
 			{
 				node_alloc(_alloc).destroy(first.current->previous);
-				node_alloc(_alloc).dealloc(first.current->previous);	
+				node_alloc(_alloc).deallocate(first.current->previous, 1);	
 				_begin = NULL;
 			}
 			else
 			{
 				node_alloc(_alloc).destroy(first.current->previous);
-				node_alloc(_alloc).dealloc(first.current->previous);	
+				node_alloc(_alloc).deallocate(first.current->previous, 1);	
 			}
 			_size--;	
 		}

@@ -12,13 +12,14 @@ namespace ft
 	class Mtree
 	{
 		public :
-			std::pair< const Key, T >	*value;
+			std::pair< const Key, T >	value;
 			Mtree						*parent;
 			Mtree						*left;
 			Mtree						*right;
 			bool						color;
 
-			Mtree() : value(NULL), parent(NULL), left(NULL), right(NULL), color(C_RED) {};
+			Mtree() : parent(NULL), left(NULL), right(NULL), color(C_RED) {};
+			Mtree(std::pair< const Key, T >	pvalue) : value(pvalue), parent(NULL), left(NULL), right(NULL), color(C_RED) {};
 	};
 
 	template < class Key, class T, class Compare = std::less<Key>, class Allocator = std::allocator<std::pair<const Key,T> > >
@@ -36,6 +37,7 @@ namespace ft
 			typedef typename Allocator::const_reference const_reference;
 			typedef typename Allocator::pointer pointer;
 			typedef typename Allocator::const_pointer const_pointer;
+			typedef typename allocator_type::template rebind< Mtree<Key, T> >::other node_alloc;
 			typedef MapIterator<value_type, Mtree<Key, T> > iterator;
 			typedef ConstMapIterator<value_type, Mtree<Key, T> > const_iterator;
 			typedef ReverseIterator<iterator> reverse_iterator;
@@ -149,13 +151,29 @@ namespace ft
 	// -------------------------------- Member functions --------------------------------
 	template< class Key, class T, class Compare, class Allocator >
 	Map<Key, T, Compare, Allocator>::Map(const Compare &comp, const Allocator &alloc)
-	: _data(NULL), _size(0), _alloc(alloc), _comp(comp), _end(new node_type()), _rend(new node_type()) {_end->color = C_BLACK; _rend->color = C_BLACK;}
+		: _data(NULL), _size(0), _alloc(alloc), _comp(comp)
+	{
+		_end = node_alloc(_alloc).allocate(1);
+		node_alloc(_alloc).construct(_end, node_type());
+
+		_rend = node_alloc(_alloc).allocate(1);
+		node_alloc(_alloc).construct(_rend, node_type());
+		 
+		_end->color = C_BLACK;
+		_rend->color = C_BLACK;
+	}
 
 	template< class Key, class T, class Compare, class Allocator >
 	template <class InputIterator>
 	Map<Key, T, Compare, Allocator>::Map(InputIterator first, InputIterator last, const key_compare &comp, const allocator_type &alloc)
-	: _data(NULL), _size(0), _alloc(alloc), _comp(comp), _end(new node_type()), _rend(new node_type())
+	: _data(NULL), _size(0), _alloc(alloc), _comp(comp)
 	{
+		_end = node_alloc(_alloc).allocate(1);
+		node_alloc(_alloc).construct(_end, node_type());
+
+		_rend = node_alloc(_alloc).allocate(1);
+		node_alloc(_alloc).construct(_rend, node_type());
+
 		for (; first != last; first++)
 		{
 			std::pair<Key, T> tmp(first->first, first->second);
@@ -164,8 +182,14 @@ namespace ft
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
-	Map<Key, T, Compare, Allocator>::Map(const Map &x) : _data(NULL), _size(0), _alloc(x._alloc),_comp(x._comp),  _end(new node_type()), _rend(new node_type())
+	Map<Key, T, Compare, Allocator>::Map(const Map &x) : _data(NULL), _size(0), _alloc(x._alloc),_comp(x._comp)
 	{
+		_end = node_alloc(_alloc).allocate(1);
+		node_alloc(_alloc).construct(_end, node_type());
+
+		_rend = node_alloc(_alloc).allocate(1);
+		node_alloc(_alloc).construct(_rend, node_type());
+
 		insert(x.begin(), x.end());
 	}
 
@@ -176,17 +200,18 @@ namespace ft
 			return;
 		p_deallocate_tree(node->left);
 		p_deallocate_tree(node->right);
-		_alloc.destroy(node->value);
-		_alloc.deallocate(node->value, 1);
-		delete node;
+		node_alloc(_alloc).destroy(node);
+		node_alloc(_alloc).deallocate(node, 1);
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
 	Map<Key, T, Compare, Allocator>::~Map()
 	{
 		p_deallocate_tree(_data);
-		delete _rend;
-		delete _end;
+		node_alloc(_alloc).destroy(_end);
+		node_alloc(_alloc).deallocate(_end, 1);
+		node_alloc(_alloc).destroy(_rend);
+		node_alloc(_alloc).deallocate(_rend, 1);
 	}
 			
 	template< class Key, class T, class Compare, class Allocator >
@@ -256,7 +281,7 @@ namespace ft
 	template< class Key, class T, class Compare, class Allocator >
 	typename Map<Key, T, Compare, Allocator>::size_type Map<Key, T, Compare, Allocator>::max_size() const
 	{
-		return (std::numeric_limits<size_type>::max() / (sizeof(Mtree<Key, T>) - sizeof(void*) + sizeof(std::pair<Key, T>)));
+		return (std::numeric_limits<size_type>::max() / sizeof(Mtree<Key, T>));
 	}
 
 	// -------------------------------- Element acces --------------------------------
@@ -268,9 +293,9 @@ namespace ft
 		temp = _data;
 		while (temp && temp != _end && temp != _rend)
 		{
-			if (temp->value->first == key)
-				return (temp->value->second);
-			else if (key_comp()(temp->value->first, key))
+			if (temp->value.first == key)
+				return (temp->value.second);
+			else if (key_comp()(temp->value.first, key))
 				temp = temp->right;
 			else
 				temp = temp->left;
@@ -287,19 +312,18 @@ namespace ft
 		value_compare tmp_cmp = value_comp();
 		if (_data == NULL)
 		{
-			_data = new node_type();
+			_data = node_alloc(_alloc).allocate(1);
+			node_alloc(_alloc).construct(_data, node_type(value_type(value.first, value.second)));
 			_data->color = C_BLACK;
-			_data->value = _alloc.allocate(1);
 			_data->parent = NULL;
-			_alloc.construct(_data->value, std::pair< Key, T >(value.first, value.second));
 			_data->left = this->_rend;
 			_data->right = this->_end;
 			this->_rend->parent = _data;
 			this->_end->parent = _data;
 			_size++;
 		}
-		else if (value.first == ptr->value->first) {} // Skip if existing key
-		else if (tmp_cmp(value, *ptr->value))
+		else if (value.first == ptr->value.first) {} // Skip if existing key
+		else if (tmp_cmp(value, ptr->value))
 		{
 			if (ptr->left != NULL && ptr->left != this->_rend)
 				p_insert_node(value, ptr->left);
@@ -307,19 +331,17 @@ namespace ft
 			{
 				if (ptr->left == this->_rend)
 				{
-					ptr->left = new node_type();
-					ptr->left->value = _alloc.allocate(1);
+					ptr->left = node_alloc(_alloc).allocate(1);
+					node_alloc(_alloc).construct(ptr->left, node_type(value_type(value.first, value.second)));
 					ptr->left->parent = ptr;
-					_alloc.construct(ptr->left->value, std::pair< Key, T >(value.first, value.second));
 					ptr->left->left = this->_rend;
 					this->_rend->parent = ptr->left;
 				}
 				else
 				{
-					ptr->left = new node_type();
-					ptr->left->value = _alloc.allocate(1);
+					ptr->left = node_alloc(_alloc).allocate(1);
+					node_alloc(_alloc).construct(ptr->left, node_type(value_type(value.first, value.second)));
 					ptr->left->parent = ptr;
-					_alloc.construct(ptr->left->value, std::pair< Key, T >(value.first, value.second));
 				}
 				_size++;
 				p_checkrb(ptr->left);
@@ -334,19 +356,17 @@ namespace ft
 			{
 				if (ptr->right == this->_end)
 				{
-					ptr->right = new node_type();
-					ptr->right->value = _alloc.allocate(1);
+					ptr->right = node_alloc(_alloc).allocate(1);
+					node_alloc(_alloc).construct(ptr->right, node_type(value_type(value.first, value.second)));
 					ptr->right->parent = ptr;
-					_alloc.construct(ptr->right->value, std::pair< Key, T >(value.first, value.second));
 					ptr->right->right = this->_end;
 					this->_end->parent = ptr->right;
 				}
 				else
 				{
-					ptr->right = new node_type();
-					ptr->right->value = _alloc.allocate(1);
+					ptr->right = node_alloc(_alloc).allocate(1);
+					node_alloc(_alloc).construct(ptr->right, node_type(value_type(value.first, value.second)));
 					ptr->right->parent = ptr;
-					_alloc.construct(ptr->right->value, std::pair< Key, T >(value.first, value.second));
 				}
 				_size++;
 				p_checkrb(ptr->right);
@@ -387,7 +407,7 @@ namespace ft
 		node_type *tmp = NULL;
 		if (ptr == NULL || ptr == _end || ptr == _rend)
 			return ;
-		if (ptr->value->first == key)
+		if (ptr->value.first == key)
 		{
 			node_type *tmp_parent = ptr->parent;
 			bool right;
@@ -412,9 +432,8 @@ namespace ft
 				_data = NULL;
 				stop = 1;
 			}
-			_alloc.destroy(ptr->value);
-			_alloc.deallocate(ptr->value, 1);
-			delete ptr;
+			node_alloc(_alloc).destroy(ptr);
+			node_alloc(_alloc).deallocate(ptr, 1);
 			_size--;
 			if (!stop)
 			{
@@ -486,7 +505,7 @@ namespace ft
 					tmp_right->parent = tmp;
 			}
 		}
-		else if (key_comp()(key, ptr->value->first))
+		else if (key_comp()(key, ptr->value.first))
 			p_erase_node(ptr->left, key);
 		else
 			p_erase_node(ptr->right, key);
@@ -556,12 +575,12 @@ namespace ft
 		temp = _data;
 		while (temp != NULL && temp != _end && temp != _rend)
 		{
-			if (temp->value->first == key)
+			if (temp->value.first == key)
 			{
 				iterator itr = temp;
 				return (itr);
 			}
-			else if (key_comp()(temp->value->first, key))
+			else if (key_comp()(temp->value.first, key))
 				temp = temp->right;
 			else
 				temp = temp->left;

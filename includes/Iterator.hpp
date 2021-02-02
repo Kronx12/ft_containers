@@ -497,8 +497,8 @@ namespace ft
 			bool operator!=(const MapIterator & rhs) { return (_current != rhs._current); }
 			bool operator==(const ConstMapIterator<T, M> & rhs) { return (_current == rhs._current); }
 			bool operator!=(const ConstMapIterator<T, M> & rhs) { return (_current != rhs._current); }
-			T *operator*() { return(_current->value); }
-			T *operator->() { return(_current->value); }
+			T *operator*() { return(&(_current->value)); }
+			T *operator->() { return(&(_current->value)); }
 
 			//Bidirectional Category
 			MapIterator &operator++()
@@ -591,8 +591,8 @@ namespace ft
 			bool operator!=(const ConstMapIterator & rhs) { return (_current != rhs._current); }
 			bool operator==(const MapIterator<T, M> & rhs) { return (_current == rhs._current); }
 			bool operator!=(const MapIterator<T, M> & rhs) { return (_current != rhs._current); }
-			T *operator*() { return(this->_current->value); }
-			T *operator->() { return(this->_current->value); }
+			T *operator*() { return(&(this->_current->value)); }
+			T *operator->() { return(&(this->_current->value)); }
 
 			//Bidirectional Category
 			ConstMapIterator &operator++()
