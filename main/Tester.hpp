@@ -15,6 +15,7 @@
 # include <vector>
 
 # include <sstream>
+# include <algorithm>
 # include <cstdlib>
 
 # define UNDEFINED 1

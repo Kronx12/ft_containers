@@ -141,15 +141,31 @@ namespace ft
 	//-------------------------- CONSTRUCTOR --------------------------
 	template < typename T, class Alloc >
 	List<T, Alloc>::List(const List<T, Alloc>::allocator_type& alloc)
-		: _end(new Link<T>()), _begin(_end), _rend(new Link<T>(NULL, T(), _end)), _size(0), _alloc(alloc)
+		: _size(0), _alloc(alloc)
 	{
+		_end = node_alloc(_alloc).allocate(1);
+		node_alloc(_alloc).construct(_end, Link<T>());
+
+		_begin = _end;
+		
+		_rend = node_alloc(_alloc).allocate(1);
+		node_alloc(_alloc).construct(_rend, Link<T>(NULL, T(), _end));
+
 		_end->previous = _rend;
 	}
 
 	template < typename T, class Alloc >
 	List<T, Alloc>::List(size_type n, const value_type& val, const allocator_type& alloc)
-		: _end(new Link<T>()), _begin(_end), _rend(new Link<T>(NULL, T(), _end)), _size(0), _alloc(alloc)
+		: _size(0), _alloc(alloc)
 	{
+		_end = node_alloc(_alloc).allocate(1);
+		node_alloc(_alloc).construct(_end, Link<T>());
+
+		_begin = _end;
+		
+		_rend = node_alloc(_alloc).allocate(1);
+		node_alloc(_alloc).construct(_rend, Link<T>(NULL, T(), _end));
+
 		for (size_type i = 0; i < n; i++)
 			push_back(val);
 	}
@@ -157,15 +173,31 @@ namespace ft
 	template < typename T, class Alloc >
 	template < class InputIterator >
 	List<T, Alloc>::List(InputIterator first, InputIterator last, const allocator_type& alloc)
-		: _end(new Link<T>()), _begin(_end), _rend(new Link<T>(NULL, T(), _end)), _size(0), _alloc(alloc)
+		: _size(0), _alloc(alloc)
 	{
+		_end = node_alloc(_alloc).allocate(1);
+		node_alloc(_alloc).construct(_end, Link<T>());
+
+		_begin = _end;
+		
+		_rend = node_alloc(_alloc).allocate(1);
+		node_alloc(_alloc).construct(_rend, Link<T>(NULL, T(), _end));
+
 		constructor_assign_helper(first, last, typename ft::is_integral<InputIterator>::type());
 	}
 
 	template < typename T, class Alloc >
 	List<T, Alloc>::List(const List& x)
-		: _end(new Link<T>()), _begin(_end), _rend(new Link<T>(NULL, T(), _end)), _size(0), _alloc(x._alloc)
+		: _size(0), _alloc(x._alloc)
 	{
+		_end = node_alloc(_alloc).allocate(1);
+		node_alloc(_alloc).construct(_end, Link<T>());
+
+		_begin = _end;
+		
+		_rend = node_alloc(_alloc).allocate(1);
+		node_alloc(_alloc).construct(_rend, Link<T>(NULL, T(), _end));
+
 		for (List<T, Alloc>::const_iterator itr = x.begin(); itr != x.end(); itr++)
 			push_back(*itr);
 	}
@@ -181,8 +213,10 @@ namespace ft
 	List<T, Alloc>::~List()
 	{
 		clear();
-		delete _end;
-		delete _rend;
+		node_alloc(_alloc).destroy(_end);
+		node_alloc(_alloc).dealloc(_end);
+		node_alloc(_alloc).destroy(_rend);
+		node_alloc(_alloc).dealloc(_rend);
 	}
 
 	//-------------------------- ITERATORS --------------------------
@@ -332,10 +366,9 @@ namespace ft
 		for (size_t i = 0; i < count; i++)
 		{
 			if (_begin == _end)
-			{ // TODO ICI
+			{
 				_begin = node_alloc(_alloc).allocate(1);
 				node_alloc(_alloc).construct(_begin, Link<T>(_rend, value, _end));
-				// _begin = new Link<T>(_rend, value, _end);
 				_end->previous = _begin;
 				_rend->next = _begin;
 				n = _begin;
@@ -343,8 +376,7 @@ namespace ft
 			else
 			{
 				n = node_alloc(_alloc).allocate(1);
-				node_alloc(_alloc).construct(n, Link<T>(_rend, value, _end));
-				// n = new Link<T>(prev.current, value, next.current);
+				node_alloc(_alloc).construct(n, Link<T>(prev.current, value, next.current));
 				prev.current->next = n;
 				next.current->previous = n;
 				if (pos.current == _begin)
@@ -370,7 +402,8 @@ namespace ft
 		link_pointer n;
 		if (_begin == _end)
 		{
-			_begin = new Link<T>(_rend, value, _end);
+			_begin = node_alloc(_alloc).allocate(1);
+			node_alloc(_alloc).construct(_begin, Link<T>(_rend, value, _end));
 			_end->previous = _begin;
 			_rend->next = _begin;
 			n = _begin;
@@ -378,7 +411,8 @@ namespace ft
 		else
 		{
 			prev--;
-			n = new Link<T>(prev.current, value, next.current);
+			n = node_alloc(_alloc).allocate(1);
+			node_alloc(_alloc).construct(n, Link<T>(prev.current, value, next.current));
 			prev.current->next = n;
 			next.current->previous = n;
 			if (pos.current == _begin)
@@ -399,7 +433,8 @@ namespace ft
 		pos.current->previous->next = pos.current->next;
 		pos.current->next->previous = pos.current->previous;
 		ret++;
-		delete (pos.current);
+		node_alloc(_alloc).destroy(pos.current);
+		node_alloc(_alloc).dealloc(pos.current);
 		_size--;
 		return (ret);
 	}
@@ -413,12 +448,14 @@ namespace ft
 			first++;
 			if (first.current->previous == _begin)
 			{
-				delete(first.current->previous);
+				node_alloc(_alloc).destroy(first.current->previous);
+				node_alloc(_alloc).dealloc(first.current->previous);	
 				_begin = NULL;
 			}
 			else
 			{
-				delete(first.current->previous);
+				node_alloc(_alloc).destroy(first.current->previous);
+				node_alloc(_alloc).dealloc(first.current->previous);	
 			}
 			_size--;	
 		}

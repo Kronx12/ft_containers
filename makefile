@@ -47,7 +47,7 @@ VECTOR_MAIN		=	$(addprefix $(MAIN_DIR),/mainvector.cpp)
 
 # Compile #
 CC				=	clang++
-CFLAGS			=	-Wall -Wextra -g3 -Werror -g3 -fsanitize=address
+CFLAGS			=	-Wall -Wextra -g3 -Werror -g3# -fsanitize=address
 CVERSION		=	-std=c++98
 LFLAGS  		=	-I $(TEST_INCS) -I $(INCS_DIR)
 CALLF			=	$(CC) $(CFLAGS) $(CVERSION)
