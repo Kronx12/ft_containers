@@ -1,21 +1,5 @@
 #include "Tester.hpp"
 
-/*
-
-all = 0
-constructor_test = 1
-iterator_test = 2
-capacity_test = 3
-element_access_test = 4
-modifiers_test = 5
-modifiers2_test = 6
-operator_test = 7
-operations2_test = 8
-operations3_test = 9
-operators_test = 10
-
-*/
-
 #ifndef TEST_LIST
 # define TEST_LIST 0
 #endif
@@ -738,6 +722,7 @@ int main()
 	constructor_test(2, 5);
 	constructor_test(1, 5);
 	constructor_test(0, 5);
+	
 	constructor_test(1000, str); // OK Sur linux (juste chiant a afficher)
 	constructor_test(10, str);
 	constructor_test(5, str);

@@ -13,16 +13,17 @@ namespace ft
 			Link	*next;
 			Link	*previous;
 			Link(const T& val) : value(val), next(NULL), previous(NULL) {};
-			Link(Link *pre, const T& val, Link *_next) :value(val), next(_next), previous(pre) {};
+			Link(Link *pre, const T& val, Link *_next) : value(val), next(_next), previous(pre) {};
 			Link() : value(T()), next(NULL), previous(NULL) {};
 	};
 
-	template < class T >
+	template < class T, class Alloc = std::allocator<T> >
 	class List
 	{
 		public:
 			typedef T value_type;
 			typedef typename std::allocator<value_type> allocator_type;
+			typedef typename allocator_type::template rebind< Link<T> >::other node_alloc;
 			typedef size_t size_type;
 			typedef std::ptrdiff_t difference_type;
 			typedef typename allocator_type::reference reference;
@@ -51,9 +52,9 @@ namespace ft
 			template <class InputIterator>
 			void constructor_assign_helper(InputIterator & first, InputIterator & last, int);
 			template <class InputIterator>
-			void insert_helper(ft::List<T>::iterator pos, const InputIterator& first, const InputIterator& last, void *);
+			void insert_helper(ft::List<T, Alloc>::iterator pos, const InputIterator& first, const InputIterator& last, void *);
 			template <class InputIterator>
-			void insert_helper(ft::List<T>::iterator pos, const InputIterator& first, const InputIterator& last, int);
+			void insert_helper(ft::List<T, Alloc>::iterator pos, const InputIterator& first, const InputIterator& last, int);
 
 		public:
 //--
@@ -63,7 +64,7 @@ namespace ft
 			List (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());
 			List (const List& x);
 			~List();
-			List<T> &operator=( List const & rhs );
+			List<T, Alloc> &operator=( List const & rhs );
 //---
 			//Iterators;
 			iterator begin();
@@ -138,46 +139,46 @@ namespace ft
 	};
 
 	//-------------------------- CONSTRUCTOR --------------------------
-	template < typename T >
-	List<T>::List(const List<T>::allocator_type& alloc)
+	template < typename T, class Alloc >
+	List<T, Alloc>::List(const List<T, Alloc>::allocator_type& alloc)
 		: _end(new Link<T>()), _begin(_end), _rend(new Link<T>(NULL, T(), _end)), _size(0), _alloc(alloc)
 	{
 		_end->previous = _rend;
 	}
 
-	template < typename T >
-	List<T>::List(size_type n, const value_type& val, const allocator_type& alloc)
+	template < typename T, class Alloc >
+	List<T, Alloc>::List(size_type n, const value_type& val, const allocator_type& alloc)
 		: _end(new Link<T>()), _begin(_end), _rend(new Link<T>(NULL, T(), _end)), _size(0), _alloc(alloc)
 	{
 		for (size_type i = 0; i < n; i++)
 			push_back(val);
 	}
 
-	template < typename T >
+	template < typename T, class Alloc >
 	template < class InputIterator >
-	List<T>::List(InputIterator first, InputIterator last, const allocator_type& alloc)
+	List<T, Alloc>::List(InputIterator first, InputIterator last, const allocator_type& alloc)
 		: _end(new Link<T>()), _begin(_end), _rend(new Link<T>(NULL, T(), _end)), _size(0), _alloc(alloc)
 	{
 		constructor_assign_helper(first, last, typename ft::is_integral<InputIterator>::type());
 	}
 
-	template < typename T >
-	List<T>::List(const List& x)
+	template < typename T, class Alloc >
+	List<T, Alloc>::List(const List& x)
 		: _end(new Link<T>()), _begin(_end), _rend(new Link<T>(NULL, T(), _end)), _size(0), _alloc(x._alloc)
 	{
-		for (List<T>::const_iterator itr = x.begin(); itr != x.end(); itr++)
+		for (List<T, Alloc>::const_iterator itr = x.begin(); itr != x.end(); itr++)
 			push_back(*itr);
 	}
 
-	template < typename T >
-	List<T> &List<T>::operator=(List<T> const & rhs) {
+	template < typename T, class Alloc >
+	List<T, Alloc> &List<T, Alloc>::operator=(List<T, Alloc> const & rhs) {
         if (this == &rhs) return(*this);
 		this->~List();
         return *new(this) List(rhs);
 	}
 
-	template < typename T >
-	List<T>::~List()
+	template < typename T, class Alloc >
+	List<T, Alloc>::~List()
 	{
 		clear();
 		delete _end;
@@ -185,144 +186,144 @@ namespace ft
 	}
 
 	//-------------------------- ITERATORS --------------------------
-	template < typename T >
-	typename List<T>::iterator List<T>::begin()
+	template < typename T, class Alloc >
+	typename List<T, Alloc>::iterator List<T, Alloc>::begin()
 	{
 		return(iterator(this->_begin));
 	}
 
-	template < typename T >
-	typename List<T>::const_iterator List<T>::begin() const
+	template < typename T, class Alloc >
+	typename List<T, Alloc>::const_iterator List<T, Alloc>::begin() const
 	{
 		return(const_iterator(this->_begin));
 	}
 
-	template < typename T >
-	typename List<T>::iterator List<T>::end()
+	template < typename T, class Alloc >
+	typename List<T, Alloc>::iterator List<T, Alloc>::end()
 	{
 		return(iterator(this->_end));
 	}
 
-	template < typename T >
-	typename List<T>::const_iterator List<T>::end() const
+	template < typename T, class Alloc >
+	typename List<T, Alloc>::const_iterator List<T, Alloc>::end() const
 	{
 		return(const_iterator(this->_end));
 	}
 
 	//------------------- REVERSE ITERATORS ------------------------
-	template < typename T >
-	typename List<T>::reverse_iterator List<T>::rbegin()
+	template < typename T, class Alloc >
+	typename List<T, Alloc>::reverse_iterator List<T, Alloc>::rbegin()
 	{
 		return(reverse_iterator(this->_end->previous));
 	}
 
-	template < typename T >
-	typename List<T>::const_reverse_iterator List<T>::rbegin() const
+	template < typename T, class Alloc >
+	typename List<T, Alloc>::const_reverse_iterator List<T, Alloc>::rbegin() const
 	{
 		return(const_reverse_iterator(this->_end->previous));
 	}
 
-	template < typename T >
-	typename List<T>::reverse_iterator List<T>::rend()
+	template < typename T, class Alloc >
+	typename List<T, Alloc>::reverse_iterator List<T, Alloc>::rend()
 	{
 		return(reverse_iterator(this->_rend));
 	}
 
-	template < typename T >
-	typename List<T>::const_reverse_iterator List<T>::rend() const
+	template < typename T, class Alloc >
+	typename List<T, Alloc>::const_reverse_iterator List<T, Alloc>::rend() const
 	{
 		return(const_reverse_iterator(this->_rend));
 	}
 
 	//-------------------------- CAPACITY --------------------------
-	template < typename T >
-	bool List<T>::empty() const
+	template < typename T, class Alloc >
+	bool List<T, Alloc>::empty() const
 	{
 		return(begin() == end());
 	}
 
-	template < typename T >
-	typename List<T>::size_type List<T>::size() const
+	template < typename T, class Alloc >
+	typename List<T, Alloc>::size_type List<T, Alloc>::size() const
 	{
 		return(_size);
 	}
 
-	template < typename T >
-	typename List<T>::size_type List<T>::max_size() const
+	template < typename T, class Alloc >
+	typename List<T, Alloc>::size_type List<T, Alloc>::max_size() const
 	{
 		return (std::numeric_limits<size_type>::max() / sizeof(link_type));
 	}
 
 	//-------------------------- ELEMENT ACCESS --------------------------
-	template < typename T >
-	typename List<T>::reference List<T>::front()
+	template < typename T, class Alloc >
+	typename List<T, Alloc>::reference List<T, Alloc>::front()
 	{
 		return(_begin->value);
 	}
 
-	template < typename T >
-	typename List<T>::const_reference List<T>::front() const
+	template < typename T, class Alloc >
+	typename List<T, Alloc>::const_reference List<T, Alloc>::front() const
 	{
 		return(_begin->value);
 	}
 
-	template < typename T >
-	typename List<T>::reference List<T>::back()
+	template < typename T, class Alloc >
+	typename List<T, Alloc>::reference List<T, Alloc>::back()
 	{
 
 		return(_end->previous->value);
 	}
 
-	template < typename T >
-	typename List<T>::const_reference List<T>::back() const
+	template < typename T, class Alloc >
+	typename List<T, Alloc>::const_reference List<T, Alloc>::back() const
 	{
 		return(_end->previous->value);
 	}
 
 	//-------------------------- MODIFIERS ---------------------------
 
-	template < typename T >
-	void List<T>::assign(size_type n, const value_type& val)
+	template < typename T, class Alloc >
+	void List<T, Alloc>::assign(size_type n, const value_type& val)
 	{
 		clear();
 		for (size_type i = 0; i < n; i++)
 			push_back(val);
 	}
 
-	template < typename T >
+	template < typename T, class Alloc >
 	template < typename InputIterator >
-	void List<T>::assign(InputIterator first, InputIterator last)
+	void List<T, Alloc>::assign(InputIterator first, InputIterator last)
 	{
 		clear();
 		constructor_assign_helper(first, last, typename ft::is_integral<InputIterator>::type());
 	}
 
-	template < typename T >
-	void List<T>::push_front(const value_type& val)
+	template < typename T, class Alloc >
+	void List<T, Alloc>::push_front(const value_type& val)
 	{
 		insert(begin(), val);
 	}
 	
-	template < typename T >
-	void List<T>::pop_front()
+	template < typename T, class Alloc >
+	void List<T, Alloc>::pop_front()
 	{
 		erase(begin());
 	}
 
-	template < typename T >
-	void List<T>::push_back(const value_type& val)
+	template < typename T, class Alloc >
+	void List<T, Alloc>::push_back(const value_type& val)
 	{
 		insert(end(), val);
 	}
 	
-	template < typename T >
-	void List<T>::pop_back()
+	template < typename T, class Alloc >
+	void List<T, Alloc>::pop_back()
 	{
 		erase(--end());
 	}
 
-	template < typename T >
-	void List<T>::insert(iterator pos, size_type count, const T& value)
+	template < typename T, class Alloc >
+	void List<T, Alloc>::insert(iterator pos, size_type count, const T& value)
 	{
 		iterator next = pos;
 		iterator prev = pos;
@@ -331,15 +332,19 @@ namespace ft
 		for (size_t i = 0; i < count; i++)
 		{
 			if (_begin == _end)
-			{
-				_begin = new Link<T>(_rend, value, _end);
+			{ // TODO ICI
+				_begin = node_alloc(_alloc).allocate(1);
+				node_alloc(_alloc).construct(_begin, Link<T>(_rend, value, _end));
+				// _begin = new Link<T>(_rend, value, _end);
 				_end->previous = _begin;
 				_rend->next = _begin;
 				n = _begin;
 			}
 			else
 			{
-				n = new Link<T>(prev.current, value, next.current);
+				n = node_alloc(_alloc).allocate(1);
+				node_alloc(_alloc).construct(n, Link<T>(_rend, value, _end));
+				// n = new Link<T>(prev.current, value, next.current);
 				prev.current->next = n;
 				next.current->previous = n;
 				if (pos.current == _begin)
@@ -350,15 +355,15 @@ namespace ft
 		}
 	}
 
-	template < typename T >
+	template < typename T, class Alloc >
 	template< class InputIterator >
-	void List<T>::insert(iterator pos, InputIterator first, InputIterator last)
+	void List<T, Alloc>::insert(iterator pos, InputIterator first, InputIterator last)
 	{
 		insert_helper(pos, first, last, typename ft::is_integral<InputIterator>::type());
 	}
 
-	template < typename T >
-	typename List<T>::iterator List<T>::insert(iterator pos, const T &value)
+	template < typename T, class Alloc >
+	typename List<T, Alloc>::iterator List<T, Alloc>::insert(iterator pos, const T &value)
 	{
 		iterator next = pos;
 		iterator prev = pos;
@@ -383,8 +388,8 @@ namespace ft
 		return (iterator(n));
 	}
 
-	template < typename T >
-	typename List<T>::iterator List<T>::erase(iterator pos)
+	template < typename T, class Alloc >
+	typename List<T, Alloc>::iterator List<T, Alloc>::erase(iterator pos)
 	{
 		iterator ret = pos;
 		if (pos.current == _end || pos.current == _rend)
@@ -399,8 +404,8 @@ namespace ft
 		return (ret);
 	}
 
-	template < typename T >
-	typename List<T>::iterator List<T>::erase(iterator first, iterator last)
+	template < typename T, class Alloc >
+	typename List<T, Alloc>::iterator List<T, Alloc>::erase(iterator first, iterator last)
 	{
 		iterator prev(first.current->previous);
 		while (first.current != last.current && first.current != _end && first.current != _rend)
@@ -424,8 +429,8 @@ namespace ft
 		return (first);
 	}
 
-	template < typename T >
-	void List<T>::clear()
+	template < typename T, class Alloc >
+	void List<T, Alloc>::clear()
 	{
 		if (_begin == _end)
 		{
@@ -436,8 +441,8 @@ namespace ft
 		_end->previous = _rend;
 	}
 
-	template < typename T >
-	void List<T>::swap(List &other) {
+	template < typename T, class Alloc >
+	void List<T, Alloc>::swap(List &other) {
 		Link<T> *tmp_end = other._end;
 		Link<T> *tmp_begin = other._begin;
 		Link<T> *tmp_rend = other._rend;
@@ -454,8 +459,8 @@ namespace ft
 		_size = tmp_size;
 	}
 
-	template< class T >
-	void List<T>::resize(size_type count, T value)
+	template< class T, class Alloc >
+	void List<T, Alloc>::resize(size_type count, T value)
 	{
 		if (size() < count)
 		{
@@ -469,11 +474,11 @@ namespace ft
 		}
 	}
 
-	template < class T >
-	void List<T>::merge(List<T> &other)
+	template < class T, class Alloc >
+	void List<T, Alloc>::merge(List<T, Alloc> &other)
 	{
 		if (this == &other) return;
-		ft::List<T> tmp;
+		ft::List<T, Alloc> tmp;
 		iterator itr = begin();
 		iterator itr_other = other.begin();
 		while (itr.current != _end || itr_other.current != other._end)
@@ -504,11 +509,11 @@ namespace ft
 		swap(tmp);
 	}
 
-	template < class T >
+	template < class T, class Alloc >
 	template < class Compare >
-	void List<T>::merge(List<T> &other, Compare comp)
+	void List<T, Alloc>::merge(List<T, Alloc> &other, Compare comp)
 	{
-		ft::List<T> tmp;
+		ft::List<T, Alloc> tmp;
 		iterator itr = begin();
 		iterator itr_other = other.begin();
 		while (itr.current != _end || itr_other.current != other._end)
@@ -538,80 +543,80 @@ namespace ft
 		swap(tmp);
 	}
 
-	template < class T >
-	void List<T>::splice(List<T>::const_iterator pos, List &other)
+	template < class T, class Alloc >
+	void List<T, Alloc>::splice(List<T, Alloc>::const_iterator pos, List &other)
 	{
 		insert(pos, other.begin(), other.end());
 		other.erase(other.begin(), other.end());
 	}
 
-	template < class T >
-	void List<T>::splice(List<T>::const_iterator pos, List &other, List<T>::const_iterator it) 
+	template < class T, class Alloc >
+	void List<T, Alloc>::splice(List<T, Alloc>::const_iterator pos, List &other, List<T, Alloc>::const_iterator it) 
 	{
 		insert(pos, *it);
 		other.erase(it);
 	}
 
-	template < class T >
-	void List<T>::splice(List<T>::const_iterator pos, List &other, List<T>::const_iterator first, List<T>::const_iterator last)
+	template < class T, class Alloc >
+	void List<T, Alloc>::splice(List<T, Alloc>::const_iterator pos, List &other, List<T, Alloc>::const_iterator first, List<T, Alloc>::const_iterator last)
 	{
 		insert(pos, first, last);
 		other.erase(first, last);
 	}
 
-	template < class T >
-	void List<T>::remove(const T &value)
+	template < class T, class Alloc >
+	void List<T, Alloc>::remove(const T &value)
 	{
-		ft::List<T> tmp;
+		ft::List<T, Alloc> tmp;
 		for (iterator itr = begin(); itr != end(); itr++)
 			if (*itr != value)
 				tmp.push_back(*itr);
 		swap(tmp);
 	}
 	
-	template < class T >
+	template < class T, class Alloc >
 	template < class UnaryPredictate >
-	void List<T>::remove_if(UnaryPredictate p) 
+	void List<T, Alloc>::remove_if(UnaryPredictate p) 
 	{
-		ft::List<T> tmp;
+		ft::List<T, Alloc> tmp;
 		for (iterator itr = begin(); itr != end(); itr++)
 			if (!p(*itr))
 				tmp.push_back(*itr);
 		swap(tmp);
 	}
 
-	template < class T >
-	void List<T>::reverse()
+	template < class T, class Alloc >
+	void List<T, Alloc>::reverse()
 	{
-		List<T> tmp;
+		List<T, Alloc> tmp;
 		for (iterator itr = begin(); itr != end(); itr++)
 			tmp.push_front(*itr);
 		swap(tmp);			
 	}
 
-	template < class T >
-	void List<T>::unique() 
+	template < class T, class Alloc >
+	void List<T, Alloc>::unique() 
 	{
-		List<T> tmp;
+		List<T, Alloc> tmp;
 		for (iterator itr = begin(); itr != end(); itr++)
 			if (tmp.empty() || tmp.back() != *itr)
 				tmp.push_back(*itr);
 		swap(tmp);
 	}
 
-	template < class T >
+	template < class T, class Alloc >
 	template < class BinaryPredicate >
-	void List<T>::unique(BinaryPredicate p) 
+	void List<T, Alloc>::unique(BinaryPredicate p) 
 	{
-		List<T> tmp;
+		List<T, Alloc> tmp;
 		for (iterator itr = begin(); itr != end(); itr++)
 			if (!p(tmp.back(), *itr))
 				tmp.push_back(*itr);
 		swap(tmp);
 	}
 
-	template < class T >
-	void List<T>::sort()
+	template < class T, class Alloc >
+	void List<T, Alloc>::sort()
 	{
 		bool swap = true;
 		while (swap && this->_size > 0)
@@ -634,9 +639,9 @@ namespace ft
 		}
 	}
 
-	template < class T >
+	template < class T, class Alloc >
 	template < class Compare >
-	void List<T>::sort(Compare comp)
+	void List<T, Alloc>::sort(Compare comp)
 	{
 		bool swap = true;
 		while (swap && this->_size > 0)
@@ -661,14 +666,14 @@ namespace ft
 
 	//---------------------------------- OPERATORS --------------------------------------------------
 
-	template < typename T >
-	bool operator==(List<T> &lhs, List<T> &rhs)
+	template < typename T, class Alloc >
+	bool operator==(List<T, Alloc> &lhs, List<T, Alloc> &rhs)
 	{
 		if (lhs.size() != rhs.size())
 			return (false);
 
-		typename ft::List<T>::iterator itr_l = lhs.begin();
-		typename ft::List<T>::iterator itr_r = rhs.begin();
+		typename ft::List<T, Alloc>::iterator itr_l = lhs.begin();
+		typename ft::List<T, Alloc>::iterator itr_r = rhs.begin();
 		while (itr_l != lhs.end() && itr_r != rhs.end())
 		{
 			if (*itr_l != *itr_r)
@@ -679,14 +684,14 @@ namespace ft
 		return (true);
 	}
 
-	template < typename T >
-	bool operator!=(List<T> &lhs, List<T> &rhs)
+	template < typename T, class Alloc >
+	bool operator!=(List<T, Alloc> &lhs, List<T, Alloc> &rhs)
 	{
 		if (lhs.size() != rhs.size())
 			return (true);
 
-		typename ft::List<T>::iterator itr_l = lhs.begin();
-		typename ft::List<T>::iterator itr_r = rhs.begin();
+		typename ft::List<T, Alloc>::iterator itr_l = lhs.begin();
+		typename ft::List<T, Alloc>::iterator itr_r = rhs.begin();
 		while (itr_l != lhs.end() && itr_r != rhs.end())
 		{
 			if (*itr_l != *itr_r)
@@ -697,11 +702,11 @@ namespace ft
 		return (false);
 	}
 
-	template < typename T >
-	bool operator<(List<T> &lhs, List<T> &rhs)
+	template < typename T, class Alloc >
+	bool operator<(List<T, Alloc> &lhs, List<T, Alloc> &rhs)
 	{
-		typename ft::List<T>::iterator itr_l = lhs.begin();
-		typename ft::List<T>::iterator itr_r = rhs.begin();
+		typename ft::List<T, Alloc>::iterator itr_l = lhs.begin();
+		typename ft::List<T, Alloc>::iterator itr_r = rhs.begin();
 		while (itr_l != lhs.end() && itr_r != rhs.end())
 		{
 			if (*itr_l < *itr_r)
@@ -714,11 +719,11 @@ namespace ft
 		return (false);
 	}
 
-	template < typename T >
-	bool operator<=(List<T> &lhs, List<T> &rhs)
+	template < typename T, class Alloc >
+	bool operator<=(List<T, Alloc> &lhs, List<T, Alloc> &rhs)
 	{
-		typename ft::List<T>::iterator itr_l = lhs.begin();
-		typename ft::List<T>::iterator itr_r = rhs.begin();
+		typename ft::List<T, Alloc>::iterator itr_l = lhs.begin();
+		typename ft::List<T, Alloc>::iterator itr_r = rhs.begin();
 		if (lhs.empty() && rhs.empty())
 			return (true);
 		while (itr_l != lhs.end() && itr_r != rhs.end())
@@ -733,11 +738,11 @@ namespace ft
 		return (true);
 	}
 
-	template < typename T >
-	bool operator>(List<T> &lhs, List<T> &rhs)
+	template < typename T, class Alloc >
+	bool operator>(List<T, Alloc> &lhs, List<T, Alloc> &rhs)
 	{
-		typename ft::List<T>::iterator itr_l = lhs.begin();
-		typename ft::List<T>::iterator itr_r = rhs.begin();
+		typename ft::List<T, Alloc>::iterator itr_l = lhs.begin();
+		typename ft::List<T, Alloc>::iterator itr_r = rhs.begin();
 		while (itr_l != lhs.end() && itr_r != rhs.end())
 		{
 			if (*itr_l > *itr_r)
@@ -750,11 +755,11 @@ namespace ft
 		return (false);
 	}
 
-	template < typename T >
-	bool operator>=(List<T> &lhs, List<T> &rhs)
+	template < typename T, class Alloc >
+	bool operator>=(List<T, Alloc> &lhs, List<T, Alloc> &rhs)
 	{
-		typename ft::List<T>::iterator itr_l = lhs.begin();
-		typename ft::List<T>::iterator itr_r = rhs.begin();
+		typename ft::List<T, Alloc>::iterator itr_l = lhs.begin();
+		typename ft::List<T, Alloc>::iterator itr_r = rhs.begin();
 		if (lhs.empty() && rhs.empty())
 			return (true);
 		while (itr_l != lhs.end() && itr_r != rhs.end())
@@ -771,9 +776,9 @@ namespace ft
 	
 	//----------------------------------OUR OWN PRIVATE STUFF--------------------------------------------------
 
-	template <typename T>
+	template <typename T, class Alloc>
 	template <class InputIterator>
-	void	List<T>::insert_helper(ft::List<T>::iterator pos, const InputIterator& first, const InputIterator& last, void *)
+	void	List<T, Alloc>::insert_helper(ft::List<T, Alloc>::iterator pos, const InputIterator& first, const InputIterator& last, void *)
 	{
 		InputIterator & first_itr = const_cast<InputIterator&>(first);
 		InputIterator from(first_itr);
@@ -785,17 +790,17 @@ namespace ft
 		}
 	}
 
-	template <typename T>
+	template <typename T, class Alloc>
 	template <class InputIterator>
-	void	List<T>::insert_helper(ft::List<T>::iterator pos, const InputIterator& size, const InputIterator& val, int)
+	void	List<T, Alloc>::insert_helper(ft::List<T, Alloc>::iterator pos, const InputIterator& size, const InputIterator& val, int)
 	{
 		for (int i = 0; i < size; i++)
 			insert(pos, val);
 	}
 
-	template <typename T>
+	template <typename T, class Alloc>
 	template <class InputIterator>
-	void	List<T>::constructor_assign_helper(InputIterator & first, InputIterator & last, void *)
+	void	List<T, Alloc>::constructor_assign_helper(InputIterator & first, InputIterator & last, void *)
 	{
 		while (first != last)
 		{
@@ -805,9 +810,9 @@ namespace ft
 		}
 	}
 
-	template <typename T>
+	template <typename T, class Alloc>
 	template <class InputIterator>
-	void	List<T>::constructor_assign_helper(InputIterator & size, InputIterator & val, int)
+	void	List<T, Alloc>::constructor_assign_helper(InputIterator & size, InputIterator & val, int)
 	{
 		clear();
 		for (int i = 0; i < size; i++)

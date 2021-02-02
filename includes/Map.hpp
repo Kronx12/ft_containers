@@ -697,6 +697,8 @@ namespace ft
 			itr_l++;
 			itr_r++;
 		}
+		if (lhs.size() < rhs.size())
+			return (true);
 		return (false);
 	}
 
