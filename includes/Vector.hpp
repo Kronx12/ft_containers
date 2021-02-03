@@ -120,7 +120,8 @@ namespace ft
 	void Vector<T, Allocator>::realloc(size_type len)
 	{
 		pointer tmp = _alloc.allocate(len * sizeof(T));
-
+		for (size_type i = 0; i < len; i++)
+			_alloc.construct(tmp + i, T());
 		for (size_type i = 0; i < _size && i < len; i++)
 			tmp[i] = _data[i];
 		_alloc.deallocate(_data, _capacity);
