@@ -1511,9 +1511,78 @@ int main()
 #if TEST_MAP == 0 || TEST_MAP == 8
 # ifndef SIZE
 	ft::Map<int, int> ft_map;
-	for (int i = 0; i < 1000; i++)
-		ft_map.insert(std::pair<int, int>(rand(), 0));
+	ft_map.insert(std::pair<int, int>(20, 0));
+	ft_map.insert(std::pair<int, int>(30, 0));
+	ft_map.insert(std::pair<int, int>(40, 0));
+	ft_map.insert(std::pair<int, int>(35, 0));
+	ft_map.insert(std::pair<int, int>(50, 0));
+	ft_map.insert(std::pair<int, int>(25, 0));
+	ft_map.insert(std::pair<int, int>(15, 0));
 	ft_map.put_tree();
+	ft_map.erase(30);
+	ft_map.put_tree();
+	ft_map.erase(35);
+	ft_map.put_tree();
+	ft_map.erase(15);
+	ft_map.put_tree();
+	ft_map.erase(20);
+	ft_map.put_tree();
+	ft_map.erase(25);
+	ft_map.put_tree();
+	ft_map.clear();
+
+	/*for (int i = 0; i < 100; i++)
+		ft_map.insert(std::pair<int, int>(i, 0));
+	ft_map.put_tree();
+	put_itr(ft_map);
+	ft_map.erase(5);
+	ft_map.put_tree();
+	put_itr(ft_map);
+	ft_map.clear();
+
+	ft_map.insert(std::pair<int, int>(20, 0));
+	ft_map.insert(std::pair<int, int>(30, 0));
+	ft_map.put_tree();
+	put_itr(ft_map);
+	ft_map.insert(std::pair<int, int>(30, 0));
+	ft_map.insert(std::pair<int, int>(40, 0));
+	ft_map.insert(std::pair<int, int>(35, 0));
+	ft_map.insert(std::pair<int, int>(50, 0));
+	ft_map.insert(std::pair<int, int>(25, 0));
+	ft_map.insert(std::pair<int, int>(15, 0));
+	ft_map.insert(std::pair<int, int>(10, 0));
+	ft_map.insert(std::pair<int, int>(5, 0));
+	ft_map.insert(std::pair<int, int>(12, 0));
+	ft_map.insert(std::pair<int, int>(42, 0));
+	ft_map.insert(std::pair<int, int>(55, 0));
+	ft_map.insert(std::pair<int, int>(45, 0));
+	ft_map.insert(std::pair<int, int>(7, 0));
+	ft_map.put_tree();
+	put_itr(ft_map);
+	ft_map.erase(30);
+	ft_map.put_tree();
+	put_itr(ft_map);
+	ft_map.erase(35);
+	ft_map.put_tree();
+	put_itr(ft_map);
+	ft_map.insert(std::pair<int, int>(60, 0));
+	ft_map.put_tree();
+	put_itr(ft_map);
+	ft_map.insert(std::pair<int, int>(46, 0));
+	ft_map.put_tree();
+	put_itr(ft_map);
+	ft_map.insert(std::pair<int, int>(70, 0));
+	ft_map.put_tree();
+	put_itr(ft_map);
+	ft_map.insert(std::pair<int, int>(23, 0));
+	ft_map.put_tree();
+	put_itr(ft_map);
+	ft_map.insert(std::pair<int, int>(27, 0));
+	ft_map.put_tree();
+	put_itr(ft_map);
+	ft_map.erase(40);
+	ft_map.put_tree();
+	put_itr(ft_map);*/
 # else
 	ft::Map<int, int> ft_map;
 	for (int i = 0; i < SIZE; i++)

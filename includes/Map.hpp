@@ -250,25 +250,25 @@ namespace ft
 	template< class Key, class T, class Compare, class Allocator >
 	typename Map<Key, T, Compare, Allocator>::reverse_iterator Map<Key, T, Compare, Allocator>::rbegin()
 	{
-		return (size() == 0 ? iterator(_rend) : iterator(_end->parent));
+		return (size() == 0 ? reverse_iterator(_rend) : reverse_iterator(_end->parent));
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
 	typename Map<Key, T, Compare, Allocator>::const_reverse_iterator Map<Key, T, Compare, Allocator>::rbegin() const
 	{
-		return (size() == 0 ? iterator(_rend) : iterator(_end->parent));
+		return (size() == 0 ? reverse_iterator(_rend) : reverse_iterator(_end->parent));
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
 	typename Map<Key, T, Compare, Allocator>::reverse_iterator Map<Key, T, Compare, Allocator>::rend()
 	{
-		return (iterator(_rend));
+		return (reverse_iterator(_rend));
 	}
 
 	template< class Key, class T, class Compare, class Allocator >
 	typename Map<Key, T, Compare, Allocator>::const_reverse_iterator Map<Key, T, Compare, Allocator>::rend() const
 	{
-		return (iterator(_rend));
+		return (reverse_iterator(_rend));
 	}
 
 	// -------------------------------- Capacity --------------------------------
@@ -805,11 +805,11 @@ namespace ft
 		else if (item == _rend)
 			ss << "(rend)◗";
 		else if (begin() == iterator(item))
-			ss << item->value->first << ":" << item->value->second << "(begin)◗";
+			ss << item->value.first << ":" << item->value.second << "(begin)◗";
 		else if (rbegin() == iterator(item))
-			ss << item->value->first << ":" << item->value->second << "(rbegin)◗";
+			ss << item->value.first << ":" << item->value.second << "(rbegin)◗";
 		else
-			ss << item->value->first << ":" << item->value->second << "◗";
+			ss << item->value.first << ":" << item->value.second << "◗";
 		ss << reset << std::endl;
 		std::cout << ss.str();
 	}
