@@ -24,6 +24,27 @@
 static int g_test = 0;
 static int g_valid = 0;
 
+
+template <class T>
+void put_itr(T ft_map)
+{
+	std::cout << "----------TEST TREE BEGIN->END----------"<< std::endl;
+	typename T::iterator itr = ft_map.begin();
+	while(itr != ft_map.end())
+	{
+		std::cout<<(*itr)->first<< " ";
+		itr++;
+	}
+	std::cout <<std::endl<< "---------TEST TREE RBEGIN->REND----------"<< std::endl;
+	typename T::reverse_iterator itr2 = ft_map.rbegin();
+	while(itr2 != ft_map.rend())
+	{
+		std::cout<<(*itr2)->first<< " ";
+		itr2++;
+	}
+	std::cout <<std::endl;
+}
+
 class Testclass
 {
 	public:

@@ -499,7 +499,7 @@ namespace ft
 						tmp->left = _rend;
 					}
 				}
-				if (tmp_left)
+				if (tmp_left && !(tmp == tmp_left))
 					tmp_left->parent = tmp;
 				if (tmp_right && !(tmp == tmp_right))
 					tmp_right->parent = tmp;
@@ -509,7 +509,6 @@ namespace ft
 			p_erase_node(ptr->left, key);
 		else
 			p_erase_node(ptr->right, key);
-		p_checkrb(tmp);
 	}
 	
 	template< class Key, class T, class Compare, class Allocator >

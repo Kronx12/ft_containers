@@ -1531,7 +1531,7 @@ int main()
 	ft_map.put_tree();
 	ft_map.clear();
 
-	/*for (int i = 0; i < 100; i++)
+	for (int i = 0; i < 100; i++)
 		ft_map.insert(std::pair<int, int>(i, 0));
 	ft_map.put_tree();
 	put_itr(ft_map);
@@ -1582,7 +1582,7 @@ int main()
 	put_itr(ft_map);
 	ft_map.erase(40);
 	ft_map.put_tree();
-	put_itr(ft_map);*/
+	put_itr(ft_map);
 # else
 	ft::Map<int, int> ft_map;
 	for (int i = 0; i < SIZE; i++)
