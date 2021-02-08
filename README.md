@@ -1,6 +1,8 @@
+![42-lyon](https://user-images.githubusercontent.com/45235527/106354618-6ec65a00-62f3-11eb-8688-ba9e0f4e77de.jpg)
+
 # ft_containers
 
---- NOTE ---
+<img alt="Note" src="https://user-images.githubusercontent.com/45235527/96753610-698e7080-13d0-11eb-9461-d3351c9208d7.png" width="250" height="200" />
 
 <strong>Description</strong>
 
