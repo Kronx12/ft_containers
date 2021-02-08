@@ -35,16 +35,3 @@ Vous devez rendre les containers suivants et leur fonctions associés :
  ```
   
 Bien entendu, la STL est interdite. Vous pouvez par contre utiliser la STD.
-  
- 
- # Partie bonus
- 
- Si vous avez complètement fini la partie obligatoire, vous pouvez essayer de rendre la
-partie bonus. Réimplémentez les containers suivants :
-
-```
-  - Deque
-  - Set
-  - Multiset
-  - Multimap
-```
